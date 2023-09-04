@@ -1,0 +1,2 @@
+class MatchShot < ApplicationRecord
+end
