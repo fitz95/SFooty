@@ -4,7 +4,7 @@ class CreateTeams < ActiveRecord::Migration[7.0]
       t.string :team_name
       t.string :country
       t.integer :founded_year
-      t.references :division, null: false, foreign_key: true
+      t.references :league, null: false, foreign_key: true
       t.string :description
       t.string :coach_name
       t.string :website

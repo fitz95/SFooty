@@ -6,8 +6,8 @@ class CreateMatchGoals < ActiveRecord::Migration[7.0]
       t.integer :assister_player_id
       t.integer :team_for_id
       t.integer :team_against_id
-      t.boolean penaly_goal
-      t.boolean own_goal
+      t.boolean :penaly_goal
+      t.boolean :own_goal
       t.string :goal_type
       t.string :goal_desc
       t.integer :minute_scored
@@ -17,7 +17,7 @@ class CreateMatchGoals < ActiveRecord::Migration[7.0]
     end
     add_foreign_key :match_goals, :matches, column: :match_id
     add_foreign_key :match_goals, :players, column: :scorer_player_id
-    add_foreign_key :match_goals, :players, column: :assist_player_id
+    add_foreign_key :match_goals, :players, column: :assister_player_id
     add_foreign_key :match_goals, :teams, column: :team_for_id
     add_foreign_key :match_goals, :users, column: :user_id
     add_index :match_goals, :user_id

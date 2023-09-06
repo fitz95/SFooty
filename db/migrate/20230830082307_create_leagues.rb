@@ -5,7 +5,7 @@ class CreateLeagues < ActiveRecord::Migration[7.0]
       t.string :country
       t.integer :tier_level
       t.string :description
-      t.string :division_photo
+      t.string :league_photo
       t.integer :user_id
 
       t.timestamps

@@ -6,7 +6,6 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :email, null: false
       t.string :role, default: "client"
       t.string :user_photo
-      t.timestamp :created_at
 
       t.timestamps
     end
