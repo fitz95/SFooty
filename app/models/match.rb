@@ -6,6 +6,7 @@ class Match < ApplicationRecord
     belongs_to :away_team, class_name: 'Team', foreign_key: 'away_team_id'
     belongs_to :league
     belongs_to :game_week
+    has_many :player_stats, dependent: :destroy
     has_many :match_events, dependent: :destroy
     has_many :match_goals, dependent: :destroy
 
