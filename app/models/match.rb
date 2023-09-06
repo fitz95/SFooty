@@ -7,4 +7,6 @@ class Match < ApplicationRecord
     belongs_to :league
     belongs_to :game_week
     has_many :match_events
+    has_many :match_goals, dependent: :destroy
+    
 end
