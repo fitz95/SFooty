@@ -8,6 +8,8 @@ class Player < ApplicationRecord
     has_many :player_team_histories, dependent: :destroy
     has_many :teams, through: :player_team_histories
     has_many :player_transfers, dependent: :destroy
+    has_many :trophy_players, dependent: :destroy
+    has_many :trophies, through: :trophy_players
 
     # Example: A scope to find players by nationality
     scope :by_nationality, ->(nationality) { where(nationality: nationality) }

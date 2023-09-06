@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trophy: one
+  player: one
+
+two:
+  trophy: two
+  player: two

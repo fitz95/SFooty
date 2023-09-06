@@ -6,4 +6,7 @@ class User < ApplicationRecord
     validates :email, presence: true, uniqueness: true
     has_secure_password
     has_one_attached :user_photo
+
+    # Example: A scope to find users with a specific role
+    scope :by_role, ->(role) { where(role: role) }
 end
