@@ -4,6 +4,12 @@ class Player < ApplicationRecord
     has_many :lineup_substitute_options, foreign_key: "substitute_player_id", dependent: :destroy
     has_many :match_events, dependent: :nullify
     has_many :player_injuries, dependent: :destroy
-    has_manny  :player_stats, dependent: :destroy
+    has_many  :player_stats, dependent: :destroy
+    has_many :player_team_histories, dependent: :destroy
+    has_many :teams, through: :player_team_histories
+    has_many :player_transfers, dependent: :destroy
+
+    # Example: A scope to find players by nationality
+    scope :by_nationality, ->(nationality) { where(nationality: nationality) }
 
 end
