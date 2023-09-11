@@ -6,6 +6,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem "rails", "~> 7.0.5"
 gem 'devise'
 gem 'devise-jwt'
+gem 'jsonapi-serializer'
 
 
 
