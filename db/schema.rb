@@ -90,6 +90,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["user_id"], name: "index_lineup_substitute_options_on_user_id"
   end
 
+  create_table "match_events", force: :cascade do |t|
+    t.integer "match_id"
+    t.string "event_type"
+    t.text "event_description"
+    t.integer "event_minute"
+    t.integer "player_id"
+    t.integer "team_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_events_on_match_id"
+    t.index ["player_id"], name: "index_match_events_on_player_id"
+    t.index ["team_id"], name: "index_match_events_on_team_id"
+    t.index ["user_id"], name: "index_match_events_on_user_id"
+  end
+
   create_table "match_goals", force: :cascade do |t|
     t.integer "match_id"
     t.integer "scorer_player_id"
@@ -379,6 +395,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["user_id"], name: "index_trophies_on_user_id"
   end
 
+  create_table "trophy_players", force: :cascade do |t|
+    t.bigint "trophy_id", null: false
+    t.bigint "player_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_trophy_players_on_player_id"
+    t.index ["trophy_id"], name: "index_trophy_players_on_trophy_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "name"
@@ -405,6 +430,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
   add_foreign_key "lineup_substitute_options", "players", column: "substitute_player_id"
   add_foreign_key "lineup_substitute_options", "teams"
   add_foreign_key "lineup_substitute_options", "users"
+  add_foreign_key "match_events", "matches"
+  add_foreign_key "match_events", "players"
+  add_foreign_key "match_events", "teams"
+  add_foreign_key "match_events", "users"
   add_foreign_key "match_goals", "matches"
   add_foreign_key "match_goals", "players", column: "assister_player_id"
   add_foreign_key "match_goals", "players", column: "scorer_player_id"
@@ -450,4 +479,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
   add_foreign_key "trophies", "leagues"
   add_foreign_key "trophies", "teams"
   add_foreign_key "trophies", "users"
+  add_foreign_key "trophy_players", "players"
+  add_foreign_key "trophy_players", "trophies"
 end
