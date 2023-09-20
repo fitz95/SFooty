@@ -7,6 +7,7 @@ gem "rails", "~> 7.0.5"
 gem 'devise'
 gem 'devise-jwt'
 gem 'jsonapi-serializer'
+gem 'active_model_serializers'
 
 
 
