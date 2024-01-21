@@ -19,6 +19,10 @@ RSpec.describe 'Api::V1::Users', type: :request do
     @token = response.headers['Authorization']
   end
 
+  # If you don't intend to have tests inside this block, you can remove it
+  # describe 'User endpoints' do
+  # end
+
   describe 'User index endpoints' do
     it 'returns all users', :show_in_doc do
       get '/api/v1/users/', headers: { 'Authorization' => @token }
@@ -59,3 +63,4 @@ RSpec.describe 'Api::V1::Users', type: :request do
     end
   end
 end
+

@@ -14,7 +14,9 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def create
     login = params[:user][:login]
-    resource = User.find_for_database_authentication(email: login) || User.find_for_database_authentication(username: login)
+    resource = User.find_for_database_authentication(email: login) ||
+               User.find_for_database_authentication(username: login)
+
 
     return invalid_login_attempt unless resource
 
