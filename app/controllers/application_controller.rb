@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
     before_action :configure_permitted_parameters, if: :devise_controller?
-    before_action :authenticate_request, except: %i[sign_in create update]
+    before_action :authenticate_request, except: %i[sign_in sign_up create update]
+
     attr_reader :current_user
 
     def authenticate_request

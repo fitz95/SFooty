@@ -7,21 +7,16 @@ class Api::V1::SessionsController < Devise::SessionsController
     # POST /api/v1/sign_in
     api :POST, '/v1/users/sign_in', 'Sign in user'
     param :user, Hash, desc: 'User info', required: true do
-      param :email, String, desc: 'User email or username', required: true
+      param :login, String, desc: 'User email or username', required: true
       param :password, String, desc: 'User password', required: true
     end
-    error code: 401, desc: 'Invalid email or password'
+    error code: 401, desc: 'Invalid email/username or password'
+    
     def create
       login = params[:user][:login]
+      resource = User.find_for_database_authentication(email: login) || User.find_for_database_authentication(username: login)
 
-       # Check if the login parameter looks like an email
-      if Devise::email_regexp.match?(login)
-        resource = User.find_for_database_authentication(email: login)
-      else
-        # Otherwise, treat it as a username
-        resource = User.find_for_database_authentication(username: login)
-      end
-        return invalid_login_attempt unless resource
+      return invalid_login_attempt unless resource
   
       if resource.valid_password?(params[:user][:password])
         sign_in(resource_name, resource)
@@ -59,8 +54,9 @@ class Api::V1::SessionsController < Devise::SessionsController
   
     def invalid_login_attempt
       warden.custom_failure!
-      render json: { error: 'Invalid email or password' }, status: :unauthorized
+      render json: { error: 'Invalid email/username or password' }, status: :unauthorized
     end
   end
+  
   
   

@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
     before_action :authenticate_request
-    load_and_authorize_resource
+    # load_and_authorize_resource
     api :GET, '/v1/users', 'Get all users'
     error code: 404, desc: 'Users not found!'
     def index
@@ -35,10 +35,23 @@ class Api::V1::UsersController < ApplicationController
     def destroy
       authorize! :destroy, User
       @user = User.find_by(id: params[:id])
-      if @user.destroy
-        render json: { message: 'User deleted successfully!' }, status: :ok
-      else
-        render json: { error: 'Failed to delete the User.' }, status: :unprocessable_entity
+
+      #check if the user exists 
+      unless @user 
+        render json: { error: 'User not found!'}, status: :not_found
+        return 
+      end 
+
+      #Authorize the current user to destroy the specified user
+      
+      if current_user.role == 'admin' || current_user == @user
+        if @user.destroy
+          render json: { message: 'User deleted successfully!' }, status: :ok
+        else
+          render json: { error: 'Failed to delete the User.' }, status: :unprocessable_entity
+        end
+      else 
+        render json: { error: 'Unauthorized to delete this user.'}, status: :unauthorized
       end
     end
   end

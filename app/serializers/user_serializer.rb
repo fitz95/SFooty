@@ -1,4 +1,4 @@
-class UserSerializer
-  include JSONAPI::Serializer
-  attributes 
-end
+# class UserSerializer
+#   include JSONAPI::Serializer
+#   attributes 
+# end

@@ -12,9 +12,20 @@ module SFooty
 
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-    config.session_store :cookie_store, key: 'capstone_session'
+    config.session_store :cookie_store, key: 'sfooty_session'
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
+    config.assets.enabled = false
+
+    config.action_dispatch.default_headers = {
+      'Content-Security-Policy' => {
+        'default-src' => "'self'",
+        'connect-src' => "'self' http://localhost:3000 ws://localhost:3000 http://localhost:3001 ws://localhost:3001",
+        'script-src' => "'self' 'unsafe-inline' 'unsafe-eval'", # Add more directives as needed
+        'style-src' => "'self' 'unsafe-inline'",
+      }
+    }
+    
 
 
     # Configuration for the application, engines, and railties goes here.
@@ -26,3 +37,5 @@ module SFooty
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
+
+require_relative '../lib/rswag_csp_patch'
