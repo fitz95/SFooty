@@ -17,7 +17,6 @@ class Api::V1::SessionsController < Devise::SessionsController
     resource = User.find_for_database_authentication(email: login) ||
                User.find_for_database_authentication(username: login)
 
-
     return invalid_login_attempt unless resource
 
     if resource.valid_password?(params[:user][:password])
