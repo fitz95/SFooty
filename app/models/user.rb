@@ -18,7 +18,7 @@ class User < ApplicationRecord
   # has_one_attached :user_photo
 
   # Example: A scope to find users with a specific role
-  scope :by_role, ->(role) { where(role: role) }
+  scope :by_role, ->(role) { where(role:) }
   def jwt_payload
     super.merge('jti' => SecureRandom.uuid)
   end

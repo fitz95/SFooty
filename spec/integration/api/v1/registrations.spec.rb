@@ -14,7 +14,6 @@ RSpec.describe 'Registrations API', type: :request do
     }
   end
 
-  
   path '/v1/users' do
     post 'Creates a new user' do
       tags 'registrations'
@@ -57,4 +56,3 @@ RSpec.describe 'Registrations API', type: :request do
     end
   end
 end
-
