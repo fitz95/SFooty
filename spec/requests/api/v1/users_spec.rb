@@ -63,4 +63,3 @@ RSpec.describe 'Api::V1::Users', type: :request do
     end
   end
 end
-

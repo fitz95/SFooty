@@ -66,4 +66,3 @@ RSpec.describe 'Registrations API', type: :request do
     }
   end
 end
-

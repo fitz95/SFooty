@@ -1,4 +1,6 @@
 require 'rails_helper'
+# rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/LineLength
 
 RSpec.configure do |config|
   config.swagger_root = Rails.root.join('swagger').to_s
@@ -200,3 +202,5 @@ describe 'API V1', swagger_doc: 'v1/swagger.yaml' do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
+# rubocop:enable Metrics/LineLength
