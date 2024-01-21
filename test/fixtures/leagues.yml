@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  league_name: MyString
+  country: MyString
+  tier_level: 1
+  description: MyString
+  division_photo: MyString
+  user: one
+
+two:
+  league_name: MyString
+  country: MyString
+  tier_level: 1
+  description: MyString
+  division_photo: MyString
+  user: two
