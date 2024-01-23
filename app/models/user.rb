@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :role, presence: true
+  validates :role, presence: true, inclusion: { in: %w(user data_collector admin) }
   # has_secure_password
   # has_one_attached :user_photo
 
