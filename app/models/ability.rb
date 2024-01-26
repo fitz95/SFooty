@@ -11,9 +11,9 @@ class Ability
     if user.super_admin?
       can :manage, :all
     elsif user.admin?
-      can :manage, [Formation, GameWeek, League, LineupPlayer, LineupPosition, LineupSubstituteOption, Match, Player, Referee, Trophy]
+      can :manage, [Formation, GameWeek, League, LineupPlayer, LineupPosition, LineupSubstituteOption, Match, MatchOfficial, Player, Referee, Trophy, Stadium, Team, User, Transfer, TrophyPlayer, MatchEvent, MatchGoal, MatchLineup, MatchOfficialForMatch, MatchShot, MatchSubstitute, PlayerPosition, PlayerInjury, PlayerStat, TeamStat]
     elsif user.data_collector?
-      can :manage, [Formation, GameWeek, LineupPlayer, LineupPosition, LineupSubstituteOption, MatchEvent, MatchGoal, MatchLineup]
+      can :manage, [Formation, GameWeek, LineupPlayer, LineupPosition, LineupSubstituteOption, MatchEvent, MatchGoal, MatchLineup, MatchPlayer, MatchOfficial, MatchOfficialForMatch, MatchShot, MatchSubstitute, Player, Stadium, TrophyPlayer, PlayerPosition, PlayerInjury, PlayerStat, TeamStat ]
     elsif user.client?
       can :read, [Follow, Formation, GameWeek, League, LineupPlayer, LineupPosition, LineupSubstituteOption, Match, Player, Referee, Trophy]
       can :create, Follow if user.persisted?
