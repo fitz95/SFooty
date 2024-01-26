@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :role, presence: true, inclusion: { in: %w(user data_collector admin) }
+  validates :role, presence: true, inclusion: { in: %w(user data_collector admin super_admin) }
   # has_secure_password
   # has_one_attached :user_photo
 
@@ -29,6 +29,22 @@ class User < ApplicationRecord
     revoke_jwt_token(authentication_token)
     self.authentication_token = nil
     save
+  end
+
+  def super_admin?
+    role == 'super_admin'
+  end
+
+  def admin?
+    role == 'admin'
+  end
+
+  def data_collector?
+    role == 'data_collector'
+  end
+
+  def client?
+    role == 'client'
   end
 
   private

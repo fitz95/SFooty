@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
   api :GET, '/v1/users', 'Get all users'
   error code: 404, desc: 'Users not found!'
   def index
-    @users = if current_user.role == 'admin'
+    @users = if current_user.role == 'admin' || current_user.role == 'super_admin'
                User.all
              else
                [current_user]
@@ -22,7 +22,11 @@ class Api::V1::UsersController < ApplicationController
   error code: 404, desc: 'User not found!'
   def show
     @user = User.find_by(id: params[:id])
-    if @user.present? && (current_user.role == 'admin' || @user.id == current_user.id)
+    if @user.present? && (
+      current_user.role == 'admin'||
+      current_user.role == 'super_admin' ||
+      @user.id == current_user.id
+      )
       render json: @user
     else
       render json: { error: @user.errors.full_messages }, status: :unprocessable_entity
