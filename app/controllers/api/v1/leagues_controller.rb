@@ -38,7 +38,33 @@ class Api::V1::LeaguesController < ApplicationController
     api :PATCH, '/v1/users/:user_id/leagues/:id', 'Update league with id'
     def update
         if @league.update(league_params)
-            redirect_to user
+            render json: @league, notice: 'League was successfully updated.'
+        else
+            render json: @league.errors, status: :unprocessable_entity
+        end
+    end 
 
+    api :DELETE, '/v1/users/:user_id/leagues/:id', 'Delete league by id'
+    def destroy
+        authorize! :destroy, League
+        @league = League.find_by(id: params[:id])
+        if @league.destroy
+            render json: { message: 'League deleted successfully!' }, status: :ok
+        else
+            render json: { error: 'Failed to delete the League.' }, status: :unprocessable_entity
+        end
+    end
+
+    private
+    
+    def set_user
+        @user = User.find(params[:user_id])
+    end
+    def set_league
+        @league = League.find(params[:id])
+    end
+    def league_params
+        params.require(:league).permit(:name, :user_id)
+    end
 
 end
