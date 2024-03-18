@@ -16,9 +16,8 @@ Rails.application.routes.draw do
       # User routes
       resources :users do
         resources :leagues do
-          resources :teams
-          resources :leagues
-        end
+        resources :teams
+        end 
       end
     end
   end
