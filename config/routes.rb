@@ -14,7 +14,11 @@ Rails.application.routes.draw do
       # Registration route
       #other routes
       # User routes
-      resources :users, only: [:show, :index, :destroy]
+      resources :users do
+        resources :leagues do
+          resources :teams
+        end
+      end
     end
   end
 end
