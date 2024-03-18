@@ -15,7 +15,7 @@ class Api::V1::LeaguesController < ApplicationController
         render json: @league
     end
 
-    api :GET '/v1/users/:user_id/leagues/new', 'Create a new league'
+    api :GET, '/v1/users/:user_id/leagues/new', 'Create a new league'
     def new
         @league = @user.leagues.new
     end

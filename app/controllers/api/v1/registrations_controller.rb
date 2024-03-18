@@ -7,7 +7,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
     param :email, String, desc: 'User email', required: true
     param :password, String, desc: 'User password', required: true
     param :password_confirmation, String, desc: 'User password confirmation', required: true
-    param :role, String, desc: 'User role', default_value: 'client'
+    param :role, String, desc: 'User role', default_value: 'user'
     param :first_name, String, desc: 'User First name', default_value: 'first_name'
     param :last_name, String, desc: 'User Last  name', default_value: 'last_name'
     param :username, String, desc: 'User username', required: true

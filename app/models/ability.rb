@@ -12,16 +12,16 @@ class Ability
       can :manage, [
         Formation, GameWeek, League, LineupPlayer, LineupPosition,
         LineupSubstituteOption, Match, MatchOfficial, Player, Referee,
-        Trophy, Stadium, Team, User, Transfer, TrophyPlayer, MatchEvent,
+        Trophy, Stadium, Team, User, PlayerTransfer, TrophyPlayer, MatchEvent,
         MatchGoal, MatchLineup, MatchOfficialForMatch, MatchShot,
-        MatchSubstitute, PlayerPosition, PlayerInjury, PlayerStat, TeamStat
+        MatchSubstitution, LineupPosition,LineupPlayer, PlayerInjury, PlayerStat, TeamStat
       ]
     elsif user.data_collector?
       can :manage, [
         Formation, GameWeek, LineupPlayer, LineupPosition,
         LineupSubstituteOption, MatchEvent, MatchGoal, MatchLineup,
         MatchPlayer, MatchOfficial, MatchOfficialForMatch, MatchShot,
-        MatchSubstitute, Player, Stadium, TrophyPlayer, PlayerPosition,
+        MatchSubstitution, Player, Stadium, TrophyPlayer, PlayerPosition,
         PlayerInjury, PlayerStat, TeamStat
       ]
     elsif user.client?

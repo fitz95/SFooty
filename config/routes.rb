@@ -15,8 +15,8 @@ Rails.application.routes.draw do
       #other routes
       # User routes
       resources :users do
-        resources :leagues do
-        resources :teams
+        resources :leagues, only: [:index, :show, :create, :destroy] do
+        resources :teams, only: [:index, :show, :create, :destroy]
         end 
       end
     end
