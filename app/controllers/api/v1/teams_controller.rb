@@ -40,7 +40,7 @@ class Api::V1::TeamsController < ApplicationController
         end
     end
 
-    api :PATCH/PUT '/v1/users/:user_id/leagues/:leagues_id/teams/:id', 'Update team with id'
+    api :PATCH, '/v1/users/:user_id/leagues/:leagues_id/teams/:id', 'Update team with id'
     def update
         if @team.update(team_params)
             render json: @team, notice: 'Team was successfully updated.'
