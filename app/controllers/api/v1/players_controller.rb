@@ -7,8 +7,8 @@ class Api::V1::PlayersController < ApplicationController
 
     api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/players/', 'Get all players in this team'
     def index
-        @players = @team.players
-        render json: @team
+        @players = Player.where(current_team_id: @team.id)
+        render json: @players
     end
 
     api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/players/:id', 'Get player with id'

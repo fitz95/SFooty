@@ -25,7 +25,7 @@ class Api::V1::SessionsController < Devise::SessionsController
         token = current_token
         resource.update(authentication_token: token)
       end
-      render json: { user: resource }, status: :created
+      render json: { user: resource }, status: :created and return
     end
 
     invalid_login_attempt

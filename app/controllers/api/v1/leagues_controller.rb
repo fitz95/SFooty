@@ -6,7 +6,6 @@ class Api::V1::LeaguesController < ApplicationController
 
     api :GET, '/v1/users/:user_id/leagues', 'Get all leagues'
     def index
-        @leagues = @user.leagues
         render json: @leagues
     end 
 
