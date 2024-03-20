@@ -21,11 +21,11 @@ class Api::V1::SessionsController < Devise::SessionsController
 
     if resource.valid_password?(params[:user][:password])
       sign_in(resource_name, resource)
-      if resource.authentication_token.nil?
-        resource.authentication_token = request.env['warden-jwt_auth.token']
-        resource.save
+      unless resource.authentication_token.present?
+        token = current_token
+        resource.update(authentication_token: token)
       end
-      render json: { user: resource }, status: :created and return
+      render json: { user: resource }, status: :created
     end
 
     invalid_login_attempt
@@ -57,4 +57,8 @@ class Api::V1::SessionsController < Devise::SessionsController
     warden.custom_failure!
     render json: { error: 'Invalid email/username or password' }, status: :unauthorized
   end
+
+  def current_token
+    request.env['warden-jwt_auth.token']
+  end   
 end

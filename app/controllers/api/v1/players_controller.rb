@@ -7,8 +7,8 @@ class Api::V1::PlayersController < ApplicationController
 
     api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/players/', 'Get all players in this team'
     def index
-        @players = @team.players.where(team_id: @team.id)
-        render json: @players
+        @players = @team.players
+        render json: @team
     end
 
     api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/players/:id', 'Get player with id'
@@ -64,8 +64,9 @@ class Api::V1::PlayersController < ApplicationController
     def set_user
         @user = User.find(params[:user_id])
     end
+
     def set_team
-        @team = Team.find(params[:id])
+        @team = Team.find(params[:team_id])
     end
     def set_player
         @player = Player.find(params[:id])
