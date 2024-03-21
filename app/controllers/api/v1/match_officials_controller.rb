@@ -6,7 +6,7 @@ class Api::V1::MatchOfficialsController < ApplicationController
 
     api :GET, '/v1/users/:user_id/match_officials', 'Get all match_officials'
     def index
-        render json: @match_official
+        render json: @match_officials
     end 
 
     api :GET, '/v1/users/:user_id/match_officials/:id', 'Get match_official with id'
