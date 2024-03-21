@@ -21,6 +21,7 @@ Rails.application.routes.draw do
           end 
         end
         resources :match_officials, only: [:index, :show, :create, :destroy]
+        resources :player_transfer, only: [:index, :show, :create, :destroy]
       end
     end
   end
