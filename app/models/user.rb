@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :followed_users, through: :follows, source: :followed_user
   has_many :followed_by_users, through: :follows, source: :followed_by_user
   has_many :leagues
+  has_many :match_officials
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
