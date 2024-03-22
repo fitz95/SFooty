@@ -2,7 +2,7 @@ class Api::V1::PlayerTransfersController < ApplicationController
     before_action :authenticate_request
     load_and_authorize_resource
     before_action :set_user
-    before_action : set_player_transfer, only: %i[show edit update destroy]
+    before_action :set_player_transfer, only: %i[show edit update destroy]
 
     api :GET, '/v1/users/:user_id/player_transfers', 'Get all player_transfers'
     def index 
@@ -72,5 +72,5 @@ class Api::V1::PlayerTransfersController < ApplicationController
         player = Player.find(player_id)
         player.update(current_team_id: to_team_id)
     end 
-    
+
 end

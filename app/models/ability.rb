@@ -35,8 +35,8 @@ class Ability
       can :read, [
         Follow, Formation, GameWeek, LineupPlayer, LineupPosition,
         LineupSubstituteOption, Match, Player, Referee, Trophy, Stadium, Team,
-        User, Transfer, TrophyPlayer, MatchEvent, MatchGoal, MatchLineup,
-        MatchOfficialForMatch, MatchShot, MatchSubstitute, PlayerPosition,
+        User, PlayerTransfer, TrophyPlayer, MatchEvent, MatchGoal, MatchLineup,
+        MatchOfficialForMatch, MatchShot, MatchSubstitution, LineupPosition,
         PlayerInjury, PlayerStat, TeamStat, League, GameWeek, MatchOfficial
       ]
       can :create, Follow if user.persisted?
