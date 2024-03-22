@@ -29,8 +29,10 @@ class Api::V1::PlayerTransfersController < ApplicationController
 
     def create
         @player_transfer = PlayerTransfer.new(player_transfer_params)
+        
 
         if @player_transfer.save
+            @player_transfer.user_id = current_user.id
             update_player_current_team(@player_transfer.player_id, @player_transfer.to_team_id)
             render json: @player_transfer, notice: 'Player Transfer was successfully created.'
         else
@@ -42,6 +44,7 @@ class Api::V1::PlayerTransfersController < ApplicationController
     def update
         if @player_transfer.update(player_transfer_params)
             update_player_current_team(@player_transfer.player_id, @player_transfer.to_team_id)
+            @player_transfer.user_id = current_user.id
             render json: @player_transfer, notice: 'Player Transfer was successfully updated.'
         else
             render json: @player_transfer.errors, status: :unprocessable_entity

@@ -27,13 +27,13 @@ class Api::V1::PlayersController < ApplicationController
     def edit
     end
 
-    api :POST, '/v1/users/:user_id/leagues/:league_id/teams', 'Create a new team in this league'
+    api :POST, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/players/', 'Create a new player in this team'
     def create
         @player = @team.players.new(player_params)
-        @player.user_id = current_user.id
-        @player.current_team_id = @team.id
 
         if @player.save
+            @player.user_id = current_user.id
+            @player.current_team_id = @team.id
             render json: @player, notice: 'Player was successfully created.'
         else
             render json: @player.errors, status: :unprocessable_entity
@@ -43,6 +43,7 @@ class Api::V1::PlayersController < ApplicationController
     api :PATCH, '/v1/users/:user_id/leagues/:leagues_id/teams/:team_id/players/:id', 'Update player with id'
     def update
         if @player.update(player_params)
+            @player.user_id = current_user.id
             render json: @player, notice: 'Player was successfully updated.'
         else
             render json: @player.errors, status: :unprocessable_entity
