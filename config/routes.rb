@@ -18,6 +18,7 @@ Rails.application.routes.draw do
         resources :leagues, only: [:index, :show, :create, :destroy] do
           resources :teams, only: [:index, :show, :create, :destroy] do 
             resources :players, only: [:index, :show, :create, :destroy]
+            resources :trophies, only: [:index, :show, :create, :destroy]
           end 
         end
         resources :match_officials, only: [:index, :show, :create, :destroy]
