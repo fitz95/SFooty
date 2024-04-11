@@ -3,7 +3,6 @@ class Api::V1::StadiumsController < ApplicationController
     load_and_authorize_resource
     before_action :set_user
     before_action :set_team
-    before_action :set_league
     before_action :set_stadium, only: %i[show edit update destroy]
 
     api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/', 'Get all stadiums in this team'
@@ -32,7 +31,6 @@ class Api::V1::StadiumsController < ApplicationController
     def create
         @stadium = @team.stadiums.new(stadium_params)
         @stadium.user_id = current_user.id
-        @stadium.league_id = @league.id
         @stadium.team_id = @team.id
 
         if @stadium.save
@@ -69,10 +67,6 @@ class Api::V1::StadiumsController < ApplicationController
 
     def set_team
         @team = Team.find(params[:team_id])
-    end
-
-    def set_league
-        @league = League.find(params[:league_id])
     end
 
     def set_stadium
