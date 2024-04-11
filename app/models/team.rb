@@ -14,5 +14,5 @@ class Team < ApplicationRecord
   has_many :players, through: :player_team_histories
   has_many :incoming_player_transfers, class_name: 'PlayerTransfer', foreign_key: 'buying_team_id', dependent: :destroy
 
-  scope :by_country, ->(country) { where(country:) }
+  scope :by_country, ->(country) { where(country: country) }
 end

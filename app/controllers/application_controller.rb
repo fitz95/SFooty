@@ -54,8 +54,6 @@ class ApplicationController < ActionController::API
   #extra authorization error catch as well as redirection
   rescue_from CanCan::AccessDenied do |exception|
     exception.default_message = "You are not authorized to perform this task"
-    respond_to do |format|
-      format.json { head :forbidden }
-    end
+    render json: { error: exception.message }, status: :forbidden
   end
 end
