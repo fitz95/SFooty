@@ -13,6 +13,9 @@ class User < ApplicationRecord
   has_many :posts
   has_many :match_officials
   has_many :player_injuries
+  has_many :player_stats
+  has_many :player_transfers
+  has_many :league_groups
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
