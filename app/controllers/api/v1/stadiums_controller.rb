@@ -75,6 +75,6 @@ class Api::V1::StadiumsController < ApplicationController
 
     def stadium_params
         params.require(:stadium).permit(:stadium_name, :city, :country, :capacity, :year_opened, :stadium_photo, :team_id)
-      end
+    end
         
 end

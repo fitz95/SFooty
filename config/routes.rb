@@ -22,6 +22,7 @@ Rails.application.routes.draw do
             resources :stadiums, only: [:index, :show, :create, :destroy]
           end 
         end
+        resources :posts, only: [:index, :show, :create, :destroy]
         resources :match_officials, only: [:index, :show, :create, :destroy]
         resources :player_transfers, only: [:index, :show, :create, :destroy]
         resources :player_injuries, only: [:index, :show, :create, :destroy]
