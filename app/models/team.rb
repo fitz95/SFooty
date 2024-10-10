@@ -3,7 +3,7 @@ class Team < ApplicationRecord
   belongs_to :user
   has_many :players
   has_many :trophies
-  belongs_to :league
+  belongs_to :league_group, optional: true
   has_many :home_matches, class_name: 'Match', foreign_key: 'home_team_id'
   has_many :away_matches, class_name: 'Match', foreign_key: 'away_team_id'
   has_many :team_shots, dependent: :destroy

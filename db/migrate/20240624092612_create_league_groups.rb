@@ -3,7 +3,7 @@ class CreateLeagueGroups < ActiveRecord::Migration[7.0]
     create_table :league_groups do |t|
       t.references :league, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
-      t.string :name
+      t.string :name, null: false
 
       t.timestamps
     end
