@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_request
+ # before_action :authenticate_request
   # load_and_authorize_resource
   api :GET, '/v1/users', 'Get all users'
   error code: 404, desc: 'Users not found!'
