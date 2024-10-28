@@ -4,6 +4,8 @@ class Api::V1::UsersController < ApplicationController
   api :GET, '/v1/users', 'Get all users'
   error code: 404, desc: 'Users not found!'
   def index
+    Rails.logger.debug "JWT Secret: #{ENV['JWT_SECRET']}" if Rails.env.production?
+    Rails.logger.info "Authorization Header: #{request.headers['Authorization']}"
     @users = if current_user.role == 'admin' || current_user.role == 'super_admin'
                User.all
              else
