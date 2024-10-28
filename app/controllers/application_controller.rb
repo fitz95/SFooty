@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
   attr_reader :current_user
 
   def authenticate_request
+    logger.info "Authorization Header: #{request.headers['Authorization']}"
     @current_user = authorize_token
     return if @current_user
 
