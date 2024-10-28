@@ -1,11 +1,11 @@
 class Api::V1::UsersController < ApplicationController
- # before_action :authenticate_request
+  before_action :authenticate_request
   # load_and_authorize_resource
   api :GET, '/v1/users', 'Get all users'
   error code: 404, desc: 'Users not found!'
   def index
-    Rails.logger.debug "JWT Secret: #{ENV['JWT_SECRET']}" if Rails.env.production?
-    Rails.logger.info "Authorization Header: #{request.headers['Authorization']}"
+    logger.debug "JWT Secret: #{ENV['JWT_SECRET']}" if Rails.env.production?
+    logger.info "Authorization Header: #{request.headers['Authorization']}"
     @users = if current_user.role == 'admin' || current_user.role == 'super_admin'
                User.all
              else

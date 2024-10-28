@@ -8,13 +8,13 @@ class ApplicationController < ActionController::API
     @current_user = authorize_token
     return if @current_user
 
-    Rails.logger.debug "Authentication failed: No current user found"
+    logger.debug "Authentication failed: No current user found"
     render json: { error: 'Unauthorized' }, status: :unauthorized
   end
 
   def authorize_token
     token = extract_token
-    Rails.logger.debug "Extracted Token: #{token}"
+    logger.debug "Extracted Token: #{token}"
 
     return unless token
 
@@ -25,7 +25,7 @@ class ApplicationController < ActionController::API
     end
 
     decoded_token = decode_token(token)
-    Rails.logger.debug "Decoded Token: #{decoded_token.inspect}"
+    logger.debug "Decoded Token: #{decoded_token.inspect}"
 
     User.find_by(id: decoded_token['sub']) if decoded_token
   rescue JWT::DecodeError
