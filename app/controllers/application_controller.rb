@@ -20,7 +20,7 @@ class ApplicationController < ActionController::API
     return unless token
 
     if revoked_token?(token)
-      Rails.logger.debug "Token is revoked: #{token}"
+      logger.debug "Token is revoked: #{token}"
       @current_user = nil
       return
     end
@@ -39,7 +39,12 @@ class ApplicationController < ActionController::API
   end
 
   def decode_token(token)
-    @decode_token = JWT.decode(token, ENV.fetch('JWT_SECRET', nil), true, algorithm: 'HS256').first
+    begin
+      @decode_token = JWT.decode(token, ENV.fetch('JWT_SECRET', nil), true, algorithm: 'HS256').first
+    rescue JWT::DecodeError => e
+      logger.debug "JWT Decode Error: #{e.message}"
+      nil
+    end
   end
 
   def revoked_token?(token)

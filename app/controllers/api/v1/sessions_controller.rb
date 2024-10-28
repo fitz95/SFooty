@@ -21,11 +21,12 @@ class Api::V1::SessionsController < Devise::SessionsController
 
     if resource.valid_password?(params[:user][:password])
       sign_in(resource_name, resource)
-      unless resource.authentication_token.present?
-        token = current_token
-        resource.update(authentication_token: token)
-      end
-      render json: { user: resource }, status: :created and return
+
+
+      token = request.env['warden-jwt_auth.token'] || generate_jwt_token(resource)
+
+      resource.update(authentication_token: token)
+      render json: { user: resource, token: token }, status: :created and return
     end
 
     invalid_login_attempt
@@ -60,5 +61,12 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def current_token
     request.env['warden-jwt_auth.token']
-  end   
+  end
+
+  private
+
+  def generate_jwt_token(resource)
+    payload = { sub: resource.id, exp: 36.hours.from_now.to_i }
+    JWT.encode(payload, ENV['JWT_SECRET'], 'HS256')
+  end
 end
