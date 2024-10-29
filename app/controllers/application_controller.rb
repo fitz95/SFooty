@@ -7,10 +7,13 @@ class ApplicationController < ActionController::API
   def authenticate_request
     logger.info "Authorization Header: #{request.headers['Authorization']}"
     @current_user = authorize_token
-    return if @current_user
 
-    logger.debug "Authentication failed: No current user found"
-    render json: { error: 'Unauthorized' }, status: :unauthorized
+    return if @current_user
+    logger.debug "Authentication sucessfulfor users: #{@current_user.id}"
+    else
+      logger.debug "Authentication failed: No current user found"
+      render json: { error: 'Unauthorized' }, status: :unauthorized
+    end
   end
 
   def authorize_token
@@ -29,7 +32,8 @@ class ApplicationController < ActionController::API
     logger.debug "Decoded Token: #{decoded_token.inspect}"
 
     User.find_by(id: decoded_token['sub']) if decoded_token
-  rescue JWT::DecodeError
+  rescue JWT::DecodeError => e
+    logger.debug "JWT Decode Error: #{e.message}"
     nil
   end
 
@@ -48,7 +52,7 @@ class ApplicationController < ActionController::API
   end
 
   def revoked_token?(token)
-    RevokedToken.exists?(token:)
+    RevokedToken.exists?(token: token)
   end
 
   protected

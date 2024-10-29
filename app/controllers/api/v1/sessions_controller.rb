@@ -22,8 +22,10 @@ class Api::V1::SessionsController < Devise::SessionsController
     if resource.valid_password?(params[:user][:password])
       sign_in(resource_name, resource)
 
-
+      # Generate or fetch the JWT token
       token = request.env['warden-jwt_auth.token'] || generate_jwt_token(resource)
+
+      # Update the user's token in the database
 
       resource.update(authentication_token: token)
       render json: { user: resource, token: token }, status: :created and return
@@ -41,9 +43,10 @@ class Api::V1::SessionsController < Devise::SessionsController
 
     if user.present?
       user.clear_jwt_token
-      user.authentication_token = nil
+      user.update(authentication_token: nil)
       render json: { message: 'Logged out successfully' }, status: :ok
     else
+      logger.debug "Invalid token provided during logout: #{token} "
       render json: { error: 'Invalid token' }, status: :unprocessable_entity
     end
   end
@@ -51,7 +54,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   protected
 
   def jwt_revoked?(_payload, token)
-    RevokedToken.exists?(token:)
+    RevokedToken.exists?(token: token)
   end
 
   def invalid_login_attempt
