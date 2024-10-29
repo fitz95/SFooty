@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     logger.info "Authorization Header: #{request.headers['Authorization']}"
     @current_user = authorize_token
 
-    return if @current_user
+    if @current_user
     logger.debug "Authentication sucessfulfor users: #{@current_user.id}"
     else
       logger.debug "Authentication failed: No current user found"
