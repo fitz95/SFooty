@@ -63,7 +63,7 @@ class Api::V1::LeaguesController < ApplicationController
         @league = League.find(params[:id])
     end
     def league_params
-        params.require(:league).permit(:league_name, :country, :tier_level, :description, :division_photo)
+        params.require(:league).permit(:league_name, :country, :tier_level, :description, :league_photo)
     end
 
 end

@@ -201,6 +201,8 @@ paths:
     get:
       summary: Get all leagues
       description: Retrieve a list of all leagues for a specific user.
+      tags:
+        - Leagues
       parameters:
         - in: path
           name: user_id
@@ -221,6 +223,8 @@ paths:
     post:
       summary: Create a new league
       description: Create a new league for a specific user.
+      tags:
+        - Leagues
       parameters:
         - in: path
           name: user_id
@@ -255,6 +259,8 @@ paths:
     get:
       summary: Get league by ID
       description: Retrieve details of a specific league by its ID.
+      tags:
+        - Leagues
       parameters:
         - in: path
           name: user_id
@@ -288,6 +294,8 @@ paths:
     patch:
       summary: Update league by ID
       description: Update details of a specific league by its ID.
+      tags:
+        - Leagues
       parameters:
         - in: path
           name: user_id
@@ -327,6 +335,8 @@ paths:
     delete:
       summary: Delete league by ID
       description: Delete a specific league by its ID.
+      tags:
+        - Leagues
       parameters:
         - in: path
           name: user_id
