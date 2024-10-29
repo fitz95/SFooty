@@ -18,6 +18,10 @@ class Api::V1::SessionsController < Devise::SessionsController
                User.find_for_database_authentication(username: login)
 
     return invalid_login_attempt unless resource
+    Rails.logger.info("JWT_SECRET: #{ENV['JWT_SECRET']}")
+    Rails.logger.info("JWT_SECRET: #{ENV['JWT_SECRET']}")
+
+
 
     if resource.valid_password?(params[:user][:password])
       sign_in(resource_name, resource)
