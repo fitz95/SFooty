@@ -1162,6 +1162,349 @@ paths:
                     type: string
   
 
+  /api/v1/users/{user_id}/player_transfers:
+    get:
+      summary: Get all player transfers
+      description: Retrieve all player transfers for a specific user.
+      tags:
+        - Player Transfers
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+      responses:
+        '200':
+          description: List of player transfers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerTransfer'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    post:
+      summary: Create a new player transfer
+      description: Add a new player transfer for a specific user.
+      tags:
+        - Player Transfers
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPlayerTransfer'
+      responses:
+        '201':
+          description: Player transfer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerTransfer'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              type: object
+              properties:
+                error:
+                  type: string
+      security:
+        - BearerAuth: []
+
+  /api/v1/users/{user_id}/player_transfers/{id}:
+    get:
+      summary: Get player transfer by ID
+      description: Retrieve a specific player transfer by its ID.
+      tags:
+        - Player Transfers
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the player transfer.
+      responses:
+        '200':
+          description: Player transfer details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerTransfer'
+        '404':
+          description: Player transfer not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    patch:
+      summary: Update player transfer by ID
+      description: Modify details of a specific player transfer by its ID.
+      tags:
+        - Player Transfers
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the player transfer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPlayerTransfer'
+      responses:
+        '200':
+          description: Player transfer updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerTransfer'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              type: object
+              properties:
+                error:
+                  type: string
+
+    delete:
+      summary: Delete player transfer by ID
+      description: Remove a player transfer by its ID.
+      tags:
+        - Player Transfers
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the player transfer.
+      responses:
+        '200':
+          description: Player transfer deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Player Transfer deleted successfully!
+        '404':
+          description: Player transfer not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /v1/users/{user_id}/player_injuries:
+    get:
+      summary: Get all player injuries
+      description: Retrieves a list of all player injuries for the specified user.
+      tags:
+        - Player Injuries
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user whose player injuries are being retrieved.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of player injuries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlayerInjury'
+    post:
+      summary: Create a new player injury
+      description: Creates a new player injury for the specified user.
+      tags:
+        - Player Injuries
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user creating the player injury.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerInjury'
+      responses:
+        '201':
+          description: Player injury created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerInjury'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /v1/users/{user_id}/player_injuries/{id}:
+    get:
+      summary: Get player injury by ID
+      description: Retrieves a specific player injury by its ID.
+      tags:
+        - Player Injuries
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user who owns the player injury.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the player injury.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A specific player injury
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerInjury'
+        '404':
+          description: Player injury not found
+
+    patch:
+      summary: Update player injury by ID
+      description: Updates a specific player injury by its ID.
+      tags:
+        - Player Injuries
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user who owns the player injury.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the player injury.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlayerInjury'
+      responses:
+        '200':
+          description: Player injury updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerInjury'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    delete:
+      summary: Delete player injury by ID
+      description: Deletes a specific player injury by its ID.
+      tags:
+        - Player Injuries
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user who owns the player injury.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the player injury.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Player injury deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Player Injury deleted successfully!"
+        '404':
+          description: Player injury not found
+
+    
+
 components:
   schemas:
     UserRegistration:
@@ -1581,7 +1924,221 @@ components:
         - title
         - body
 
+    NewPlayerTransfer:
+      type: object
+      properties:
+        player_id:
+          type: integer
+          description: The ID of the player being transferred.
+        from_team_id:
+          type: integer
+          description: The ID of the team from which the player is transferring.
+        to_team_id:
+          type: integer
+          description: The ID of the team to which the player is transferring.
+        transfer_date:
+          type: string
+          format: date
+          description: The date of the transfer.
+        transfer_fee:
+          type: number
+          format: float
+          description: The fee for the transfer.
+        transfer_type:
+          type: string
+          description: The type of transfer (e.g., loan, permanent).
+        transfer_window:
+          type: string
+          description: The transfer window during which the transfer occurs.
+        transfer_status:
+          type: string
+          description: The status of the transfer (e.g., completed, pending).
+        transfer_contract:
+          type: string
+          description: Details of the transfer contract.
+        transfer_contract_duration:
+          type: integer
+          description: Duration of the transfer contract in years.
+        transfer_contract_salary:
+          type: number
+          format: float
+          description: Salary included in the transfer contract.
+        transfer_contract_bonus:
+          type: number
+          format: float
+          description: Bonus included in the transfer contract.
+        transfer_contract_clause:
+          type: string
+          description: Any clauses included in the transfer contract.
+        transfer_contract_release_clause:
+          type: number
+          format: float
+          description: Release clause included in the transfer contract.
+        transfer_contract_agent_fee:
+          type: number
+          format: float
+          description: Agent fee associated with the transfer.
+        transfer_contract_agent:
+          type: string
+          description: The agent managing the transfer.
+      required:
+        - player_id
+        - from_team_id
+        - to_team_id
+        - transfer_date
+        - transfer_fee
+        - transfer_type
+
+    PlayerTransfer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        player_id:
+          type: integer
+          example: 101
+        from_team_id:
+          type: integer
+          example: 201
+        to_team_id:
+          type: integer
+          example: 202
+        transfer_date:
+          type: string
+          format: date
+          example: "2024-01-15"
+        transfer_fee:
+          type: number
+          format: double
+          example: 5000000.00
+        transfer_type:
+          type: string
+          example: "permanent"
+        transfer_window:
+          type: string
+          example: "summer"
+        transfer_status:
+          type: string
+          example: "completed"
+        transfer_contract:
+          type: string
+          example: "3 years"
+        transfer_contract_duration:
+          type: integer
+          example: 3
+        transfer_contract_salary:
+          type: number
+          format: double
+          example: 1500000.00
+        transfer_contract_bonus:
+          type: number
+          format: double
+          example: 50000.00
+        transfer_contract_clause:
+          type: string
+          example: "buy-back option"
+        transfer_contract_release_clause:
+          type: number
+          format: double
+          example: 10000000.00
+        transfer_contract_agent_fee:
+          type: number
+          format: double
+          example: 100000.00
+        transfer_contract_agent:
+          type: string
+          example: "John Doe"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T12:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T12:00:00Z"
+      required:
+        - player_id
+        - from_team_id
+        - to_team_id
+        - transfer_date
+        - transfer_fee
+        - transfer_type
+        - transfer_window
+        - transfer_status
+        - transfer_contract_duration
+        - transfer_contract_salary
     
+    PlayerInjury:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        player_id:
+          type: integer
+          example: 10
+        injury_type:
+          type: string
+          example: "Hamstring"
+        description:
+          type: string
+          example: "Slight strain in the hamstring muscle."
+        start_date:
+          type: string
+          format: date
+          example: "2023-10-01"
+        end_date:
+          type: string
+          format: date
+          example: "2023-10-15"
+        recovery_status:
+          type: string
+          example: "Recovering"
+        user_id:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T12:34:56Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2023-10-02T12:34:56Z"
+
+    NewPlayerInjury:
+      type: object
+      required:
+        - player_id
+        - injury_type
+      properties:
+        player_id:
+          type: integer
+          description: "ID of the player associated with the injury."
+          example: 10
+        injury_type:
+          type: string
+          description: "Type of injury (e.g., 'Hamstring', 'Ankle')."
+          example: "Hamstring"
+        description:
+          type: string
+          description: "Detailed description of the injury."
+          example: "Slight strain in the hamstring muscle."
+        start_date:
+          type: string
+          format: date
+          description: "Date when the injury occurred."
+          example: "2023-10-01"
+        end_date:
+          type: string
+          format: date
+          description: "Expected recovery date."
+          example: "2023-10-15"
+        recovery_status:
+          type: string
+          description: "Current recovery status of the player (e.g., 'Recovering', 'Fully Recovered')."
+          example: "Recovering"
     
   securitySchemes:
     BearerAuth:
