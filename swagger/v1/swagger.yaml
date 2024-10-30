@@ -978,6 +978,188 @@ paths:
                 properties:
                   error:
                     type: string
+  /api/v1/users/{user_id}/posts:
+    get:
+      summary: Get all posts for a user
+      description: Retrieve all posts for a specific user.
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+      responses:
+        '200':
+          description: List of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    post:
+      summary: Create a new post for a user
+      description: Add a new post for a specific user.
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPost'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              type: object
+              properties:
+                error:
+                  type: string
+      security:
+        - BearerAuth: []
+
+  /api/v1/users/{user_id}/posts/{id}:
+    get:
+      summary: Get post by ID for a user
+      description: Retrieve a specific post by its ID for a user.
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the post.
+      responses:
+        '200':
+          description: Post details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    patch:
+      summary: Update post by ID for a user
+      description: Modify details of a specific post by its ID for a user.
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPost'
+      responses:
+        '200':
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              type: object
+              properties:
+                error:
+                  type: string
+
+    delete:
+      summary: Delete post by ID for a user
+      description: Remove a post by its ID for a user.
+      tags:
+        - Posts
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user.
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the post.
+      responses:
+        '200':
+          description: Post deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post deleted successfully!
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   
 
 components:
@@ -1329,6 +1511,75 @@ components:
         - last_name
         - nationality
         - date_of_birth
+
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        body:
+          type: string
+        photo:
+          type: string
+        user_id:
+          type: integer
+        status:
+          type: string
+        team_id:
+          type: integer
+        player_id:
+          type: integer
+        league_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        additional_images:
+          type: array
+          items:
+            type: string
+        video:
+          type: string
+
+    NewPost:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the post.
+        body:
+          type: string
+          description: Body of the post.
+        photo:
+          type: string
+          description: Photo URL of the post.
+        status:
+          type: string
+          description: Status of the post.
+        team_id:
+          type: integer
+          description: ID of the team.
+        player_id:
+          type: integer
+          description: ID of the player.
+        league_id:
+          type: integer
+          description: ID of the league.
+        video:
+          type: string
+          description: Video URL of the post.
+        additional_images:
+          type: array
+          items:
+            type: string
+      required:
+        - title
+        - body
 
     
     
