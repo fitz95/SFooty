@@ -17,11 +17,13 @@ Rails.application.routes.draw do
       resources :users do
         resources :leagues, only: [:index, :show, :create, :destroy, :update] do
           resources :teams, only: [:index, :show, :create, :destroy, :update] do 
-            resources :players, only: [:index, :show, :create, :destroy, :update]
             resources :trophies, only: [:index, :show, :create, :destroy, :update]
             resources :stadiums, only: [:index, :show, :create, :destroy, :update]
-          end 
+          end
+          resources :players, only: [:index, :show, :create, :destroy, :update]
         end
+        
+
         resources :posts, only: [:index, :show, :create, :destroy, :update]
         resources :match_officials, only: [:index, :show, :create, :destroy, :update]
         resources :player_transfers, only: [:index, :show, :create, :destroy, :update]

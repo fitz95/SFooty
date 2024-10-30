@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_29_140822) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_30_040202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -323,6 +323,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_29_140822) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "league_id"
+    t.index ["league_id"], name: "index_players_on_league_id"
     t.index ["user_id"], name: "index_players_on_user_id"
   end
 
@@ -535,6 +537,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_29_140822) do
   add_foreign_key "player_transfers", "teams", column: "from_team_id"
   add_foreign_key "player_transfers", "teams", column: "to_team_id"
   add_foreign_key "player_transfers", "users"
+  add_foreign_key "players", "leagues"
   add_foreign_key "players", "teams", column: "current_team_id"
   add_foreign_key "players", "users"
   add_foreign_key "posts", "leagues"
