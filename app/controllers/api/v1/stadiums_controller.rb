@@ -2,79 +2,62 @@ class Api::V1::StadiumsController < ApplicationController
     before_action :authenticate_request
     load_and_authorize_resource
     before_action :set_user
-    before_action :set_team
-    before_action :set_stadium, only: %i[show edit update destroy]
-
-    api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/', 'Get all stadiums in this team'
+    before_action :set_stadium, only: %i[show update destroy]
+  
+    # GET /v1/users/:user_id/stadiums
+    api :GET, '/v1/users/:user_id/stadiums', 'Get all stadiums for a specific user'
     def index
-        @stadiums = Stadium.where(team_id: @team.id)
-        render json: @stadiums
+      @stadiums = @user.stadiums
+      render json: @stadiums
     end
-
-    api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/:id', 'Get Stadium with id'
-    param :id, :number, desc: 'id of the requested Stadium', required: true
-    error code: 404, desc: 'Stadium not found!'
+  
+    # GET /v1/users/:user_id/stadiums/:id
+    api :GET, '/v1/users/:user_id/stadiums/:id', 'Get a specific stadium by id'
     def show
-        render json: @stadium
+      render json: @stadium
     end
-
-    api :POST, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/', 'Create a new Stadium in this team'
-    def new 
-        @stadium = @team.stadiums.new
-    end
-
-    api :GET, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/:id/edit', 'Edit Stadium with id'
-    def edit
-    end
-
-    api :POST, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/', 'Create a new Stadium in this team'
+  
+    # POST /v1/users/:user_id/stadiums
+    api :POST, '/v1/users/:user_id/stadiums', 'Create a new stadium'
     def create
-        @stadium = @team.stadiums.new(stadium_params)
-        @stadium.user_id = current_user.id
-        @stadium.team_id = @team.id
-
-        if @stadium.save
-            render json: @stadium, notice: 'Stadium was successfully created.'
-        else
-            render json: @stadium.errors, status: :unprocessable_entity
-        end
+      @stadium = @user.stadiums.new(stadium_params)
+  
+      if @stadium.save
+        render json: @stadium, status: :created, notice: 'Stadium was successfully created.'
+      else
+        render json: @stadium.errors, status: :unprocessable_entity
+      end
     end
-
-    api :PATCH, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/:id', 'Update Stadium with id'
+  
+    # PATCH/PUT /v1/users/:user_id/stadiums/:id
+    api :PATCH, '/v1/users/:user_id/stadiums/:id', 'Update a stadium'
     def update
-        if @stadium.update(stadium_params)
-            @stadium.user_id = current_user.id
-            render json: @stadium, notice: 'Stadium was successfully updated.'
-        else
-            render json: @stadium.errors, status: :unprocessable_entity
-        end
+      if @stadium.update(stadium_params)
+        render json: @stadium, notice: 'Stadium was successfully updated.'
+      else
+        render json: @stadium.errors, status: :unprocessable_entity
+      end
     end
-    
-    api :DELETE, '/v1/users/:user_id/leagues/:league_id/teams/:team_id/stadiums/:id', 'Delete Stadium by id'
+  
+    # DELETE /v1/users/:user_id/stadiums/:id
+    api :DELETE, '/v1/users/:user_id/stadiums/:id', 'Delete a stadium'
     def destroy
-        authorize! :destroy, Stadium
-        if @stadium.destroy
-            render json: { message: 'Stadium deleted successfully!' }, status: :ok
-        else
-            render json: { error: 'Failed to delete the Stadium.' }, status: :unprocessable_entity
-        end
+      @stadium.destroy
+      render json: { message: 'Stadium deleted successfully!' }, status: :ok
     end
-    
+  
     private
+  
     def set_user
-        @user = User.find(params[:user_id])
+      @user = User.find(params[:user_id])
     end
-
-    def set_team
-        @team = Team.find(params[:team_id])
-    end
-
+  
     def set_stadium
-        @stadium = Stadium.find(params[:id])
+      @stadium = @user.stadiums.find(params[:id])
     end
-
+  
     def stadium_params
-        params.require(:stadium).permit(:stadium_name, :city, :country, :capacity, :year_opened, :stadium_photo, :team_id)
+      params.require(:stadium).permit(:stadium_name, :city, :country, :capacity, :year_opened, :stadium_photo, :team_id )
     end
-        
-end
+  end
+  
