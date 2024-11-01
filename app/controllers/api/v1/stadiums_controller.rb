@@ -5,9 +5,9 @@ class Api::V1::StadiumsController < ApplicationController
     before_action :set_stadium, only: %i[show update destroy]
   
     # GET /v1/users/:user_id/stadiums
-    api :GET, '/v1/users/:user_id/stadiums', 'Get all stadiums for a specific user'
+    api :GET, '/v1/users/:user_id/stadiums', 'Get all stadiums'
     def index
-      @stadiums = @user.stadiums
+      @stadiums = Stadium.all
       render json: @stadiums
     end
   
