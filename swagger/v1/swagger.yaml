@@ -556,10 +556,10 @@ paths:
                   error:
                     type: string 
 
-  /api/v1/users/{user_id}/leagues/{league_id}/players:
+  /api/v1/users/{user_id}/players:
     get:
-      summary: Get all players in a specific league
-      description: Retrieve all players within the specified league.
+      summary: Get all players for a specific user
+      description: Retrieve all players associated with a specific user.
       tags:
         - Players
       parameters:
@@ -569,12 +569,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
       responses:
         '200':
           description: List of players
@@ -585,7 +579,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Player'
         '404':
-          description: League not found
+          description: User not found
           content:
             application/json:
               schema:
@@ -595,8 +589,8 @@ paths:
                     type: string
 
     post:
-      summary: Create a new player in a league
-      description: Add a new player to the specified league.
+      summary: Create a new player for a user
+      description: Add a new player associated with the specified user.
       tags:
         - Players
       parameters:
@@ -606,12 +600,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
       requestBody:
         required: true
         content:
@@ -636,10 +624,10 @@ paths:
       security:
         - BearerAuth: []
 
-  /api/v1/users/{user_id}/leagues/{league_id}/players/{id}:
+  /api/v1/users/{user_id}/players/{id}:
     get:
       summary: Get player by ID
-      description: Retrieve a specific player by its ID within a league.
+      description: Retrieve a specific player by its ID associated with a user.
       tags:
         - Players
       parameters:
@@ -649,12 +637,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
         - in: path
           name: id
           required: true
@@ -680,7 +662,7 @@ paths:
 
     patch:
       summary: Update player by ID
-      description: Modify details of a specific player by its ID within a league.
+      description: Modify details of a specific player by its ID associated with a user.
       tags:
         - Players
       parameters:
@@ -690,12 +672,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
         - in: path
           name: id
           required: true
@@ -726,7 +702,7 @@ paths:
 
     delete:
       summary: Delete player by ID
-      description: Remove a player by its ID within a league.
+      description: Remove a player by its ID associated with a user.
       tags:
         - Players
       parameters:
@@ -736,12 +712,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
         - in: path
           name: id
           required: true
