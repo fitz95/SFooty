@@ -1543,6 +1543,7 @@ paths:
                     type: string
                     example: "Stadium not found"
 
+
     patch:
       summary: Update a stadium
       description: Modify details of a specific Stadium by its ID for a user.
@@ -1585,7 +1586,7 @@ paths:
                     type: array
                     items:
                       type: string
-
+    
     delete:
       summary: Delete a stadium
       description: Remove a stadium by its ID for a user.
@@ -1625,7 +1626,728 @@ paths:
                   error:
                     type: string
                     example: "Stadium not found"
+    
+  /v1/users/{user_id}/managers:
+    get:
+      summary: Get all managers for a specific user
+      description: Retrieve all managers associated with a user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Manager'
 
+    post:
+      summary: Create a new manager
+      description: Create a Manager for a specific User
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewManager'
+      responses:
+        '201':
+          description: Manager created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /v1/users/{user_id}/managers/{id}:
+    get:
+      summary: Get a specific manager by ID
+      description: Retrieve a specific manager by ID for a User
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the manager.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+        '404':
+          description: Manager not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Manager not found"
+
+    patch:
+      summary: Update a manager
+      description: Modify details of a specific Manager by its ID for a user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the manager.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewManager'
+      responses:
+        '200':
+          description: Manager updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a manager
+      description: Remove a manager by its ID for a user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the manager.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Manager deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Manager deleted successfully!"
+        '404':
+          description: Manager not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Manager not found"  
+
+  /v1/users/{user_id}/seasons:
+    get:
+      summary: Get all seasons for a user
+      description: Retrieve all seasons associated with a specific user.
+      tags:
+        - Seasons
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Season'
+
+    post:
+      summary: Create a new season for a user
+      description: Create a new season associated with a specific user.
+      tags:
+        - Seasons
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeason'
+      responses:
+        '201':
+          description: Season created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Season'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /v1/users/{user_id}/seasons/{id}:
+    get:
+      summary: Get a specific season by ID
+      description: Retrieve details of a specific season by its ID for a user.
+      tags:
+        - Seasons
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the season.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Season'
+        '404':
+          description: Season not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Season not found!"
+
+    patch:
+      summary: Update a specific season by ID
+      description: Modify details of a specific season by its ID for a user.
+      tags:
+        - Seasons
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the season.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeason'
+      responses:
+        '200':
+          description: Season updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Season'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific season by ID
+      description: Remove a season by its ID for a user.
+      tags:
+        - Seasons
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the season.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Season deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Season deleted successfully!"
+        '404':
+          description: Season not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Season not found!"
+
+
+  /v1/users/{user_id}/managers:
+    get:
+      summary: Get all managers for a user
+      description: Retrieve all managers associated with a specific user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Manager'
+
+    post:
+      summary: Create a new manager for a user
+      description: Create a new manager associated with a specific user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewManager'
+      responses:
+        '201':
+          description: Manager created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /v1/users/{user_id}/managers/{id}:
+
+    get:
+      summary: Get a specific manager by ID
+      description: Retrieve details of a specific manager by its ID for a user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the manager.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+        '404':
+          description: Manager not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Manager not found!"
+
+    patch:
+      summary: Update a specific manager by ID
+      description: Modify details of a specific manager by its ID for a user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the manager.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewManager'
+      responses:
+        '200':
+          description: Manager updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manager'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific manager by ID
+      description: Remove a manager by its ID for a user.
+      tags:
+        - Managers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the manager.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Manager deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Manager deleted successfully!"
+        '404':
+          description: Manager not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Manager not found!"
+
+  /v1/users/{user_id}/season_managers:
+    get:
+      summary: Get all season managers for a user
+      description: Retrieve all season managers associated with a specific user.
+      tags:
+        - SeasonManagers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeasonManager'
+
+    post:
+      summary: Create a new season manager for a user
+      description: Create a new season manager associated with a specific user.
+      tags:
+        - SeasonManagers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeasonManager'
+      responses:
+        '201':
+          description: Season Manager created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeasonManager'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /v1/users/{user_id}/season_managers/{id}:
+    get:
+      summary: Get a specific season manager by ID
+      description: Retrieve details of a specific season manager by its ID for a user.
+      tags:
+        - SeasonManagers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the season manager.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeasonManager'
+        '404':
+          description: Season Manager not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Season Manager not found!"
+
+    patch:
+      summary: Update a specific season manager by ID
+      description: Modify details of a specific season manager by its ID for a user.
+      tags:
+        - SeasonManagers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the season manager.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSeasonManager'
+      responses:
+        '200':
+          description: Season Manager updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeasonManager'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific season manager by ID
+      description: Remove a season manager by its ID for a user.
+      tags:
+        - SeasonManagers
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the season manager.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Season Manager deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Season Manager deleted successfully!"
+        '404':
+          description: Season Manager not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Season Manager not found!"
     
 
 components:
@@ -2319,6 +3041,377 @@ components:
           type: string
           example: "http://example.com/stadium_photo.jpg"
     
+    Manager:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the manager.
+        name:
+          type: string
+          description: The name of the manager.
+        previous_teams:
+          type: string
+          description: A list of previous teams managed by the manager.
+        user_id:
+          type: integer
+          description: The ID of the user who created the manager record.
+      required:
+        - id
+        - name
+        - user_id
+
+    NewManager:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the manager.
+        previous_teams:
+          type: string
+          description: A list of previous teams managed by the manager.
+      required:
+        - name
+    
+    Season:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the season.
+        name:
+          type: string
+          description: The name of the season.
+        start_date:
+          type: string
+          format: date
+          description: The start date of the season.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the season.
+        status:
+          type: string
+          description: The status of the season (e.g., active, inactive).
+        number_of_teams:
+          type: integer
+          description: The number of teams in the season.
+        season_type:
+          type: string
+          description: The type of season.
+        description:
+          type: string
+          description: Description of the season.
+        total_matches:
+          type: integer
+          description: The total number of matches in the season.
+        user_id:
+          type: integer
+          description: The ID of the user who created the season.
+      required:
+        - id
+        - name
+        - start_date
+        - end_date
+        - status
+        - number_of_teams
+        - season_type
+        - description
+        - total_matches
+        - user_id
+
+    NewSeason:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the season.
+        start_date:
+          type: string
+          format: date
+          description: The start date of the season.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the season.
+        status:
+          type: string
+          description: The status of the season (e.g., active, inactive).
+        number_of_teams:
+          type: integer
+          description: The number of teams in the season.
+        season_type:
+          type: string
+          description: The type of season.
+        description:
+          type: string
+          description: Description of the season.
+        total_matches:
+          type: integer
+          description: The total number of matches in the season.
+      required:
+        - name
+        - start_date
+        - end_date
+        - status
+        - number_of_teams
+        - season_type
+        - description
+        - total_matches
+
+    Manager:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the manager.
+        name:
+          type: string
+          description: The name of the manager.
+        date_of_birth:
+          type: string
+          format: date
+          description: The date of birth of the manager.
+        nationality:
+          type: string
+          description: The nationality of the manager.
+        experience_level:
+          type: integer
+          description: The experience level of the manager.
+        hired_on:
+          type: string
+          format: date
+          description: The date the manager was hired.
+        contract_end_date:
+          type: string
+          format: date
+          description: The end date of the manager's contract.
+        salary:
+          type: number
+          format: decimal
+          description: The salary of the manager.
+        achievements:
+          type: string
+          description: A description of the manager's achievements.
+        manager_type:
+          type: string
+          description: The type of manager.
+        previous_teams:
+          type: string
+          description: The list of previous teams managed by the manager.
+        user_id:
+          type: integer
+          description: The ID of the user who created the manager record.
+      required:
+        - id
+        - name
+        - date_of_birth
+        - nationality
+        - experience_level
+        - hired_on
+        - contract_end_date
+        - salary
+        - achievements
+        - manager_type
+        - previous_teams
+        - user_id
+
+    NewManager:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the manager.
+        date_of_birth:
+          type: string
+          format: date
+          description: The date of birth of the manager.
+        nationality:
+          type: string
+          description: The nationality of the manager.
+        experience_level:
+          type: integer
+          description: The experience level of the manager.
+        hired_on:
+          type: string
+          format: date
+          description: The date the manager was hired.
+        contract_end_date:
+          type: string
+          format: date
+          description: The end date of the manager's contract.
+        salary:
+          type: number
+          format: decimal
+          description: The salary of the manager.
+        achievements:
+          type: string
+          description: A description of the manager's achievements.
+        manager_type:
+          type: string
+          description: The type of manager.
+        previous_teams:
+          type: string
+          description: The list of previous teams managed by the manager.
+      required:
+        - name
+        - date_of_birth
+        - nationality
+        - experience_level
+        - hired_on
+        - contract_end_date
+        - salary
+        - achievements
+        - manager_type
+        - previous_teams
+    
+    SeasonManager:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the season manager.
+        role:
+          type: string
+          description: The role of the season manager.
+        performance_rating:
+          type: number
+          format: decimal
+          description: The performance rating of the season manager.
+        season_start_date:
+          type: string
+          format: date
+          description: The start date of the season.
+        season_end_date:
+          type: string
+          format: date
+          description: The end date of the season.
+        goals:
+          type: integer
+          description: The goals achieved in the season.
+        bonuses:
+          type: number
+          format: decimal
+          description: The bonuses earned by the season manager.
+        contract_terms:
+          type: string
+          description: Terms of the season manager's contract.
+        status:
+          type: string
+          description: The status of the season manager.
+        team_performance_notes:
+          type: string
+          description: Notes on the team’s performance.
+        training_style:
+          type: string
+          description: The training style of the season manager.
+        most_used_formation:
+          type: string
+          description: The most used formation by the season manager.
+        most_improved_player:
+          type: string
+          description: The most improved player under the season manager.
+        relegated:
+          type: boolean
+          description: Indicates if the manager's team was relegated.
+        promoted:
+          type: boolean
+          description: Indicates if the manager's team was promoted.
+        season_id:
+          type: integer
+          description: The ID of the associated season.
+        manager_id:
+          type: integer
+          description: The ID of the associated manager.
+        team_id:
+          type: integer
+          description: The ID of the associated team.
+        user_id:
+          type: integer
+          description: The ID of the associated user.
+      required:
+        - id
+        - role
+        - season_start_date
+        - status
+        - season_id
+        - manager_id
+        - team_id
+        - user_id
+
+    NewSeasonManager:
+      type: object
+      properties:
+        role:
+          type: string
+          description: The role of the season manager.
+        performance_rating:
+          type: number
+          format: decimal
+          description: The performance rating of the season manager.
+        season_start_date:
+          type: string
+          format: date
+          description: The start date of the season.
+        season_end_date:
+          type: string
+          format: date
+          description: The end date of the season.
+        goals:
+          type: integer
+          description: The goals achieved in the season.
+        bonuses:
+          type: number
+          format: decimal
+          description: The bonuses earned by the season manager.
+        contract_terms:
+          type: string
+          description: Terms of the season manager's contract.
+        status:
+          type: string
+          description: The status of the season manager.
+        team_performance_notes:
+          type: string
+          description: Notes on the team’s performance.
+        training_style:
+          type: string
+          description: The training style of the season manager.
+        most_used_formation:
+          type: string
+          description: The most used formation by the season manager.
+        most_improved_player:
+          type: string
+          description: The most improved player under the season manager.
+        relegated:
+          type: boolean
+          description: Indicates if the manager's team was relegated.
+        promoted:
+          type: boolean
+          description: Indicates if the manager's team was promoted.
+        season_id:
+          type: integer
+          description: The ID of the associated season.
+        manager_id:
+          type: integer
+          description: The ID of the associated manager.
+        team_id:
+          type: integer
+          description: The ID of the associated team.
+        user_id:
+          type: integer
+          description: The ID of the associated user.
+      required:
+        - role
+        - season_start_date
+        - status
+        - season_id
+        - manager_id
+        - team_id
+        - user_id
+
+
+
+
   securitySchemes:
     BearerAuth:
       type: apiKey
