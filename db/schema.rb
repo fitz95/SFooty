@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_05_090713) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_06_090138) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -227,13 +227,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_05_090713) do
     t.integer "referee_id"
     t.integer "home_team_id"
     t.integer "away_team_id"
-    t.integer "home_team_score"
-    t.integer "away_team_score"
     t.integer "league_id"
     t.integer "game_week_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "competition_id"
+    t.index ["competition_id"], name: "index_matches_on_competition_id"
   end
 
   create_table "player_injuries", force: :cascade do |t|
