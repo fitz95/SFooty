@@ -2709,6 +2709,186 @@ paths:
                     items:
                       type: string
 
+  /api/v1/users/{user_id}/competitions:
+    get:
+      summary: Get all competitions for a user
+      description: Retrieve a list of all competitions created by a specific user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+
+    post:
+      summary: Create a new competition for a user
+      description: Create a new competition record for a specific user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCompetition'
+      responses:
+        '201':
+          description: Competition created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/competitions/{id}:
+    get:
+      summary: Get a specific competition by ID
+      description: Retrieve details of a specific competition by its ID for a user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the competition.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        '404':
+          description: Competition not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Competition not found!"
+
+    patch:
+      summary: Update a specific competition by ID
+      description: Modify details of a specific competition by its ID for a user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the competition.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCompetition'
+      responses:
+        '200':
+          description: Competition updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific competition by ID
+      description: Remove a competition by its ID for a user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the competition.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Competition deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Competition deleted successfully!"
+        '404':
+          description: Competition not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Competition not found!"
+
 components:
   schemas:
     UserRegistration:
@@ -3835,6 +4015,93 @@ components:
         - time
         - home_team_id
         - away_team_id
+
+
+    Competition:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date
+          description: The start date of the competition.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the competition.
+        status:
+          type: string
+          description: Status of the competition.
+        location:
+          type: string
+          description: Location of the competition.
+        description:
+          type: string
+          description: Detailed description of the competition.
+        user_id:
+          type: integer
+          description: ID of the user who created the competition.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewCompetition:
+      type: object
+      properties:
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        status:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date
+          description: The start date of the competition.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the competition.
+        status:
+          type: string
+          description: Status of the competition.
+        location:
+          type: string
+          description: Location of the competition.
+        description:
+          type: string
+          description: Detailed description of the competition.
+        user_id:
+          type: integer
+          description: ID of the user who created the competition.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    
 
   securitySchemes:
     BearerAuth:
