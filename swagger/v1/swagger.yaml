@@ -3087,22 +3087,48 @@ paths:
                 properties:
                   error:
                     type: string
-    patch:
-      summary: Update a specific match goal by ID
-      description: Modify details of a specific match goal by its ID for a user.
+  
+  /api/v1/users/{user_id}/formations:
+    get:
+      summary: Get all formations for a specific user
+      description: Retrieve all formations created by a specific user.
       tags:
-        - Match Goals
+        - Formations
       parameters:
         - name: user_id
           in: path
           required: true
-          description: The ID of the user.
+          description: The ID of the user
           schema:
             type: integer
-        - name: id
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Formation'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    post:
+      summary: Create a new formation for a specific user
+      description: Add a new formation for a specific user.
+      tags:
+        - Formations
+      parameters:
+        - name: user_id
           in: path
           required: true
-          description: The ID of the match goal.
+          description: The ID of the user
           schema:
             type: integer
       requestBody:
@@ -3110,16 +3136,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewMatchGoal'
+              $ref: '#/components/schemas/NewFormation'
       responses:
-        '200':
-          description: Match goal updated successfully
+        '201':
+          description: Formation created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MatchGoal'
+                $ref: '#/components/schemas/Formation'
         '422':
-          description: Validation error
+          description: Validation errors
           content:
             application/json:
               schema:
@@ -3129,63 +3155,26 @@ paths:
                     type: array
                     items:
                       type: string
-  
-    delete:
-      summary: Delete a specific match goal by ID
-      description: Remove a match goal by its ID for a user.
-      tags:
-        - Match Goals
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          description: The ID of the user.
-          schema:
-            type: integer
-        - name: id
-          in: path
-          required: true
-          description: The ID of the match goal.
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Match goal deleted successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Match goal deleted successfully!"
-        '404':  
-          description: Match goal not found 
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Match goal not found!"
+        '404':
+          description: User not found
 
-    get :
-      summary: Get a specific match goal by ID
-      description: Retrieve details of a specific match goal by its ID for a user.
+  /api/v1/users/{user_id}/formations/{id}:
+    get:
+      summary: Get a specific formation by ID
+      description: Retrieve a specific formation created by a user.
       tags:
-        - Match Goals
+        - Formations
       parameters:
         - name: user_id
           in: path
           required: true
-          description: The ID of the user.
+          description: The ID of the user
           schema:
             type: integer
         - name: id
           in: path
           required: true
-          description: The ID of the match goal.
+          description: The ID of the formation
           schema:
             type: integer
       responses:
@@ -3194,9 +3183,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MatchGoal'
+                $ref: '#/components/schemas/Formation'
         '404':
-          description: Match goal not found
+          description: Formation not found
           content:
             application/json:
               schema:
@@ -3204,8 +3193,90 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Match goal not found!"
-                  
+    patch:
+      summary: Update a formation by ID
+      description: Update the details of a specific formation for a user.
+      tags:
+        - Formations
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFormation'
+      responses:
+        '200':
+          description: Formation updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Formation'
+        '404':
+          description: Formation not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+    delete:
+      summary: Delete a formation by ID
+      description: Remove a specific formation associated with a user.
+      tags:
+        - Formations
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Formation deleted successfully
+        '404':
+          description: Formation not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+
+
 
 components:
   schemas:
@@ -4487,7 +4558,42 @@ components:
         minute_scored:
           type: integer
 
+    Formation:
+      type: object
+      properties:
+        id:
+          type: integer
+        formation_name:
+          type: string
+          description: The name of the formation (e.g., "4-4-2", "3-5-2")
+        description:
+          type: string
+          description: A description of the formation
+        user_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
 
+    NewFormation:
+      type: object
+      required:
+        - formation_name
+        - description
+      properties:
+        formation_name:
+          type: string
+          description: The name of the formation
+        description:
+          type: string
+          description: A description of the formation
+
+
+
+                      
   securitySchemes:
     BearerAuth:
       type: apiKey
