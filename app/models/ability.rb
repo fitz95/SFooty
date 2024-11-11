@@ -14,7 +14,7 @@ class Ability
         LineupSubstituteOption, Match, MatchOfficial, Player, Referee,
         Trophy, Stadium, Team, User, PlayerTransfer, TrophyPlayer, MatchEvent,
         MatchGoal, MatchLineup, MatchOfficialForMatch, MatchShot,
-        MatchSubstitution, LineupPosition,LineupPlayer, PlayerInjury, PlayerStat, TeamStat, Post
+        MatchSubstitution, LineupPosition,LineupPlayer, PlayerInjury, PlayerStat, TeamStat, Post, FormationPosition
       ]
     elsif user.data_collector?
       can :manage, [
@@ -22,7 +22,7 @@ class Ability
         LineupSubstituteOption, MatchEvent, MatchGoal, MatchLineup,
         MatchPlayer, MatchOfficial, MatchOfficialForMatch, MatchShot,
         MatchSubstitution, Player, Stadium, TrophyPlayer, PlayerPosition,
-        PlayerInjury, PlayerStat, TeamStat, Post
+        PlayerInjury, PlayerStat, TeamStat, Post, FormationPosition
       ]
     elsif user.client?
       can :read, [

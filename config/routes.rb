@@ -31,7 +31,10 @@ Rails.application.routes.draw do
         resources :matches, only: [:index, :show, :create, :destroy, :update]
         resources :competitions, only: [:index, :show, :create, :destroy, :update]
         resources :match_goals, only: [:index, :show, :create, :destroy, :update]
-        resources :formations, only: [:index, :show, :create, :destroy, :update]
+        resources :formations, only: [:index, :show, :create, :destroy, :update] do
+          resources:formation_positions, only: [:index, :show, :create, :destroy, :update]
+        end
+
       end
     end
   end

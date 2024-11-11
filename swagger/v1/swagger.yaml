@@ -3275,8 +3275,174 @@ paths:
                   error:
                     type: string
 
+  /api/v1/formations/{formation_id}/formation_positions:
+    get:
+      summary: Get all positions for a specific formation
+      description: Retrieve all positions defined within a specific formation.
+      tags:
+        - Formation Positions
+      parameters:
+        - name: formation_id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FormationPosition'
+        '404':
+          description: Formation not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
+    post:
+      summary: Create a new position for a specific formation
+      description: Add a new position to a specific formation.
+      tags:
+        - Formation Positions
+      parameters:
+        - name: formation_id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFormationPosition'
+      responses:
+        '201':
+          description: Position created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormationPosition'
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Formation not found
 
+  /api/v1/formations/{formation_id}/formation_positions/{id}:
+    get:
+      summary: Get a specific position by ID
+      description: Retrieve details of a specific position by its ID within a formation.
+      tags:
+        - Formation Positions
+      parameters:
+        - name: formation_id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the position
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormationPosition'
+        '404':
+          description: Position or Formation not found
+
+    patch:
+      summary: Update a specific position
+      description: Modify an existing position by ID within a formation.
+      tags:
+        - Formation Positions
+      parameters:
+        - name: formation_id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the position
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFormationPosition'
+      responses:
+        '200':
+          description: Position updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FormationPosition'
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Position or Formation not found
+
+    delete:
+      summary: Delete a specific position
+      description: Remove a position from a formation.
+      tags:
+        - Formation Positions
+      parameters:
+        - name: formation_id
+          in: path
+          required: true
+          description: The ID of the formation
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the position
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Position deleted successfully
+        '404':
+          description: Position or Formation not found
 
 components:
   schemas:

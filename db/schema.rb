@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_07_065053) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_08_053057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_065053) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_follows_on_user_id"
+  end
+
+  create_table "formation_positions", force: :cascade do |t|
+    t.bigint "formation_id", null: false
+    t.string "position_name"
+    t.integer "position_order"
+    t.integer "position_number"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["formation_id"], name: "index_formation_positions_on_formation_id"
   end
 
   create_table "formations", force: :cascade do |t|
@@ -563,6 +573,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_07_065053) do
   add_foreign_key "follows", "users"
   add_foreign_key "follows", "users", column: "followed_user_id"
   add_foreign_key "follows", "users", column: "following_user_id"
+  add_foreign_key "formation_positions", "formations"
   add_foreign_key "game_weeks", "leagues"
   add_foreign_key "game_weeks", "seasons"
   add_foreign_key "game_weeks", "users"
