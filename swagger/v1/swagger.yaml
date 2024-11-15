@@ -4029,6 +4029,319 @@ paths:
         '404':
           description: Substitution not found
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_shots:
+    get:
+      summary: Retrieve all match shots for a specific user and match
+      description: Fetches all match shots created by a specific user for a given match.
+      tags:
+        - MatchShots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match shots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchShot'
+              examples:
+                example-1:
+                  summary: Successful response
+                  value:
+                    - id: 1
+                      match_id: 3
+                      player_id: 10
+                      team_id: 2
+                      shot_type: "header"
+                      shot_outcome: "on_target"
+                      is_goal: true
+                      minute: 45
+                      expected_goal_value: 0.3
+                    - id: 2
+                      match_id: 3
+                      player_id: 15
+                      team_id: 2
+                      shot_type: "foot"
+                      shot_outcome: "missed"
+                      is_goal: false
+                      minute: 78
+                      expected_goal_value: 0.2
+        '404':
+          description: User or match not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "User or match not found"
+
+    post:
+      summary: Create a new match shot
+      description: Create a new match shot for a specific user and match, with details like player, shot type, outcome, and minute.
+      tags:
+        - MatchShots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchShot'
+            examples:
+              example-1:
+                summary: Example request body
+                value:
+                  player_id: 10
+                  team_id: 2
+                  shot_type: "header"
+                  shot_outcome: "on_target"
+                  is_goal: true
+                  minute: 45
+                  expected_goal_value: 0.3
+      responses:
+        '201':
+          description: Match shot created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchShot'
+              example:
+                id: 5
+                match_id: 3
+                player_id: 10
+                team_id: 2
+                shot_type: "header"
+                shot_outcome: "on_target"
+                is_goal: true
+                minute: 45
+                expected_goal_value: 0.3
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors: ["Player ID is required", "Minute cannot be negative"]
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_shots/{id}:
+  get:
+    summary: Retrieve a specific match shot
+    description: Get details of a specific match shot created by a user for a given match.
+    tags:
+      - MatchShots
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Match shot details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchShot'
+      '404':
+        description: Match shot not found
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+            example:
+              error: "Match shot not found"
+
+  patch:
+    summary: Update a specific match shot
+    description: Update the details of an existing match shot.
+    tags:
+      - MatchShots
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewMatchShot'
+    responses:
+      '200':
+        description: Match shot updated successfully
+      '404':
+        description: Match shot not found
+
+  delete:
+    summary: Delete a specific match shot
+    description: Delete a match shot associated with a specific user and match.
+    tags:
+      - MatchShots
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    responses:
+      '204':
+        description: No content, match shot deleted successfully
+      '404':
+        description: Match shot not found
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_shots/on_target:
+    get:
+      summary: Retrieve all on-target shots
+      description: Fetches all on-target shots for a specific match.
+      tags:
+        - Match Shots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of on-target shots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchShot'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_shots/missed_shots:
+    get:
+      summary: Retrieve all missed shots
+      description: Fetches all missed shots for a specific match.
+      tags:
+        - Match Shots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of missed shots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchShot'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_shots/total_xg:
+    get:
+      summary: Calculate total xG (Expected Goals)
+      description: Calculates the total xG for all on-target shots in a specific match.
+      tags:
+        - Match Shots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Total xG for on-target shots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_xg:
+                    type: number
+                    format: float
+                    example: 2.34
+
 components:
   schemas:
     UserRegistration:
@@ -5533,6 +5846,49 @@ components:
         team_id:
           type: integer
 
+    MatchShot:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        shot_type:
+          type: string
+        shot_outcome:
+          type: string
+        is_goal:
+          type: boolean
+        minute:
+          type: integer
+        expected_goal_value:
+          type: number
+          format: float
+
+    NewMatchShot:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        shot_type:
+          type: string
+        shot_outcome:
+          type: string
+        is_goal:
+          type: boolean
+        minute:
+          type: integer
+        expected_goal_value:
+          type: number
+          format: float
+ 
+ 
   securitySchemes:
     BearerAuth:
       type: apiKey

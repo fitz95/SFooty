@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_12_124348) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_15_104636) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -226,11 +226,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_124348) do
     t.integer "match_id"
     t.integer "player_id"
     t.integer "team_id"
-    t.integer "minute_shot"
+    t.integer "minute"
     t.boolean "is_on_target"
-    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "assist_player_id"
+    t.string "shot_type", default: "unknown", null: false
+    t.string "shot_outcome", default: "off target", null: false
+    t.boolean "is_goal", default: false
+    t.decimal "x", precision: 5, scale: 2, default: "0.0"
+    t.decimal "y", precision: 5, scale: 2, default: "0.0"
+    t.decimal "expected_goal_value", precision: 4, scale: 3, default: "0.0"
+    t.index ["assist_player_id"], name: "index_match_shots_on_assist_player_id"
   end
 
   create_table "match_substitutions", force: :cascade do |t|
@@ -632,6 +639,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_124348) do
   add_foreign_key "match_official_for_matches", "matches"
   add_foreign_key "match_official_for_matches", "users"
   add_foreign_key "match_officials", "users"
+  add_foreign_key "match_shots", "players", column: "assist_player_id"
   add_foreign_key "match_substitutions", "matches"
   add_foreign_key "match_substitutions", "players", column: "substitution_player_in_id"
   add_foreign_key "match_substitutions", "players", column: "substitution_player_out_id"
