@@ -3280,7 +3280,7 @@ paths:
       summary: Retrieve all positions for a specific formation
       description: Fetches all positions for a specific formation associated with the given user.
       tags:
-        - FormationPositions
+        - Formation Positions
       parameters:
         - name: user_id
           in: path
@@ -3322,7 +3322,7 @@ paths:
       summary: Create a new position for a formation
       description: Creates a new position for a specific formation associated with the given user.
       tags:
-        - FormationPositions
+        - Formation Positions
       parameters:
         - name: user_id
           in: path
@@ -3515,7 +3515,7 @@ paths:
       summary: Retrieve all match lineups for a specific user and match
       description: Fetches all match lineups that have been created by a specific user for a given match.
       tags:
-        - MatchLineups
+        - Match Lineups
       parameters:
         - name: user_id
           in: path
@@ -3574,7 +3574,7 @@ paths:
       summary: Create a new match lineup
       description: Create a new lineup for a specific user and match, with details like formation, team, and player positions.
       tags:
-        - MatchLineups
+        - Match Lineups
       parameters:
         - name: user_id
           in: path
@@ -4158,105 +4158,105 @@ paths:
                 errors: ["Player ID is required", "Minute cannot be negative"]
 
   /api/v1/users/{user_id}/matches/{match_id}/match_shots/{id}:
-  get:
-    summary: Retrieve a specific match shot
-    description: Get details of a specific match shot created by a user for a given match.
-    tags:
-      - MatchShots
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      '200':
-        description: Match shot details
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MatchShot'
-      '404':
-        description: Match shot not found
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-            example:
-              error: "Match shot not found"
-
-  patch:
-    summary: Update a specific match shot
-    description: Update the details of an existing match shot.
-    tags:
-      - MatchShots
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    requestBody:
-      required: true
-      content:
-        application/json:
+    get:
+      summary: Retrieve a specific match shot
+      description: Get details of a specific match shot created by a user for a given match.
+      tags:
+        - MatchShots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
           schema:
-            $ref: '#/components/schemas/NewMatchShot'
-    responses:
-      '200':
-        description: Match shot updated successfully
-      '404':
-        description: Match shot not found
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match shot details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchShot'
+        '404':
+          description: Match shot not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Match shot not found"
 
-  delete:
-    summary: Delete a specific match shot
-    description: Delete a match shot associated with a specific user and match.
-    tags:
-      - MatchShots
-    parameters:
-      - name: user_id
-        in: path
+    patch:
+      summary: Update a specific match shot
+      description: Update the details of an existing match shot.
+      tags:
+        - MatchShots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
         required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      '204':
-        description: No content, match shot deleted successfully
-      '404':
-        description: Match shot not found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchShot'
+      responses:
+        '200':
+          description: Match shot updated successfully
+        '404':
+          description: Match shot not found
+
+    delete:
+      summary: Delete a specific match shot
+      description: Delete a match shot associated with a specific user and match.
+      tags:
+        - MatchShots
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content, match shot deleted successfully
+        '404':
+          description: Match shot not found
 
   /api/v1/users/{user_id}/matches/{match_id}/match_shots/on_target:
     get:
@@ -5521,105 +5521,116 @@ components:
         description:
           type: string
 
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        start_date:
-          type: string
-          format: date
-          description: The start date of the competition.
-        end_date:
-          type: string
-          format: date
-          description: The end date of the competition.
-        status:
-          type: string
-          description: Status of the competition.
-        location:
-          type: string
-          description: Location of the competition.
-        description:
-          type: string
-          description: Detailed description of the competition.
-        user_id:
-          type: integer
-          description: ID of the user who created the competition.
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-    
     MatchGoal:
       type: object
       properties:
         id:
           type: integer
+          description: The ID of the match goal.
         match_id:
           type: integer
-          description: ID of the match where the goal was scored.
-        scorer_player_id:
+          description: The ID of the match in which the goal was scored.
+        scorer_id:
           type: integer
-          description: ID of the player who scored the goal.
-        assister_player_id:
+          description: The ID of the player who scored the goal.
+        assister_id:
           type: integer
-          description: ID of the player who assisted the goal (if any).
-        team_for_id:
-          type: integer
-          description: ID of the team that scored the goal.
-        team_against_id:
-          type: integer
-          description: ID of the opposing team.
-        penalty_goal:
+          description: The ID of the player who assisted the goal (if applicable).
+        is_penalty:
           type: boolean
-          description: Indicates if the goal was a penalty.
-        own_goal:
+          description: Whether the goal was a penalty.
+          default: false
+        is_own_goal:
           type: boolean
-          description: Indicates if the goal was an own goal.
+          description: Whether the goal was an own goal.
+          default: false
         goal_type:
           type: string
-          description: The type of goal (e.g., "header", "free kick").
+          description: The type of the goal (e.g., header, foot).
         goal_desc:
           type: string
-          description: Additional description of the goal.
-        minute_scored:
+          description: A description of the goal (e.g., long shot, rebound).
+        minute:
           type: integer
-          description: The minute during which the goal was scored.
+          description: The minute in the match when the goal was scored.
         user_id:
           type: integer
-          description: ID of the user who created the match goal.
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+          description: The ID of the user (administrator or person managing the data).
+        match_shot_id:
+          type: integer
+          description: The ID of the corresponding shot that resulted in the goal.
+        team_id:
+          type: integer
+          description: The ID of the team to which the goal scorer belongs.
+        x:
+          type: number
+          format: float
+          description: The x-coordinate on the pitch where the goal was scored.
+        y:
+          type: number
+          format: float
+          description: The y-coordinate on the pitch where the goal was scored.
+        expected_goal_value:
+          type: number
+          format: float
+          description: The expected goal value (probability) for the shot.
+      required:
+        - match_id
+        - scorer_id
+        - minute
+        - user_id
+        - team_id
+        - expected_goal_value
 
     NewMatchGoal:
       type: object
       properties:
-        scorer_player_id:
+        scorer_id:
           type: integer
-        assister_player_id:
+          description: The ID of the player who scored the goal.
+        assister_id:
           type: integer
-        team_for_id:
-          type: integer
-        team_against_id:
-          type: integer
-        penalty_goal:
+          description: The ID of the player who assisted the goal (optional).
+        is_penalty:
           type: boolean
-        own_goal:
+          description: Whether the goal was a penalty.
+          default: false
+        is_own_goal:
           type: boolean
+          description: Whether the goal was an own goal.
+          default: false
         goal_type:
           type: string
+          description: The type of the goal (e.g., header, foot).
         goal_desc:
           type: string
-        minute_scored:
+          description: A description of the goal (e.g., long shot, rebound).
+        minute:
           type: integer
+          description: The minute in the match when the goal was scored.
+        team_id:
+          type: integer
+          description: The ID of the team to which the goal scorer belongs.
+        match_shot_id:
+          type: integer
+          description: The ID of the corresponding shot that resulted in the goal (optional).
+        x:
+          type: number
+          format: float
+          description: The x-coordinate on the pitch where the goal was scored.
+        y:
+          type: number
+          format: float
+          description: The y-coordinate on the pitch where the goal was scored.
+        expected_goal_value:
+          type: number
+          format: float
+          description: The expected goal value (probability) for the shot.
+      required:
+        - scorer_id
+        - minute
+        - team_id
+        - expected_goal_value
 
     Formation:
       type: object

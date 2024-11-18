@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_15_104636) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_18_005436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -166,19 +166,26 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_104636) do
 
   create_table "match_goals", force: :cascade do |t|
     t.integer "match_id"
-    t.integer "scorer_player_id"
-    t.integer "assister_player_id"
-    t.integer "team_for_id"
-    t.integer "team_against_id"
-    t.boolean "penaly_goal"
-    t.boolean "own_goal"
+    t.integer "scorer_id"
+    t.integer "assister_id"
+    t.boolean "is_penalty", default: false
+    t.boolean "is_own_goal", default: false
     t.string "goal_type"
     t.string "goal_desc"
-    t.integer "minute_scored"
+    t.integer "minute"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "match_shot_id"
+    t.bigint "team_id"
+    t.decimal "x", precision: 5, scale: 2
+    t.decimal "y", precision: 5, scale: 2
+    t.decimal "expected_goal_value", precision: 4, scale: 3
+    t.index ["assister_id"], name: "index_match_goals_on_assister_id"
     t.index ["match_id"], name: "index_match_goals_on_match_id"
+    t.index ["match_shot_id"], name: "index_match_goals_on_match_shot_id"
+    t.index ["scorer_id"], name: "index_match_goals_on_scorer_id"
+    t.index ["team_id"], name: "index_match_goals_on_team_id"
     t.index ["user_id"], name: "index_match_goals_on_user_id"
   end
 
@@ -237,7 +244,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_104636) do
     t.decimal "x", precision: 5, scale: 2, default: "0.0"
     t.decimal "y", precision: 5, scale: 2, default: "0.0"
     t.decimal "expected_goal_value", precision: 4, scale: 3, default: "0.0"
+    t.bigint "user_id", null: false
     t.index ["assist_player_id"], name: "index_match_shots_on_assist_player_id"
+    t.index ["user_id"], name: "index_match_shots_on_user_id"
   end
 
   create_table "match_substitutions", force: :cascade do |t|
@@ -627,10 +636,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_104636) do
   add_foreign_key "match_events", "players"
   add_foreign_key "match_events", "teams"
   add_foreign_key "match_events", "users"
+  add_foreign_key "match_goals", "match_shots"
   add_foreign_key "match_goals", "matches"
-  add_foreign_key "match_goals", "players", column: "assister_player_id"
-  add_foreign_key "match_goals", "players", column: "scorer_player_id"
-  add_foreign_key "match_goals", "teams", column: "team_for_id"
+  add_foreign_key "match_goals", "players", column: "assister_id"
+  add_foreign_key "match_goals", "players", column: "scorer_id"
+  add_foreign_key "match_goals", "teams"
   add_foreign_key "match_goals", "users"
   add_foreign_key "match_lineups", "formations"
   add_foreign_key "match_lineups", "matches"
@@ -640,6 +650,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_15_104636) do
   add_foreign_key "match_official_for_matches", "users"
   add_foreign_key "match_officials", "users"
   add_foreign_key "match_shots", "players", column: "assist_player_id"
+  add_foreign_key "match_shots", "users"
   add_foreign_key "match_substitutions", "matches"
   add_foreign_key "match_substitutions", "players", column: "substitution_player_in_id"
   add_foreign_key "match_substitutions", "players", column: "substitution_player_out_id"
