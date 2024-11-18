@@ -4342,6 +4342,318 @@ paths:
                     format: float
                     example: 2.34
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes:
+    get:
+      summary: Retrieve all match passes for a specific  match
+      description: Fetches all match passes created for a given match.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match passes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchPass'
+              examples:
+                example-1:
+                  summary: Successful response
+                  value:
+                    - id: 1
+                      match_id: 5
+                      player_id: 12
+                      team_id: 3
+                      pass_type: "through_ball"
+                      pass_outcome: "completed"
+                      is_successful: true
+                      is_key_pass: true
+                      minute: 34
+                      pass_start_x: 40
+                      pass_start_y: 50
+                      pass_end_x: 60
+                      pass_end_y: 30
+                      expected_assist_value: 0.2
+                    - id: 2
+                      match_id: 5
+                      player_id: 20
+                      team_id: 3
+                      pass_type: "cross"
+                      pass_outcome: "intercepted"
+                      is_successful: false
+                      minute: 78
+                      pass_start_x: 30
+                      pass_start_y: 20
+                      pass_end_x: 70
+                      pass_end_y: 40
+        '404':
+          description: User or match not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "User or match not found"
+
+    post:
+      summary: Create a new match pass
+      description: Create a new match pass for a specific user and match with details like player, pass type, outcome, and coordinates.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchPass'
+            examples:
+              example-1:
+                summary: Example request body
+                value:
+                  player_id: 12
+                  team_id: 3
+                  pass_type: "through_ball"
+                  pass_outcome: "completed"
+                  is_successful: true
+                  is_key_pass: false
+                  minute: 45
+                  pass_start_x: 40
+                  pass_start_y: 50
+                  pass_end_x: 60
+                  pass_end_y: 30
+                  expected_assist_value: 0.1
+      responses:
+        '201':
+          description: Match pass created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchPass'
+              example:
+                id: 7
+                match_id: 5
+                player_id: 12
+                team_id: 3
+                pass_type: "through_ball"
+                pass_outcome: "completed"
+                is_successful: true
+                minute: 45
+                expected_assist_value: 0.1
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  errors: ["Player ID is required", "Minute cannot be negative"]
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes/{id}:
+    get:
+      summary: Retrieve a specific match pass
+      description: Fetches details of a specific match pass for a given user and match.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match pass details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchPass'
+              example:
+                id: 7
+                match_id: 5
+                player_id: 12
+                team_id: 3
+                pass_type: "through_ball"
+                pass_outcome: "completed"
+                is_successful: true
+                minute: 45
+        '404':
+          description: Match pass not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Match pass not found"
+    patch:
+      summary: Update a match pass
+      description: Update the details of a specific match pass.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match pass
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchPass'
+      responses:
+        '200':
+          description: Match pass updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchPass'
+        '404':
+          description: Match pass not found
+        '422':
+          description: Validation error
+
+    delete:
+      summary: Delete a match pass
+      description: Delete a specific match pass by its ID.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match pass
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match pass deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "Match pass deleted successfully"
+        '404':
+          description: Match pass not found
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes/key_passes:
+    get:
+      summary: Retrieve all key passes for a match
+      description: Fetches all key passes made by players in a specific match.
+      tags:
+        - MatchPasses
+      responses:
+        '200':
+          description: A list of key passes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchPass'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes/completed:
+    get:
+      summary: Retrieve the count of completed passes
+      description: Fetches the number of completed passes for a specific team in a match.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: team_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Count of completed passes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completed_passes:
+                    type: integer
+                example:
+                  completed_passes: 42
+
 components:
   schemas:
     UserRegistration:
@@ -5898,8 +6210,51 @@ components:
         expected_goal_value:
           type: number
           format: float
- 
- 
+
+    MatchPass:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        pass_type:
+          type: string
+        pass_outcome:
+          type: string
+        is_successful:
+          type: boolean
+        is_key_pass:
+          type: boolean
+        minute:
+          type: integer
+        expected_assist_value:
+          type: number
+
+    NewMatchPass:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        pass_type:
+          type: string
+        pass_outcome:
+          type: string
+        is_successful:
+          type: boolean
+        is_key_pass:
+          type: boolean
+        minute:
+          type: integer
+        expected_assist_value:
+          type: number
+  
   securitySchemes:
     BearerAuth:
       type: apiKey

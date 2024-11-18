@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_18_005436) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_18_070817) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -227,6 +227,37 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_005436) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_match_officials_on_user_id"
+  end
+
+  create_table "match_passes", force: :cascade do |t|
+    t.integer "match_id", null: false
+    t.integer "player_id", null: false
+    t.integer "team_id", null: false
+    t.integer "minute", null: false
+    t.boolean "is_successful", default: false, null: false
+    t.boolean "is_key_pass", default: false
+    t.boolean "is_cross", default: false
+    t.boolean "is_assist", default: false
+    t.string "pass_type", default: "short", null: false
+    t.string "pass_outcome", default: "incomplete", null: false
+    t.decimal "pass_start_x", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "pass_start_y", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "pass_end_x", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "pass_end_y", precision: 5, scale: 2, default: "0.0", null: false
+    t.decimal "pass_distance", precision: 5, scale: 2, default: "0.0", null: false
+    t.string "pass_direction", default: "forward", null: false
+    t.decimal "expected_assist_value", precision: 4, scale: 3, default: "0.0"
+    t.integer "assister"
+    t.integer "receiver"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assister"], name: "index_match_passes_on_assister"
+    t.index ["match_id"], name: "index_match_passes_on_match_id"
+    t.index ["player_id"], name: "index_match_passes_on_player_id"
+    t.index ["receiver"], name: "index_match_passes_on_receiver"
+    t.index ["team_id"], name: "index_match_passes_on_team_id"
+    t.index ["user_id"], name: "index_match_passes_on_user_id"
   end
 
   create_table "match_shots", force: :cascade do |t|
@@ -649,6 +680,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_005436) do
   add_foreign_key "match_official_for_matches", "matches"
   add_foreign_key "match_official_for_matches", "users"
   add_foreign_key "match_officials", "users"
+  add_foreign_key "match_passes", "matches"
+  add_foreign_key "match_passes", "players"
+  add_foreign_key "match_passes", "players", column: "assister"
+  add_foreign_key "match_passes", "players", column: "receiver"
+  add_foreign_key "match_passes", "teams"
+  add_foreign_key "match_passes", "users"
   add_foreign_key "match_shots", "players", column: "assist_player_id"
   add_foreign_key "match_shots", "users"
   add_foreign_key "match_substitutions", "matches"
