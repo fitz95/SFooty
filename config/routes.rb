@@ -38,6 +38,21 @@ Rails.application.routes.draw do
             end
           end
           resources :match_goals, only: [:index, :show, :create, :destroy, :update]
+          resources :match_passes, only: [:index, :show, :create, :destroy, :update] do
+            collection do
+              get :key_passes
+              get :completed_passes
+              get :chances_created
+              get :total_xg
+            end
+          end
+          resources :match_touches, only: [:index, :show, :create, :destroy, :update] do
+            collection do
+              get :touches  
+              get :in_box
+            end
+          end
+          resources :match_dribbles, only: [:index, :show, :create, :destroy, :update]
         end
         resources :competitions, only: [:index, :show, :create, :destroy, :update]
         resources :formations, only: [:index, :show, :create, :destroy, :update] do

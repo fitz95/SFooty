@@ -11,6 +11,14 @@ class Player < ApplicationRecord
   has_many :player_transfers, dependent: :destroy
   has_many :trophy_players, dependent: :destroy
   has_many :trophies, through: :trophy_players
+  has_many :match_dribbles, dependent: :destroy
+  has_many :match_fouls, dependent: :destroy
+  has_many :match_goals, dependent: :destroy
+  has_many :match_passes, dependent: :destroy
+  has_many :match_shots, dependent: :destroy
+  has_many :match_touches, dependent: :destroy
+  has_many :match_lineups, dependent: :destroy
+  has_many :dribbled_past, class_name: 'MatchDribble', foreign_key: 'opponent'
 
   # Example: A scope to find players by nationality
   scope :by_nationality, ->(nationality) { where(nationality:) }

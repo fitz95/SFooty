@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_18_070817) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_19_004857) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -146,6 +146,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_070817) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_managers_on_user_id"
+  end
+
+  create_table "match_dribbles", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "opponent_id"
+    t.integer "minute"
+    t.boolean "is_successful"
+    t.string "dribble_type"
+    t.string "outcome"
+    t.decimal "x"
+    t.decimal "y"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_dribbles_on_match_id"
+    t.index ["opponent_id"], name: "index_match_dribbles_on_opponent_id"
+    t.index ["player_id"], name: "index_match_dribbles_on_player_id"
+    t.index ["team_id"], name: "index_match_dribbles_on_team_id"
+    t.index ["user_id"], name: "index_match_dribbles_on_user_id"
   end
 
   create_table "match_events", force: :cascade do |t|
@@ -290,6 +311,26 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_070817) do
     t.datetime "updated_at", null: false
     t.index ["match_id"], name: "index_match_substitutions_on_match_id"
     t.index ["user_id"], name: "index_match_substitutions_on_user_id"
+  end
+
+  create_table "match_touches", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.string "touch_type"
+    t.string "touch_direction"
+    t.boolean "successful", default: false
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.integer "minute"
+    t.boolean "in_box", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_touches_on_match_id"
+    t.index ["player_id"], name: "index_match_touches_on_player_id"
+    t.index ["team_id"], name: "index_match_touches_on_team_id"
+    t.index ["user_id"], name: "index_match_touches_on_user_id"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -663,6 +704,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_070817) do
   add_foreign_key "lineup_substitute_options", "teams"
   add_foreign_key "lineup_substitute_options", "users"
   add_foreign_key "managers", "users"
+  add_foreign_key "match_dribbles", "matches"
+  add_foreign_key "match_dribbles", "players"
+  add_foreign_key "match_dribbles", "players", column: "opponent_id"
+  add_foreign_key "match_dribbles", "teams"
+  add_foreign_key "match_dribbles", "users"
   add_foreign_key "match_events", "matches"
   add_foreign_key "match_events", "players"
   add_foreign_key "match_events", "teams"
@@ -692,6 +738,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_18_070817) do
   add_foreign_key "match_substitutions", "players", column: "substitution_player_in_id"
   add_foreign_key "match_substitutions", "players", column: "substitution_player_out_id"
   add_foreign_key "match_substitutions", "users"
+  add_foreign_key "match_touches", "matches"
+  add_foreign_key "match_touches", "players"
+  add_foreign_key "match_touches", "teams"
+  add_foreign_key "match_touches", "users"
   add_foreign_key "player_injuries", "players"
   add_foreign_key "player_injuries", "users"
   add_foreign_key "player_stats", "matches"
