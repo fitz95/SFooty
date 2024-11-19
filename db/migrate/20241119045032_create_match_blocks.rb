@@ -5,7 +5,7 @@ class CreateMatchBlocks < ActiveRecord::Migration[7.0]
       t.references :player, null: false, foreign_key: true
       t.references :team, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
-      t.references :opponent, null: false, foreign_key: true
+      t.references :opponent, foreign_key: { to_table: :players }
       t.boolean :is_successful
       t.string :block_type
       t.integer :minute

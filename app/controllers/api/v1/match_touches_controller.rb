@@ -67,7 +67,7 @@ class Api::V1::MatchTouchesController < ApplicationController
     def set_match_touch
       @match_touch = @match.match_touches.find_by(id: params[:id])
       if @match_touch.nil?
-        render json: { error: 'Match touch not found for the user' }, status: :not_found
+        render json: { error: 'Match touch not found for the match' }, status: :not_found
       end
     end
   

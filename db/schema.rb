@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_19_004857) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_19_045032) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -146,6 +146,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_004857) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_managers_on_user_id"
+  end
+
+  create_table "match_blocks", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "opponent_id"
+    t.boolean "is_successful"
+    t.string "block_type"
+    t.integer "minute"
+    t.decimal "x"
+    t.decimal "y"
+    t.string "block_outcome"
+    t.integer "distance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_blocks_on_match_id"
+    t.index ["opponent_id"], name: "index_match_blocks_on_opponent_id"
+    t.index ["player_id"], name: "index_match_blocks_on_player_id"
+    t.index ["team_id"], name: "index_match_blocks_on_team_id"
+    t.index ["user_id"], name: "index_match_blocks_on_user_id"
   end
 
   create_table "match_dribbles", force: :cascade do |t|
@@ -704,6 +726,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_004857) do
   add_foreign_key "lineup_substitute_options", "teams"
   add_foreign_key "lineup_substitute_options", "users"
   add_foreign_key "managers", "users"
+  add_foreign_key "match_blocks", "matches"
+  add_foreign_key "match_blocks", "players"
+  add_foreign_key "match_blocks", "players", column: "opponent_id"
+  add_foreign_key "match_blocks", "teams"
+  add_foreign_key "match_blocks", "users"
   add_foreign_key "match_dribbles", "matches"
   add_foreign_key "match_dribbles", "players"
   add_foreign_key "match_dribbles", "players", column: "opponent_id"
