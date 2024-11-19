@@ -4986,6 +4986,136 @@ paths:
                 properties:
                   message:
                     type: string
+                    
+  /api/v1/users/{user_id}/matches/{match_id}/match_blocks:
+    post:
+      summary: Create a new match block
+      description: Registers a new block event for a player in a specific match.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchBlock'
+      responses:
+        '201':
+          description: Match block created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchBlock'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_blocks/{id}:
+    patch:
+      summary: Update an existing match block
+      description: Updates a block event by its ID for a specific match.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match block
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchBlock'
+      responses:
+        '200':
+          description: Match block updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchBlock'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+    delete:
+      summary: Delete a specific match block by its ID
+      description: Deletes a block event from a specific match by its ID.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match block
+      responses:
+        '200':
+          description: Match block deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  
+
 components:
   schemas:
     UserRegistration:
@@ -6744,7 +6874,56 @@ components:
           nullable: true
           description: Y-coordinate of the dribble location on the pitch
     
-    
+    MatchBlock:
+      type: object
+      properties:
+        id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opponent_id:
+          type: integer
+        block_type:
+          type: string
+        minute:
+          type: integer
+        is_successful:
+          type: boolean
+        block_outcome:
+          type: string
+        distance:
+          type: number
+          format: float
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewMatchBlock:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opponent_id:
+          type: integer
+        block_type:
+          type: string
+        minute:
+          type: integer
+        is_successful:
+          type: boolean
+        block_outcome:
+          type: string
+        distance:
+          type: number
+          format: float
+          
 
   securitySchemes:
     BearerAuth:

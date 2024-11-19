@@ -17,6 +17,7 @@ class Player < ApplicationRecord
   has_many :match_passes, dependent: :destroy
   has_many :match_shots, dependent: :destroy
   has_many :match_touches, dependent: :destroy
+  has_many :match_blocks, dependent: :destroy
   has_many :match_lineups, dependent: :destroy
   has_many :dribbled_past, class_name: 'MatchDribble', foreign_key: 'opponent'
 
