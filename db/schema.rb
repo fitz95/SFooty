@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_19_045032) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_20_030629) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -230,6 +230,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_045032) do
     t.index ["scorer_id"], name: "index_match_goals_on_scorer_id"
     t.index ["team_id"], name: "index_match_goals_on_team_id"
     t.index ["user_id"], name: "index_match_goals_on_user_id"
+  end
+
+  create_table "match_interceptions", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "match_pass_id"
+    t.string "interception_type"
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.string "interception_outcome"
+    t.integer "minute"
+    t.boolean "successful"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_interceptions_on_match_id"
+    t.index ["match_pass_id"], name: "index_match_interceptions_on_match_pass_id"
+    t.index ["player_id"], name: "index_match_interceptions_on_player_id"
+    t.index ["team_id"], name: "index_match_interceptions_on_team_id"
+    t.index ["user_id"], name: "index_match_interceptions_on_user_id"
   end
 
   create_table "match_lineups", force: :cascade do |t|
@@ -746,6 +767,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_19_045032) do
   add_foreign_key "match_goals", "players", column: "scorer_id"
   add_foreign_key "match_goals", "teams"
   add_foreign_key "match_goals", "users"
+  add_foreign_key "match_interceptions", "match_passes"
+  add_foreign_key "match_interceptions", "matches"
+  add_foreign_key "match_interceptions", "players"
+  add_foreign_key "match_interceptions", "teams"
+  add_foreign_key "match_interceptions", "users"
   add_foreign_key "match_lineups", "formations"
   add_foreign_key "match_lineups", "matches"
   add_foreign_key "match_lineups", "users"

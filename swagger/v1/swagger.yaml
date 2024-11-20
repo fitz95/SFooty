@@ -5200,6 +5200,47 @@ paths:
                       type: string
 
   /api/v1/users/{user_id}/matches/{match_id}/match_blocks/{id}:
+    get:
+      summary: Get a specific match block
+      description: Fetch a single match block by its ID.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match block
+      responses:
+        '200':
+          description: The requested match block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchBlock'
+        '404':
+          description: MatchBlock not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
     patch:
       summary: Update an existing match block
       description: Updates a block event by its ID for a specific match.
