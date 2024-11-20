@@ -13,6 +13,7 @@ class CreateMatchTackles < ActiveRecord::Migration[7.0]
       t.boolean :last_man
       t.boolean :resulted_in_foul
       t.string :resulted_in_card
+      t.string :tackle_outcome
 
       t.timestamps
     end

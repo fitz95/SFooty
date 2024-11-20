@@ -369,6 +369,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_035046) do
     t.boolean "last_man"
     t.boolean "resulted_in_foul"
     t.string "resulted_in_card"
+    t.string "tackle_outcome"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["match_id"], name: "index_match_tackles_on_match_id"

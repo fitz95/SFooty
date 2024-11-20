@@ -5472,6 +5472,154 @@ paths:
                   message:
                     type: string
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_tackles:
+    get:
+      summary: Retrieve all match tackles for a specific match
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match tackles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchTackle'
+    post:
+      summary: Create a new match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchTackle'
+      responses:
+        '201':
+          description: Match tackle created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTackle'
+        '422':
+          description: Validation errors
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_tackles/{id}:
+  get:
+    summary: Retrieve a specific match tackle
+    tags:
+      - MatchTackles
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Match tackle details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchTackle'
+  patch:
+    summary: Update a match tackle
+    tags:
+      - MatchTackles
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateMatchTackle'
+    responses:
+      '200':
+        description: Match tackle updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchTackle'
+  delete:
+    summary: Delete a match tackle
+    tags:
+      - MatchTackles
+    parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: match_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Match tackle deleted
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+
 components:
   schemas:
     UserRegistration:
@@ -7428,8 +7576,62 @@ components:
         match_pass_id:
           type: integer
           description: ID of the corresponding pass that was intercepted.
-          
 
+    MatchTackles:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        tackle_type:
+          type: string
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        successful:
+          type: boolean
+        last_man:
+          type: boolean
+        resulted_in_foul:
+          type: boolean
+        resulted_in_card:
+          type: boolean
+        tackle_outcome:
+          type: string
+
+    NewMatchTackle:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:  
+          type: integer
+        tackle_type:
+          type: string
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        successful:
+          type: boolean      
+        last_man:
+          type: boolean      
+        resulted_in_foul:
+          type: boolean      
+        resulted_in_card:
+          type: boolean
+        tackle_outcome:
+          type: string
 
   securitySchemes:
     BearerAuth:

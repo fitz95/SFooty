@@ -65,7 +65,7 @@ class Api::V1::MatchTacklesController < ApplicationController
   
     # Strong parameters
     def match_tackle_params
-      params.require(:match_tackle).permit(:player_id, :team_id, :tackle_type, :x_coordinate, :y_coordinate, :minute, :successful, :last_man, :resulted_in_foul, :resulted_in_card)
+      params.require(:match_tackle).permit(:player_id, :team_id, :tackle_type, :x_coordinate, :y_coordinate, :minute, :successful, :last_man, :resulted_in_foul, :resulted_in_card :tackle_outcome)
     end
   end
   

@@ -37,13 +37,14 @@ Rails.application.routes.draw do
               get :total_xg
             end
           end
+          resources :match_tackles, only: [:index, :show, :create, :destroy, :update]
           resources :match_goals, only: [:index, :show, :create, :destroy, :update]
           resources :match_blocks, only: [:index, :show, :create, :destroy, :update] do
             collection do
               get :blocked_shots
             end
           end
-          
+
           resources :match_interceptions, only: [:index, :show, :create, :destroy, :update]
           resources :match_passes, only: [:index, :show, :create, :destroy, :update] do
             collection do
