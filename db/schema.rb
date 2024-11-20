@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_20_030629) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_20_035046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -354,6 +354,27 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_030629) do
     t.datetime "updated_at", null: false
     t.index ["match_id"], name: "index_match_substitutions_on_match_id"
     t.index ["user_id"], name: "index_match_substitutions_on_user_id"
+  end
+
+  create_table "match_tackles", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.string "tackle_type"
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.integer "minute"
+    t.boolean "successful"
+    t.boolean "last_man"
+    t.boolean "resulted_in_foul"
+    t.string "resulted_in_card"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_tackles_on_match_id"
+    t.index ["player_id"], name: "index_match_tackles_on_player_id"
+    t.index ["team_id"], name: "index_match_tackles_on_team_id"
+    t.index ["user_id"], name: "index_match_tackles_on_user_id"
   end
 
   create_table "match_touches", force: :cascade do |t|
@@ -791,6 +812,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_030629) do
   add_foreign_key "match_substitutions", "players", column: "substitution_player_in_id"
   add_foreign_key "match_substitutions", "players", column: "substitution_player_out_id"
   add_foreign_key "match_substitutions", "users"
+  add_foreign_key "match_tackles", "matches"
+  add_foreign_key "match_tackles", "players"
+  add_foreign_key "match_tackles", "teams"
+  add_foreign_key "match_tackles", "users"
   add_foreign_key "match_touches", "matches"
   add_foreign_key "match_touches", "players"
   add_foreign_key "match_touches", "teams"

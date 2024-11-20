@@ -43,6 +43,7 @@ Rails.application.routes.draw do
               get :blocked_shots
             end
           end
+          
           resources :match_interceptions, only: [:index, :show, :create, :destroy, :update]
           resources :match_passes, only: [:index, :show, :create, :destroy, :update] do
             collection do
