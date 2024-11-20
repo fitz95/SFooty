@@ -4,6 +4,7 @@ class CreateMatchOffsides < ActiveRecord::Migration[7.0]
       t.references :match, null: false, foreign_key: true
       t.references :player, null: false, foreign_key: true
       t.references :team, null: false, foreign_key: true
+      t.references :user, null: false, foreign_key: true
       t.integer :x_coordinate
       t.integer :y_coordinate
       t.integer :minute
