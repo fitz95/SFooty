@@ -5323,7 +5323,154 @@ paths:
                 properties:
                   message:
                     type: string
-  
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_interceptions:
+    get:
+      summary: Retrieve all match interceptions for a specific match
+      tags:
+        - MatchInterceptions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match interceptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchInterception'
+    post:
+      summary: Create a new match interception
+      tags:
+        - MatchInterceptions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchInterception'
+      responses:
+        '201':
+          description: Match interception created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchInterception'
+        '422':
+          description: Validation errors
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_interceptions/{id}:
+    get:
+      summary: Retrieve a specific match interception
+      tags:
+        - MatchInterceptions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match interception details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchInterception'
+    patch:
+      summary: Update a match interception
+      tags:
+        - MatchInterceptions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchInterception'
+      responses:
+        '200':
+          description: Match interception updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchInterception'
+    delete:
+      summary: Delete a match interception
+      tags:
+        - MatchInterceptions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match interception deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
 components:
   schemas:
@@ -7198,6 +7345,91 @@ components:
           type: boolean
         notes:
           type: string
+
+    MatchInterception:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the match interception.
+        match_id:
+          type: integer
+          description: ID of the associated match.
+        player_id:
+          type: integer
+          description: ID of the player performing the interception.
+        team_id:
+          type: integer
+          description: ID of the team associated with the interception.
+        interception_type:
+          type: string
+          description: The type of interception (e.g., "pass interception").
+        match_pass_id:
+          type: integer
+          description: ID of the corresponding pass that was intercepted.
+        x_coordinate:
+          type: number
+          format: float
+          description: The X-coordinate of the interception location on the field.
+        y_coordinate:
+          type: number
+          format: float
+          description: The Y-coordinate of the interception location on the field.
+        minute:
+          type: integer
+          description: The minute of the match when the interception occurred.
+        interception_outcome:
+          type: string
+          description: The outcome of the interception (e.g., "interception", "blocked", "out of bounds").
+        successful:
+          type: boolean
+          description: Indicates if the interception was successful.
+        user_id:
+          type: integer
+          description: ID of the user who created or updated the record.
+        created_at:
+          type: string
+          format: datetime
+          description: Time when the record was created.
+        updated_at:
+          type: string
+          format: datetime
+          description: Time when the record was last updated.
+
+    NewMatchInterception:
+      type: object
+      properties:
+        player_id:
+          type: integer
+          description: ID of the player performing the interception.
+        team_id:
+          type: integer
+          description: ID of the team associated with the interception.
+        interception_type:
+          type: string
+          description: The type of interception (e.g., "pass interception").
+        x_coordinate:
+          type: number
+          format: float
+          description: The X-coordinate of the interception location on the field.
+        y_coordinate:
+          type: number
+          format: float
+          description: The Y-coordinate of the interception location on the field.
+        minute:
+          type: integer
+          description: The minute of the match when the interception occurred.
+        successful:
+          type: boolean
+          description: Indicates if the interception was successful.
+        interception_outcome:
+          type: string
+          description: The outcome of the interception (e.g., "interception", "blocked", "out of bounds").
+        match_pass_id:
+          type: integer
+          description: ID of the corresponding pass that was intercepted.
+          
+
 
   securitySchemes:
     BearerAuth:
