@@ -5620,6 +5620,154 @@ paths:
                 message:
                   type: string
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_clearances:
+    get:
+      summary: Retrieve all match clearances for a specific match
+      tags:
+        - MatchClearances
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match clearances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchClearance'
+    post:
+      summary: Create a new match clearance
+      tags:
+        - MatchClearances
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchClearance'
+      responses:
+        '201':
+          description: Match clearance created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchClearance'
+        '422':
+          description: Validation errors
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_clearances/{id}:
+    get:
+      summary: Retrieve a specific match clearance
+      tags:
+        - MatchClearances
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match clearance details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchClearance'
+    patch:
+      summary: Update a match clearance
+      tags:
+        - MatchClearances
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchClearance'
+      responses:
+        '200':
+          description: Match clearance updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchClearance'
+    delete:
+      summary: Delete a match clearance
+      tags:
+        - MatchClearances
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match clearance deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
 components:
   schemas:
     UserRegistration:
@@ -7633,6 +7781,66 @@ components:
         tackle_outcome:
           type: string
 
+    MatchClearance:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        successful:
+          type: boolean
+        under_pressure:
+          type: boolean
+        clearance_type:
+          type: string
+        clearance_outcome:
+          type: string
+        resulted_in_corner:
+          type: boolean
+        resulted_in_throw_in:
+          type: boolean
+        resulted_in_goal:
+          type: boolean
+
+    NewMatchClearance:
+      type: object 
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        successful:
+          type: boolean
+        under_pressure:
+          type: boolean
+        clearance_type:
+          type: string
+        clearance_outcome:
+          type: string
+        resulted_in_corner:
+          type: boolean
+        resulted_in_throw_in:
+          type: boolean
+        resulted_in_goal:
+          type: boolean
+        
   securitySchemes:
     BearerAuth:
       type: apiKey
