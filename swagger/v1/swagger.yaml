@@ -5916,6 +5916,154 @@ paths:
                   message:
                     type: string
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_duels:
+    get:
+      summary: Retrieve all duels for a specific match
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match duels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchDuel'
+    post:
+      summary: Create a new match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchDuel'
+      responses:
+        '201':
+          description: Match duel created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDuel'
+        '422':
+          description: Validation errors
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_duels/{id}:
+    get:
+      summary: Retrieve a specific match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match duel details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDuel'
+    patch:
+      summary: Update a match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchDuel'
+      responses:
+        '200':
+          description: Match duel updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDuel'
+    delete:
+      summary: Delete a match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match duel deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
 components:
   schemas:
     UserRegistration:
@@ -8029,7 +8177,65 @@ components:
         resulted_in_goal:
           type: boolean
   
-
+    MatchDuel:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        opponent_player_id:
+          type: integer
+        team_id:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        duel_type:
+          type: string
+        outcome:
+          type: string
+        successful:
+          type: boolean
+        aerial:
+          type: boolean
+        ground:
+          type: boolean
+        
+    NewMatchDuel:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        opponent_player_id:
+          type: integer
+        team_id:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        duel_type:
+          type: string
+        outcome:
+          type: string
+        successful:
+          type: boolean
+        aerial:
+          type: boolean
+        last_man:
+          type: boolean
+        ground:
+          type: boolean
+        
+  
 
   securitySchemes:
     BearerAuth:

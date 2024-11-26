@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_20_055109) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_20_083149) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -214,6 +214,30 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_055109) do
     t.index ["user_id"], name: "index_match_dribbles_on_user_id"
   end
 
+  create_table "match_duels", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "team_id", null: false
+    t.integer "opponent_player_id"
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.integer "minute"
+    t.string "duel_type"
+    t.boolean "aerial"
+    t.boolean "ground"
+    t.boolean "last_man"
+    t.string "outcome"
+    t.boolean "successful"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_duels_on_match_id"
+    t.index ["opponent_player_id"], name: "index_match_duels_on_opponent_player_id"
+    t.index ["player_id"], name: "index_match_duels_on_player_id"
+    t.index ["team_id"], name: "index_match_duels_on_team_id"
+    t.index ["user_id"], name: "index_match_duels_on_user_id"
+  end
+
   create_table "match_events", force: :cascade do |t|
     t.integer "match_id"
     t.string "event_type"
@@ -314,6 +338,26 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_055109) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_match_officials_on_user_id"
+  end
+
+  create_table "match_offsides", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.integer "minute"
+    t.integer "last_man"
+    t.boolean "resulted_in_goal", default: false
+    t.string "opposing_team"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["last_man"], name: "index_match_offsides_on_last_man"
+    t.index ["match_id"], name: "index_match_offsides_on_match_id"
+    t.index ["player_id"], name: "index_match_offsides_on_player_id"
+    t.index ["team_id"], name: "index_match_offsides_on_team_id"
+    t.index ["user_id"], name: "index_match_offsides_on_user_id"
   end
 
   create_table "match_passes", force: :cascade do |t|
@@ -806,6 +850,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_055109) do
   add_foreign_key "match_dribbles", "players", column: "opponent_id"
   add_foreign_key "match_dribbles", "teams"
   add_foreign_key "match_dribbles", "users"
+  add_foreign_key "match_duels", "matches"
+  add_foreign_key "match_duels", "players"
+  add_foreign_key "match_duels", "teams"
+  add_foreign_key "match_duels", "users"
   add_foreign_key "match_events", "matches"
   add_foreign_key "match_events", "players"
   add_foreign_key "match_events", "teams"
@@ -828,6 +876,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_055109) do
   add_foreign_key "match_official_for_matches", "matches"
   add_foreign_key "match_official_for_matches", "users"
   add_foreign_key "match_officials", "users"
+  add_foreign_key "match_offsides", "matches"
+  add_foreign_key "match_offsides", "players"
+  add_foreign_key "match_offsides", "teams"
+  add_foreign_key "match_offsides", "users"
   add_foreign_key "match_passes", "matches"
   add_foreign_key "match_passes", "players"
   add_foreign_key "match_passes", "players", column: "assister"
