@@ -6064,6 +6064,141 @@ paths:
                   message:
                     type: string
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls:
+    get:
+      summary: Retrieve all fouls for a specific match
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match fouls
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchFoul'
+    post:
+      summary: Create a new match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchFoul'
+    '422':
+      description: Validation errors
+  
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls/{id}:
+    get:
+      summary: Retrieve a specific match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match foul details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchFoul'
+    patch:
+      summary: Update a match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchFoul'
+    delete:
+      summary: Delete a match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match foul deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    
+                      
 components:
   schemas:
     UserRegistration:
@@ -8234,15 +8369,89 @@ components:
           type: boolean
         ground:
           type: boolean
-        
-  
 
-  securitySchemes:
-    BearerAuth:
-      type: apiKey
-      name: Authorization
-      in: header
-      description: Enter your Bearer token in the format 'Bearer {token}'
+    MatchFoul:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opposing_team:
+          type: integer
+        minute:
+          type: integer
+        fouled_player_id:
+          type: integer
+        fouled_official_id:
+          type: integer
+        foul_type:
+          type: string
+        severity:
+          type: string
+        card_issued:
+          type: boolean
+        card_type:
+          type: string
+        tackle_id:
+          type: integer
+        penalty_awarded:
+          type: boolean
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    NewMatchFoul:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opposing_team_id:
+          type: integer
+        minute:
+          type: integer
+        foul_type:
+          type: string
+        severity:
+          type: string
+        card_issued:
+          type: boolean
+        card_type:
+          type: string
+        penalty_awarded:
+          type: boolean
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        tackle_id:
+          type: integer
+        fouled_player_id:
+          type: integer
+        fouled_official_id:
+          type: integer
+        severity:
+          type: string
+
+      
+
+      securitySchemes:
+        BearerAuth:
+          type: apiKey
+          name: Authorization
+          in: header
+          description: Enter your Bearer token in the format 'Bearer {token}'
 
 security:
   - BearerAuth: []
