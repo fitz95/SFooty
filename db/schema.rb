@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_035126) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_070420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -191,6 +191,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_035126) do
     t.index ["player_id"], name: "index_match_clearances_on_player_id"
     t.index ["team_id"], name: "index_match_clearances_on_team_id"
     t.index ["user_id"], name: "index_match_clearances_on_user_id"
+  end
+
+  create_table "match_corners", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "corner_taker_id"
+    t.bigint "user_id", null: false
+    t.integer "minute"
+    t.string "outcome"
+    t.string "side"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["corner_taker_id"], name: "index_match_corners_on_corner_taker_id"
+    t.index ["match_id"], name: "index_match_corners_on_match_id"
+    t.index ["team_id"], name: "index_match_corners_on_team_id"
+    t.index ["user_id"], name: "index_match_corners_on_user_id"
   end
 
   create_table "match_dribbles", force: :cascade do |t|
@@ -872,6 +888,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_035126) do
   add_foreign_key "match_clearances", "players"
   add_foreign_key "match_clearances", "teams"
   add_foreign_key "match_clearances", "users"
+  add_foreign_key "match_corners", "matches"
+  add_foreign_key "match_corners", "players", column: "corner_taker_id"
+  add_foreign_key "match_corners", "teams"
+  add_foreign_key "match_corners", "users"
   add_foreign_key "match_dribbles", "matches"
   add_foreign_key "match_dribbles", "players"
   add_foreign_key "match_dribbles", "players", column: "opponent_id"

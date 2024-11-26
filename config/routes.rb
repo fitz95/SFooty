@@ -64,6 +64,7 @@ Rails.application.routes.draw do
           resources :match_duels, only: [:index, :show, :create, :destroy, :update]
           resources :match_clearances, only: [:index, :show, :create, :destroy, :update]
           resources :match_offsides, only: [:index, :show, :create, :destroy, :update]
+          resources :match_corners, only: [:index, :show, :create, :destroy, :update]
           resources :match_fouls, only: [:index, :show, :create, :destroy, :update] do
             collection do
               get :yellow_cards
