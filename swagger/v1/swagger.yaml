@@ -5529,96 +5529,96 @@ paths:
           description: Validation errors
 
   /api/v1/users/{user_id}/matches/{match_id}/match_tackles/{id}:
-  get:
-    summary: Retrieve a specific match tackle
-    tags:
-      - MatchTackles
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      '200':
-        description: Match tackle details
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MatchTackle'
-  patch:
-    summary: Update a match tackle
-    tags:
-      - MatchTackles
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    requestBody:
-      required: true
-      content:
-        application/json:
+    get:
+      summary: Retrieve a specific match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
           schema:
-            $ref: '#/components/schemas/UpdateMatchTackle'
-    responses:
-      '200':
-        description: Match tackle updated
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match tackle details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTackle'
+    patch:
+      summary: Update a match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MatchTackle'
-  delete:
-    summary: Delete a match tackle
-    tags:
-      - MatchTackles
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      '200':
-        description: Match tackle deleted
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
+              $ref: '#/components/schemas/UpdateMatchTackle'
+      responses:
+        '200':
+          description: Match tackle updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTackle'
+    delete:
+      summary: Delete a match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match tackle deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
   /api/v1/users/{user_id}/matches/{match_id}/match_clearances:
     get:
