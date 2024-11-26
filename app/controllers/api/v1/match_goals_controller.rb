@@ -3,6 +3,7 @@ class Api::V1::MatchGoalsController < ApplicationController
   before_action :set_user
   before_action :set_match
   before_action :set_match_goal, only: [:show, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /api/v1/users/:user_id/matches/:match_id/match_goals
   def index

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_070420) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_101022) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_070420) do
     t.string "location"
     t.text "description"
     t.index ["user_id"], name: "index_competitions_on_user_id"
+  end
+
+  create_table "error_leading_to_goals", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "match_goal_id", null: false
+    t.string "error_type"
+    t.integer "minute"
+    t.integer "additional_time"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_goal_id"], name: "index_error_leading_to_goals_on_match_goal_id"
+    t.index ["match_id"], name: "index_error_leading_to_goals_on_match_id"
+    t.index ["player_id"], name: "index_error_leading_to_goals_on_player_id"
+    t.index ["team_id"], name: "index_error_leading_to_goals_on_team_id"
+    t.index ["user_id"], name: "index_error_leading_to_goals_on_user_id"
   end
 
   create_table "follows", force: :cascade do |t|
@@ -858,6 +877,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_070420) do
   end
 
   add_foreign_key "competitions", "users"
+  add_foreign_key "error_leading_to_goals", "match_goals"
+  add_foreign_key "error_leading_to_goals", "matches"
+  add_foreign_key "error_leading_to_goals", "players"
+  add_foreign_key "error_leading_to_goals", "teams"
+  add_foreign_key "error_leading_to_goals", "users"
   add_foreign_key "follows", "users"
   add_foreign_key "follows", "users", column: "followed_user_id"
   add_foreign_key "follows", "users", column: "following_user_id"
