@@ -43,6 +43,18 @@ class Api::V1::ErrorLeadingToGoalsController < ApplicationController
     head :no_content
   end
 
+  # GET /api/v1/users/:user_id/error_leading_to_goals/players/:player_id
+  def index_by_player
+    @error_leading_to_goals = ErrorLeadingToGoal.where(player_id: params[:player_id])
+    render json: @error_leading_to_goals, status: :ok
+  end
+
+    # GET /api/v1/users/:user_id/error_leading_to_goals/teams/:team_id
+    def index_by_team
+      @error_leading_to_goals = ErrorLeadingToGoal.where(team_id: params[:team_id])
+      render json: @error_leading_to_goals, status: :ok
+    end
+
   private
 
     def set_user
