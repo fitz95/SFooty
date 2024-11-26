@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_20_083149) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_26_035126) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -252,6 +252,33 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_083149) do
     t.index ["player_id"], name: "index_match_events_on_player_id"
     t.index ["team_id"], name: "index_match_events_on_team_id"
     t.index ["user_id"], name: "index_match_events_on_user_id"
+  end
+
+  create_table "match_fouls", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "fouled_player_id"
+    t.integer "fouled_official_id"
+    t.string "foul_type"
+    t.string "severity"
+    t.string "card_issued"
+    t.integer "tackle_id"
+    t.integer "minute"
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.integer "opposing_team"
+    t.boolean "penalty_awarded"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fouled_official_id"], name: "index_match_fouls_on_fouled_official_id"
+    t.index ["fouled_player_id"], name: "index_match_fouls_on_fouled_player_id"
+    t.index ["match_id"], name: "index_match_fouls_on_match_id"
+    t.index ["player_id"], name: "index_match_fouls_on_player_id"
+    t.index ["team_id"], name: "index_match_fouls_on_team_id"
+    t.index ["user_id"], name: "index_match_fouls_on_user_id"
   end
 
   create_table "match_goals", force: :cascade do |t|
@@ -858,6 +885,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_083149) do
   add_foreign_key "match_events", "players"
   add_foreign_key "match_events", "teams"
   add_foreign_key "match_events", "users"
+  add_foreign_key "match_fouls", "matches"
+  add_foreign_key "match_fouls", "players"
+  add_foreign_key "match_fouls", "teams"
+  add_foreign_key "match_fouls", "users"
   add_foreign_key "match_goals", "match_shots"
   add_foreign_key "match_goals", "matches"
   add_foreign_key "match_goals", "players", column: "assister_id"

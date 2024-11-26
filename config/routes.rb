@@ -64,6 +64,14 @@ Rails.application.routes.draw do
           resources :match_duels, only: [:index, :show, :create, :destroy, :update]
           resources :match_clearances, only: [:index, :show, :create, :destroy, :update]
           resources :match_offsides, only: [:index, :show, :create, :destroy, :update]
+          resources :match_fouls, only: [:index, :show, :create, :destroy, :update] do
+            collection do
+              get :yellow_cards
+              get :red_cards
+              get :fouls_by_player
+              get :fouls_by_team
+            end
+          end
         end
         resources :competitions, only: [:index, :show, :create, :destroy, :update]
         resources :formations, only: [:index, :show, :create, :destroy, :update] do

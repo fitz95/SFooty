@@ -56,6 +56,20 @@ class Api::V1::MatchFoulsController < ApplicationController
         @team_fouls = @match.match_fouls.where(team_id: params[:team_id])
         render json: @team_fouls, status: :ok
     end
+
+    # Custom Route: Get all fouls with yellow cards
+    # GET /api/v1/users/:user_id/matches/:match_id/match_fouls/yellow_cards
+    def yellow_cards
+        @yellow_cards = @match.match_fouls.where(card_issued: 'Yellow Card')
+        render json: @yellow_cards, status: :ok
+    end
+
+    # Custom Route: Get all fouls with red cards
+    # GET /api/v1/users/:user_id/matches/:match_id/match_fouls/red_cards
+    def red_cards    
+        @red_cards = @match.match_fouls.where(card_issued: 'Red Card')
+        render json: @red_cards, status: :ok
+    end
   
     private
   

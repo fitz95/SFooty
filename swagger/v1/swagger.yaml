@@ -6197,8 +6197,59 @@ paths:
                 properties:
                   message:
                     type: string
-                    
-                      
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls/yellow_cards:
+    get:
+      summary: Retrieve all yellow cards for a specific match
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of yellow cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchFoul'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls/red_cards:
+    get:
+      summary: Retrieve all red cards for a specific match
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path  
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of red cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchFoul'               
+
 components:
   schemas:
     UserRegistration:

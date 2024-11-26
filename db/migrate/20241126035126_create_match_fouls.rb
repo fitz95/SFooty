@@ -9,7 +9,6 @@ class CreateMatchFouls < ActiveRecord::Migration[7.0]
       t.integer :fouled_official_id, foreign_key: { to_table: :match_officials }, index: true
       t.string :foul_type
       t.string :severity
-      t.boolean :penalty_awarded
       t.string :card_issued
       t.integer :tackle_id
       t.integer :minute
