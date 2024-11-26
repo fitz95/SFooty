@@ -62,6 +62,8 @@ Rails.application.routes.draw do
           end
           resources :match_dribbles, only: [:index, :show, :create, :destroy, :update]
           resources :match_duels, only: [:index, :show, :create, :destroy, :update]
+          resources :match_clearances, only: [:index, :show, :create, :destroy, :update]
+          resources :match_offsides, only: [:index, :show, :create, :destroy, :update]
         end
         resources :competitions, only: [:index, :show, :create, :destroy, :update]
         resources :formations, only: [:index, :show, :create, :destroy, :update] do
