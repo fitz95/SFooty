@@ -8652,6 +8652,8 @@ components:
           type: boolean
         resulted_in_goal:
           type: boolean
+        sweeper_clearance:
+          type: boolean
 
     NewMatchClearance:
       type: object 
@@ -8679,6 +8681,8 @@ components:
         resulted_in_throw_in:
           type: boolean
         resulted_in_goal:
+          type: boolean
+        sweeper_clearance:
           type: boolean
     
     MatchOffside:

@@ -14,3 +14,9 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym "RESTful"
 # end
+# config/initializers/inflections.rb
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+    inflect.irregular 'match_keeper_save', 'match_keeper_saves'
+  end
+  
