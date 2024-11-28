@@ -8389,7 +8389,21 @@ components:
         minute:
           type: integer
         expected_assist_value:
-          type: number
+          type: decimal
+        is_goalkick:
+          type: boolean
+        is_throwout: 
+          type: boolean
+        is_throwin:
+          type: boolean
+        is_punt:
+          type: boolean
+        is_open_play:
+          type: boolean
+        is_freekick:
+          type: boolean
+        
+        
 
     NewMatchPass:
       type: object
@@ -8725,14 +8739,30 @@ components:
         user_id:
           type: integer
           description: ID of the user who created or updated the record.
-        created_at:
+        successful:
+          type: boolean
+          description: Indicates if the interception was successful.
+        is_cross:
+          type: boolean
+          description: Indicates if the interception was a cross.
+        is_high_claim:
+          type: boolean
+          description: Indicates if the interception was a high claim.
+        is_low_claim:
+          type: boolean
+          description: Indicates if the interception was a low claim.
+        body_part:
           type: string
-          format: datetime
-          description: Time when the record was created.
-        updated_at:
-          type: string
-          format: datetime
-          description: Time when the record was last updated.
+          description: The body part used for the interception (e.g., head, foot).
+        dropped_down:
+          type: boolean
+          description: Indicates if the goalkeeper dropped the ball.
+        is_corner:
+          type: boolean
+          description: Indicates if the interception was during a corner.
+        is_free_kick:
+          type: boolean
+          description: Indicates if the interception was during a free kick.
 
     NewMatchInterception:
       type: object
@@ -8766,6 +8796,26 @@ components:
         match_pass_id:
           type: integer
           description: ID of the corresponding pass that was intercepted.
+        is_cross:
+          type: boolean
+          description: Indicates if the interception was a cross.
+        is_high_claim:
+          type: boolean
+          description: Indicates if the interception was a high claim.
+        is_low_claim:
+          type: boolean
+          description: Indicates if the interception was a low claim.
+        body_part:
+          type: string
+          description: The body part used for the interception (e.g., head, foot).
+        dropped_down:
+          type: boolean
+          description: Indicates if the goalkeeper dropped the ball.
+        is_corner:
+          type: boolean
+          description: Indicates if the interception was during a corner.
+        is_free_kick:
+          type: boolean
 
     MatchTackles:
       type: object

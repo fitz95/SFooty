@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_27_063342) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_27_075335) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -483,6 +483,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_063342) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_goalkick", default: false
+    t.boolean "is_throw_out", default: false
+    t.boolean "is_punt", default: false
+    t.boolean "is_open_play", default: true
+    t.boolean "is_freekick", default: false
+    t.boolean "is_throw_in", default: false, null: false
     t.index ["assister"], name: "index_match_passes_on_assister"
     t.index ["match_id"], name: "index_match_passes_on_match_id"
     t.index ["player_id"], name: "index_match_passes_on_player_id"

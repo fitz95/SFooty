@@ -5,7 +5,7 @@ class ModifyMatchInterceptionsForGoalkeeperActions < ActiveRecord::Migration[7.0
       t.remove :successful
 
       # Add a general 'successful' boolean for interception success
-      t.boolean :successful, default: false
+      t.boolean :successful, default: true
 
       # Goalkeeper-specific columns
       t.boolean :is_cross, default: false      # Whether it was a cross claim
