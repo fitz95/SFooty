@@ -35,6 +35,11 @@ Rails.application.routes.draw do
           end
         end
         resources :matches, only: [:index, :show, :create, :destroy, :update] do
+          resources :match_possession_events, only: [:index, :show, :create, :destroy, :update] do
+            collection do
+              get :possession_percentages
+            end
+          end
           resources :substitutions, only: [:index, :show, :create, :destroy, :update]
           resources :match_shots, only: [:index, :show, :create, :destroy, :update] do
             collection do
