@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_05_090713) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,7 +46,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "season_id", null: false
+    t.text "description"
+    t.boolean "completed", default: false
     t.index ["league_id"], name: "index_game_weeks_on_league_id"
+    t.index ["season_id"], name: "index_game_weeks_on_season_id"
     t.index ["user_id"], name: "index_game_weeks_on_user_id"
   end
 
@@ -104,6 +108,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
     t.index ["substitute_player_id"], name: "index_lineup_substitute_options_on_substitute_player_id"
     t.index ["team_id"], name: "index_lineup_substitute_options_on_team_id"
     t.index ["user_id"], name: "index_lineup_substitute_options_on_user_id"
+  end
+
+  create_table "managers", force: :cascade do |t|
+    t.string "name"
+    t.date "date_of_birth"
+    t.string "nationality"
+    t.integer "experience_level"
+    t.date "hired_on"
+    t.date "contract_end_date"
+    t.decimal "salary"
+    t.text "achievements"
+    t.string "manager_type"
+    t.string "previous_teams"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_managers_on_user_id"
   end
 
   create_table "match_events", force: :cascade do |t|
@@ -364,6 +385,48 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
     t.index ["token"], name: "index_revoked_tokens_on_token"
   end
 
+  create_table "season_managers", force: :cascade do |t|
+    t.string "role"
+    t.decimal "performance_rating"
+    t.date "season_start_date"
+    t.date "season_end_date"
+    t.integer "goals"
+    t.decimal "bonuses"
+    t.text "contract_terms"
+    t.string "status"
+    t.text "team_performance_notes"
+    t.string "training_style"
+    t.string "most_used_formation"
+    t.string "most_improved_player"
+    t.boolean "relegated"
+    t.boolean "promoted"
+    t.bigint "season_id", null: false
+    t.bigint "manager_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manager_id"], name: "index_season_managers_on_manager_id"
+    t.index ["season_id"], name: "index_season_managers_on_season_id"
+    t.index ["team_id"], name: "index_season_managers_on_team_id"
+    t.index ["user_id"], name: "index_season_managers_on_user_id"
+  end
+
+  create_table "seasons", force: :cascade do |t|
+    t.string "name"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "status"
+    t.integer "number_of_teams"
+    t.string "season_type"
+    t.string "description"
+    t.integer "total_matches"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_seasons_on_user_id"
+  end
+
   create_table "stadiums", force: :cascade do |t|
     t.string "stadium_name"
     t.string "city"
@@ -493,6 +556,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
   add_foreign_key "follows", "users", column: "followed_user_id"
   add_foreign_key "follows", "users", column: "following_user_id"
   add_foreign_key "game_weeks", "leagues"
+  add_foreign_key "game_weeks", "seasons"
   add_foreign_key "game_weeks", "users"
   add_foreign_key "league_groups", "leagues"
   add_foreign_key "league_groups", "users"
@@ -507,6 +571,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
   add_foreign_key "lineup_substitute_options", "players", column: "substitute_player_id"
   add_foreign_key "lineup_substitute_options", "teams"
   add_foreign_key "lineup_substitute_options", "users"
+  add_foreign_key "managers", "users"
   add_foreign_key "match_events", "matches"
   add_foreign_key "match_events", "players"
   add_foreign_key "match_events", "teams"
@@ -547,6 +612,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_30_080328) do
   add_foreign_key "posts", "teams"
   add_foreign_key "posts", "users"
   add_foreign_key "referees", "users"
+  add_foreign_key "season_managers", "managers"
+  add_foreign_key "season_managers", "seasons"
+  add_foreign_key "season_managers", "teams"
+  add_foreign_key "season_managers", "users"
+  add_foreign_key "seasons", "users"
   add_foreign_key "stadiums", "teams"
   add_foreign_key "stadiums", "users"
   add_foreign_key "team_shots", "matches"

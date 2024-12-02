@@ -10,5 +10,7 @@ class CreateMatchShots < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+
+    add_foreign_key :match_shots, :users, column: :user_id
   end
 end

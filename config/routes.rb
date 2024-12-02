@@ -24,6 +24,9 @@ Rails.application.routes.draw do
         resources :match_officials, only: [:index, :show, :create, :destroy, :update]
         resources :player_transfers, only: [:index, :show, :create, :destroy, :update]
         resources :player_injuries, only: [:index, :show, :create, :destroy, :update]
+        resources :managers, only: [:index, :show, :create, :destroy, :update]
+        resources :seasons, only: [:index, :show, :create, :destroy, :update]
+        resources :season_managers, only: [:index, :show, :create, :destroy, :update]
       end
     end
   end

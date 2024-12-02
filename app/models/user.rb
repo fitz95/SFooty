@@ -15,7 +15,10 @@ class User < ApplicationRecord
   has_many :player_injuries
   has_many :player_stats
   has_many :player_transfers
-  has_many :league_groupsgit
+  has_many :league_groups
+  has_many :season_managers
+  has_many :teams
+  has_many :managers
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
