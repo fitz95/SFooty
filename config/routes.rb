@@ -37,9 +37,9 @@ Rails.application.routes.draw do
               get :total_xg
             end
           end
+          resources :match_goals, only: [:index, :show, :create, :destroy, :update]
         end
         resources :competitions, only: [:index, :show, :create, :destroy, :update]
-        resources :match_goals, only: [:index, :show, :create, :destroy, :update]
         resources :formations, only: [:index, :show, :create, :destroy, :update] do
           resources:formation_positions, only: [:index, :show, :create, :destroy, :update]
         end

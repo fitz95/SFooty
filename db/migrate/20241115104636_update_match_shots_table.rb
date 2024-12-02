@@ -1,8 +1,10 @@
 class UpdateMatchShotsTable < ActiveRecord::Migration[7.0]
   def change
     change_table :match_shots do |t|
-      # Adding new references
-      t.references :assist_player, foreign_key: { to_table: :players }, index: true unless column_exists?(:match_shots, :assist_player_id)
+      # Adding new references only if they do not exist
+      unless column_exists?(:match_shots, :assist_player_id)
+        t.references :assist_player, foreign_key: { to_table: :players }, index: true
+      end
 
       # Add new columns only if they do not exist
       t.string :shot_type, null: false, default: 'unknown' unless column_exists?(:match_shots, :shot_type)
@@ -18,10 +20,5 @@ class UpdateMatchShotsTable < ActiveRecord::Migration[7.0]
     if column_exists?(:match_shots, :minute_shot) && !column_exists?(:match_shots, :minute)
       rename_column :match_shots, :minute_shot, :minute
     end
-
-    # Remove old or redundant columns if needed
-    remove_column :match_shots, :user_id, if_exists: true
   end
 end
-
-
