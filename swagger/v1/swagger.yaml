@@ -1503,6 +1503,186 @@ paths:
         '404':
           description: Player injury not found
 
+  /v1/users/{user_id}/stadiums:
+    get:
+      summary: Get all stadiums for a specific user
+      description: Get all stadiums 
+      tags:
+        - Stadiums
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stadium'
+
+    post:
+      summary: Create a new stadium
+      description: Create a Stadium for a specific User
+      tags:
+        - Stadiums
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStadium'
+      responses:
+        '201':
+          description: Stadium created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stadium'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /v1/users/{user_id}/stadiums/{id}:
+    get:
+      summary: Get a specific stadium by ID
+      description: Retrieve a specific statdium by ID for a User
+      tags:
+        - Stadiums
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stadium.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stadium'
+        '404':
+          description: Stadium not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Stadium not found"
+
+    patch:
+      summary: Update a stadium
+      description: Modify details of a specific Stadium by its ID for a user.
+      tags:
+        - Stadiums
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stadium.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStadium'
+      responses:
+        '200':
+          description: Stadium updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stadium'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a stadium
+      description: Remove a stadium by its ID for a user.
+      tags:
+        - Stadiums
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the stadium.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Stadium deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Stadium deleted successfully!"
+        '404':
+          description: Stadium not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Stadium not found"
+
     
 
 components:
@@ -2139,6 +2319,62 @@ components:
           type: string
           description: "Current recovery status of the player (e.g., 'Recovering', 'Fully Recovered')."
           example: "Recovering"
+    
+    Stadium:
+      type: object
+      properties:
+        id:
+          type: integer
+        stadium_name:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        capacity:
+          type: integer
+        year_opened:
+          type: integer
+        stadium_photo:
+          type: string
+        team_id:
+          type: integer
+        user_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewStadium:
+      type: object
+      required:
+        - stadium_name
+        - city
+        - country
+        - capacity
+        - year_opened
+      properties:
+        stadium_name:
+          type: string
+          example: "Old Trafford"
+        city:
+          type: string
+          example: "Manchester"
+        country:
+          type: string
+          example: "England"
+        capacity:
+          type: integer
+          example: 74879
+        year_opened:
+          type: integer
+          example: 1910
+        stadium_photo:
+          type: string
+          example: "http://example.com/stadium_photo.jpg"
     
   securitySchemes:
     BearerAuth:
