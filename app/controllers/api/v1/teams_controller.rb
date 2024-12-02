@@ -34,7 +34,7 @@ class Api::V1::TeamsController < ApplicationController
         @team.user_id = current_user.id
 
         if @team.save
-           render json: @team, notice: 'Team was successfully created.'
+           render json: @team, message: 'Team was successfully created.'
         else
             render json: @team.errors, status: :unprocessable_entity
         end
@@ -43,7 +43,7 @@ class Api::V1::TeamsController < ApplicationController
     api :PATCH, '/v1/users/:user_id/leagues/:leagues_id/teams/:id', 'Update team with id'
     def update
         if @team.update(team_params)
-            render json: @team, notice: 'Team was successfully updated.'
+            render json: @team, message: 'Team was successfully updated.'
         else
             render json: @team.errors, status: :unprocessable_entity
         end
@@ -52,7 +52,6 @@ class Api::V1::TeamsController < ApplicationController
     api :DELETE, '/v1/users/:user_id/leagues/:league_id/teams/:id', 'Delete team by id'
     def destroy
         authorize! :destroy, Team
-        @team = Team.find_by(id: params[:id])
         if @team.destroy
             render json: { message: 'Team deleted successfully!' }, status: :ok
         else
