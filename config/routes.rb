@@ -15,13 +15,10 @@ Rails.application.routes.draw do
       #other routes
       # User routes
       resources :users do
-        resources :leagues, only: [:index, :show, :create, :destroy, :update] do
-          resources :teams, only: [:index, :show, :create, :destroy, :update] do 
-            resources :trophies, only: [:index, :show, :create, :destroy, :update]
-          end
-          resources :players, only: [:index, :show, :create, :destroy, :update]
-        end
-        
+        resources :leagues, only: [:index, :show, :create, :destroy, :update] 
+        resources :players, only: [:index, :show, :create, :destroy, :update]
+        resources :teams, only: [:index, :show, :create, :destroy, :update] 
+        resources :trophies, only: [:index, :show, :create, :destroy, :update]
         resources :stadiums, only: [:index, :show, :create, :destroy, :update]
         resources :posts, only: [:index, :show, :create, :destroy, :update]
         resources :match_officials, only: [:index, :show, :create, :destroy, :update]
