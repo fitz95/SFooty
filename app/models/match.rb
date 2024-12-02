@@ -11,4 +11,13 @@ class Match < ApplicationRecord
   has_many :player_stats, dependent: :destroy
   has_many :match_events, dependent: :destroy
   has_many :match_goals, dependent: :destroy
+
+
+  validates :stadium_id, :referee_id, :home_team_id, :away_team_id, presence: true
+  validate :teams_must_be_different
+
+  def teams_must_be_different
+    errors.add(:away_team, "can't be the same as home team") if home_team_id == away_team_id 
+  end
+
 end

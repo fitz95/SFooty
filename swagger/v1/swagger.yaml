@@ -2529,6 +2529,186 @@ paths:
                     type: string
                     example: "Game Week not found!"
 
+  /api/v1/users/{user_id}/matches/{id}:
+    get:
+      summary: Get a specific match by ID
+      description: Retrieve details of a specific match by its ID for a user.
+      tags:
+        - Matches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+        '404':
+          description: Match not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Match not found!"
+
+    patch:
+      summary: Update a specific match by ID
+      description: Modify details of a specific match by its ID for a user.
+      tags:
+        - Matches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatch'
+      responses:
+        '200':
+          description: Match updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific match by ID
+      description: Remove a match by its ID for a user.
+      tags:
+        - Matches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Match deleted successfully!"
+        '404':
+          description: Match not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Match not found!"
+
+  /api/v1/users/{user_id}/matches:
+    get:
+      summary: Get all matches for a user
+      description: Retrieve a list of all matches for a specific user.
+      tags:
+        - Matches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Match'
+
+    post:
+      summary: Create a new match for a user
+      description: Create a new match record for a specific user.
+      tags:
+        - Matches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatch'
+      responses:
+        '201':
+          description: Match created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Match'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
 components:
   schemas:
     UserRegistration:
@@ -3588,8 +3768,73 @@ components:
         - team_id
         - user_id
 
+    Match:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+          description: The date of the match.
+        time:
+          type: string
+          description: The time of the match.
+        stadium_id:
+          type: integer
+          description: ID of the stadium where the match is held.
+        referee_id:
+          type: integer
+          description: ID of the referee for the match.
+        home_team_id:
+          type: integer
+          description: ID of the home team.
+        away_team_id:
+          type: integer
+          description: ID of the away team.
+        league_id:
+          type: integer
+          description: ID of the league.
+        game_week_id:
+          type: integer
+          description: ID of the game week.
+        competition_id:
+          type: integer
+          description: ID of the competition.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
 
-
+    NewMatch:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+        stadium_id:
+          type: integer
+        referee_id:
+          type: integer
+        home_team_id:
+          type: integer
+        away_team_id:
+          type: integer
+        league_id:
+          type: integer
+        game_week_id:
+          type: integer
+        competition_id:
+          type: integer
+      required:
+        - date
+        - time
+        - home_team_id
+        - away_team_id
 
   securitySchemes:
     BearerAuth:
