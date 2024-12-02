@@ -20,6 +20,7 @@ class Match < ApplicationRecord
   has_many :match_fouls, dependent: :destroy
   has_many :match_touches, dependent: :destroy
   has_many :match_dribbles, dependent: :destroy
+  has_many :match_blocks, dependent: :destroy
 
 
   validates :stadium_id, :referee_id, :home_team_id, :away_team_id, presence: true

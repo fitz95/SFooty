@@ -4657,9 +4657,22 @@ paths:
   /api/v1/users/{user_id}/matches/{match_id}/match_touches:
     get:
       summary: Retrieve all match touches for a specific match
-      description: Fetches all touch events for players in a specific match.
+      description: Fetches all match touches recorded for a given match.
       tags:
-        - Match Touches
+        - MatchTouches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
       responses:
         '200':
           description: A list of match touches
@@ -4669,43 +4682,81 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MatchTouch'
-
-  /api/v1/users/{user_id}/matches/{match_id}/match_touches/{id}:
-    get:
-      summary: Retrieve a specific match touch by its ID
-      description: Fetches a single touch event from a specific match by its ID.
-      tags:
-        - Match Touches
-      responses:
-        '200':
-          description: A match touch object
+              examples:
+                example-1:
+                  summary: Successful response
+                  value:
+                    - id: 1
+                      match_id: 5
+                      player_id: 12
+                      team_id: 3
+                      touch_type: "interception"
+                      touch_direction: "forward"
+                      successful: true
+                      x_coordinate: 45.6
+                      y_coordinate: 22.4
+                      minute: 35
+                      in_box: false
+                    - id: 2
+                      match_id: 5
+                      player_id: 15
+                      team_id: 4
+                      touch_type: "tackle"
+                      touch_direction: "backward"
+                      successful: false
+                      x_coordinate: 12.3
+                      y_coordinate: 54.2
+                      minute: 78
+                      in_box: true
+        '404':
+          description: User or match not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MatchTouch'
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "User or match not found"
 
-  /api/v1/users/{user_id}/matches/{match_id}/match_touches/in_box:
-    get:
-      summary: Retrieve all match touches in the penalty box
-      description: Fetches all touches made in the penalty box during a specific match.
-      tags:
-        - MatchTouches
-      responses:
-        '200':
-          description: A list of match touches in the penalty box
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MatchTouch'
-
-  /api/v1/users/{user_id}/matches/{match_id}/match_touches:
     post:
       summary: Create a new match touch
-      description: Registers a new touch event for a player in a specific match.
+      description: Create a new match touch for a specific user and match with details like player, team, and coordinates.
       tags:
         - MatchTouches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchTouch'
+            examples:
+              example-1:
+                summary: Example request body
+                value:
+                  player_id: 12
+                  team_id: 3
+                  touch_type: "pass_reception"
+                  touch_direction: "forward"
+                  successful: true
+                  x_coordinate: 40.5
+                  y_coordinate: 60.2
+                  minute: 45
+                  in_box: false
       responses:
         '201':
           description: Match touch created successfully
@@ -4713,8 +4764,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MatchTouch'
+              example:
+                id: 7
+                match_id: 5
+                player_id: 12
+                team_id: 3
+                touch_type: "pass_reception"
+                touch_direction: "forward"
+                successful: true
+                x_coordinate: 40.5
+                y_coordinate: 60.2
+                minute: 45
+                in_box: false
         '422':
-          description: Unprocessable entity (validation errors)
+          description: Validation error
           content:
             application/json:
               schema:
@@ -4724,13 +4787,105 @@ paths:
                     type: array
                     items:
                       type: string
+                example:
+                  errors: ["Player ID is required", "Minute must be positive"]
 
-  /api/v1/users/{user_id}/matches/{match_id}/match_touches/{id}:
-    patch:
-      summary: Update a match touch
-      description: Updates the details of a specific match touch event.
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches/in_box:
+    get:
+      summary: Retrieve all touches in the penalty box
+      description: Fetches all match touches recorded in the penalty box for a given match.
       tags:
         - MatchTouches
+      responses:
+        '200':
+          description: A list of touches in the penalty box
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchTouch'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches/{id}:
+    get:
+      summary: Retrieve a specific match touch
+      description: Fetches details of a specific match touch for a given user and match.
+      tags:
+        - MatchTouches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match touch details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTouch'
+              example:
+                id: 7
+                match_id: 5
+                player_id: 12
+                team_id: 3
+                touch_type: "pass_reception"
+                touch_direction: "forward"
+                successful: true
+                x_coordinate: 40.5
+                y_coordinate: 60.2
+                minute: 45
+                in_box: false
+        '404':
+          description: Match touch not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Match touch not found"
+
+    patch:
+      summary: Update a match touch
+      description: Update the details of a specific match touch.
+      tags:
+        - MatchTouches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchTouch'
       responses:
         '200':
           description: Match touch updated successfully
@@ -4738,23 +4893,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MatchTouch'
+        '404':
+          description: Match touch not found
         '422':
-          description: Unprocessable entity (validation errors)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errors:
-                    type: array
-                    items:
-                      type: string
+          description: Validation error
 
     delete:
       summary: Delete a match touch
-      description: Deletes a specific match touch from a match.
+      description: Delete a specific match touch by its ID.
       tags:
         - MatchTouches
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Match touch deleted successfully
@@ -4765,7 +4929,11 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Match touch deleted successfully"
+                example:
+                  message: "Match touch deleted successfully"
+        '404':
+          description: Match touch not found
+
 
   /api/v1/users/{user_id}/matches/{match_id}/match_dribbles:
     get:
@@ -4986,6 +5154,136 @@ paths:
                 properties:
                   message:
                     type: string
+                    
+  /api/v1/users/{user_id}/matches/{match_id}/match_blocks:
+    post:
+      summary: Create a new match block
+      description: Registers a new block event for a player in a specific match.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchBlock'
+      responses:
+        '201':
+          description: Match block created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchBlock'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_blocks/{id}:
+    patch:
+      summary: Update an existing match block
+      description: Updates a block event by its ID for a specific match.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match block
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchBlock'
+      responses:
+        '200':
+          description: Match block updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchBlock'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+    delete:
+      summary: Delete a specific match block by its ID
+      description: Deletes a block event from a specific match by its ID.
+      tags:
+        - Match Blocks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match block
+      responses:
+        '200':
+          description: Match block deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  
+
 components:
   schemas:
     UserRegistration:
@@ -6744,7 +7042,121 @@ components:
           nullable: true
           description: Y-coordinate of the dribble location on the pitch
     
-    
+    MatchBlock:
+      type: object
+      properties:
+        id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opponent_id:
+          type: integer
+        block_type:
+          type: string
+        minute:
+          type: integer
+        is_successful:
+          type: boolean
+        block_outcome:
+          type: string
+        distance:
+          type: number
+          format: float
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewMatchBlock:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opponent_id:
+          type: integer
+        block_type:
+          type: string
+        minute:
+          type: integer
+        is_successful:
+          type: boolean
+        block_outcome:
+          type: string
+        distance:
+          type: number
+          format: float
+
+    GameWeek:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the game week.
+        league_id:
+          type: integer
+          description: ID of the associated league.
+        week_number:
+          type: integer
+          description: The number of the week within the season.
+        season_id:
+          type: integer
+          description: ID of the associated season.
+        season:
+          type: integer
+          description: The year of the season.
+        start_date:
+          type: string
+          format: date
+          description: Start date of the game week.
+        end_date:
+          type: string
+          format: date
+          description: End date of the game week.
+        user_id:
+          type: integer
+          description: ID of the user who created or updated the game week.
+        description:
+          type: string
+          description: Additional details about the game week.
+        completed:
+          type: boolean
+          description: Whether the game week has been completed.
+        created_at:
+          type: string
+          format: datetime
+          description: Time when the record was created.
+        updated_at:
+          type: string
+          format: datetime
+          description: Time when the record was last updated.
+
+    NewGameWeek:
+      type: object
+      properties:
+        season_id:
+          type: integer
+        league_id:
+          type: integer
+        week_number:
+          type: integer
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        total_matches:
+          type: integer
+        is_completed:
+          type: boolean
+        notes:
+          type: string
 
   securitySchemes:
     BearerAuth:
