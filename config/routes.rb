@@ -34,6 +34,7 @@ Rails.application.routes.draw do
         resources :formations, only: [:index, :show, :create, :destroy, :update] do
           resources:formation_positions, only: [:index, :show, :create, :destroy, :update]
         end
+        resources :match_lineups, only: [:index, :show, :create, :destroy, :update]
 
       end
     end

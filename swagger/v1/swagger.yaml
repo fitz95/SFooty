@@ -3275,13 +3275,19 @@ paths:
                   error:
                     type: string
 
-  /api/v1/formations/{formation_id}/formation_positions:
+  /api/v1/users/{user_id}/formations/{formation_id}/formation_positions:
     get:
-      summary: Get all positions for a specific formation
-      description: Retrieve all positions defined within a specific formation.
+      summary: Retrieve all positions for a specific formation
+      description: Fetches all positions for a specific formation associated with the given user.
       tags:
-        - Formation Positions
+        - FormationPositions
       parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
         - name: formation_id
           in: path
           required: true
@@ -3290,29 +3296,40 @@ paths:
             type: integer
       responses:
         '200':
-          description: Successful response
+          description: A list of formation positions
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/FormationPosition'
+              examples:
+                example-1:
+                  summary: Successful response
+                  value:
+                    - id: 1
+                      position_name: "Goalkeeper"
+                      position_order: 1
+                      position_number: 1
+                    - id: 2
+                      position_name: "Center Back"
+                      position_order: 2
+                      position_number: 4
         '404':
-          description: Formation not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+          description: User or formation not found
 
     post:
-      summary: Create a new position for a specific formation
-      description: Add a new position to a specific formation.
+      summary: Create a new position for a formation
+      description: Creates a new position for a specific formation associated with the given user.
       tags:
-        - Formation Positions
+        - FormationPositions
       parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
         - name: formation_id
           in: path
           required: true
@@ -3325,28 +3342,77 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/NewFormationPosition'
+            examples:
+              example-1:
+                summary: Example request body
+                value:
+                  position_name: "Left Back"
+                  position_order: 3
+                  position_number: 3
       responses:
         '201':
-          description: Position created successfully
+          description: Formation position created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FormationPosition'
         '422':
-          description: Validation errors
+          description: Validation error
+
+  /api/v1/users/{user_id}/formations/{formation_id}/formation_positions/{id}:
+    get:
+      summary: Retrieve a specific formation position
+      description: Get details of a specific position by ID.
+      tags:
+        - FormationPositions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: formation_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Formation position details
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  errors:
-                    type: array
-                    items:
-                      type: string
-        '404':
-          description: Formation not found
+                $ref: '#/components/schemas/FormationPosition'
 
-  /api/v1/formations/{formation_id}/formation_positions/{id}:
+    patch:
+      summary: Update a specific formation position
+      description: Update the details of an existing position.
+      tags:
+        - FormationPositions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewFormationPosition'
+      responses:
+        '200':
+          description: Formation position updated successfully
+
+    delete:
+      summary: Delete a specific formation position
+      description: Delete a position associated with a specific formation and user.
+      tags:
+        - FormationPositions
+      responses:
+        '204':
+          description: No content, position deleted successfully
+
     get:
       summary: Get a specific position by ID
       description: Retrieve details of a specific position by its ID within a formation.
@@ -3443,6 +3509,301 @@ paths:
           description: Position deleted successfully
         '404':
           description: Position or Formation not found
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_lineups:
+    get:
+      summary: Retrieve all match lineups for a specific user and match
+      description: Fetches all match lineups that have been created by a specific user for a given match.
+      tags:
+        - MatchLineups
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match lineups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchLineup'
+              examples:
+                example-1:
+                  summary: Successful response
+                  value: 
+                    - id: 1
+                      formation_id: 2
+                      match_id: 3
+                      team_id: 4
+                      expected_match_lineup: ["GK", "LB", "CB", "CB", "RB", "CDM", "CM", "CM", "LW", "ST", "RW"]
+                      lineup_name: "4-3-3 Formation"
+                      comments: "Standard offensive lineup"
+                      user_id: 1
+                    - id: 2
+                      formation_id: 5
+                      match_id: 3
+                      team_id: 4
+                      expected_match_lineup: ["GK", "CB", "CB", "CB", "LWB", "RWB", "CM", "CAM", "ST", "ST"]
+                      lineup_name: "3-5-2 Formation"
+                      comments: "Defensive setup with wing-backs"
+                      user_id: 1
+        '404':
+          description: User or match not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "User not found"
+
+    post:
+      summary: Create a new match lineup
+      description: Create a new lineup for a specific user and match, with details like formation, team, and player positions.
+      tags:
+        - MatchLineups
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchLineup'
+            examples:
+              example-1:
+                summary: Example request body
+                value:
+                  formation_id: 2
+                  team_id: 4
+                  expected_match_lineup: ["GK", "LB", "CB", "CB", "RB", "CM", "CM", "CAM", "LW", "RW", "ST"]
+                  lineup_name: "4-2-3-1"
+                  comments: "Offensive strategy for high pressing"
+      responses:
+        '201':
+          description: Match lineup created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchLineup'
+              example:
+                id: 10
+                formation_id: 2
+                match_id: 3
+                team_id: 4
+                expected_match_lineup: ["GK", "LB", "CB", "CB", "RB", "CDM", "CM", "CAM", "LW", "RW", "ST"]
+                lineup_name: "4-2-3-1"
+                comments: "Aggressive formation"
+                user_id: 1
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+              example:
+                errors: ["Formation ID is required", "Expected match lineup cannot be empty"]
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_lineups/{id}:
+    get:
+      summary: Retrieve a specific match lineup
+      description: Get details of a specific lineup created by a user for a given match.
+      tags:
+        - MatchLineups
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match lineup details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchLineup'
+        '404':
+          description: Match lineup not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Match lineup not found"
+
+    patch:
+      summary: Update a specific match lineup
+      description: Update the details of an existing match lineup.
+      tags:
+        - MatchLineups
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchLineup'
+      responses:
+        '200':
+          description: Match lineup updated successfully
+        '404':
+          description: Match lineup not found
+
+    delete:
+      summary: Delete a specific match lineup
+      description: Delete a lineup associated with a specific user and match.
+      tags:
+        - MatchLineups
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content, lineup deleted successfully
+        '404':
+          description: Match lineup not found
+
+    get:
+      summary: Get a specific lineup entry
+      tags:
+        - Match Lineups
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchLineup'
+        '404':
+          description: Lineup entry not found
+
+    patch:
+      summary: Update a lineup entry
+      tags:
+        - Match Lineups
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchLineup'
+      responses:
+        '200':
+          description: Lineup updated successfully
+        '422':
+          description: Validation errors
+
+    delete:
+      summary: Delete a lineup entry
+      tags:
+        - Match Lineups
+      parameters:
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Lineup entry deleted
 
 components:
   schemas:
@@ -4571,7 +4932,6 @@ components:
         - home_team_id
         - away_team_id
 
-
     Competition:
       type: object
       properties:
@@ -4745,6 +5105,7 @@ components:
           format: date-time
 
     NewFormation:
+
       type: object
       required:
         - formation_name
@@ -4757,9 +5118,152 @@ components:
           type: string
           description: A description of the formation
 
+    MatchLineup:
+      type: object
+      properties:
+        id:
+          type: integer
+        formation_id:
+          type: integer
+        match_id:
+          type: integer
+        team_id:
+          type: integer
+        expected_match_lineup:
+          type: array
+          items:
+            type: string
+        lineup_name:
+          type: string
+        comments:
+          type: string
+        user_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
 
+    NewMatchLineup:
+      type: object
+      required:
+        - formation_id
+        - team_id
+        - expected_match_lineup
+      properties:
+        formation_id:
+          type: integer
+        team_id:
+          type: integer
+        expected_match_lineup:
+          type: array
+          items:
+            type: string
+        lineup_name:
+          type: string
+        comments:
+          type: string
 
-                      
+      type: object
+      properties:
+        formation_id:
+          type: integer
+        team_id:
+          type: integer
+        expected_match_lineup:
+          type: array
+          items:
+            type: object
+            properties:
+              player_name:
+                type: string
+              position:
+                type: string
+              jersey_number:
+                type: integer
+
+    FormationPosition:
+      type: object
+      properties:
+        id:
+          type: integer
+        formation_id:
+          type: integer
+        position_name:
+          type: string
+        position_order:
+          type: integer
+        position_number:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewFormationPosition:
+
+      type: object
+      properties:
+        position_name:
+          type: string
+          example: "Forward"
+        position_order:
+          type: integer
+          example: 1
+        position_number:
+          type: integer
+          example: 9
+
+    LineupPlayer:
+      type: object
+      properties:
+        id:
+          type: integer
+        player_id:
+          type: integer
+        formation_position_id:
+          type: integer
+        position:
+          type: string
+        is_captain:
+          type: boolean
+          default: false
+        is_substitute:
+          type: boolean
+          default: false
+        user_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewLineupPlayer:
+      type: object
+      required:
+        - player_id
+        - formation_position_id
+        - position
+      properties:
+        player_id:
+          type: integer
+        formation_position_id:
+          type: integer
+        position:
+          type: string
+        is_captain:
+          type: boolean
+          default: false
+        is_substitute:
+          type: boolean
+          default: false   
+
   securitySchemes:
     BearerAuth:
       type: apiKey

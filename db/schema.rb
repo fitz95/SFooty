@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_08_053057) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_12_044355) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -95,11 +95,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_08_053057) do
 
   create_table "lineup_players", force: :cascade do |t|
     t.integer "match_lineup_id"
-    t.integer "lineup_position_id"
     t.integer "player_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "formation_position_id", null: false
+    t.string "position"
+    t.boolean "is_captain", default: false
+    t.boolean "is_substitute", default: false
+    t.index ["formation_position_id"], name: "index_lineup_players_on_formation_position_id"
     t.index ["match_lineup_id"], name: "index_lineup_players_on_match_lineup_id"
   end
 
@@ -186,8 +190,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_08_053057) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "team_id", null: false
+    t.string "expected_match_lineup", default: [], array: true
     t.index ["formation_id"], name: "index_match_lineups_on_formation_id"
+    t.index ["match_id", "team_id", "formation_id"], name: "index_match_lineups_on_match_team_formation", unique: true
     t.index ["match_id"], name: "index_match_lineups_on_match_id"
+    t.index ["team_id"], name: "index_match_lineups_on_team_id"
     t.index ["user_id"], name: "index_match_lineups_on_user_id"
   end
 
@@ -580,7 +588,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_08_053057) do
   add_foreign_key "league_groups", "leagues"
   add_foreign_key "league_groups", "users"
   add_foreign_key "leagues", "users"
-  add_foreign_key "lineup_players", "lineup_positions"
+  add_foreign_key "lineup_players", "formation_positions"
   add_foreign_key "lineup_players", "match_lineups"
   add_foreign_key "lineup_players", "players"
   add_foreign_key "lineup_players", "users"

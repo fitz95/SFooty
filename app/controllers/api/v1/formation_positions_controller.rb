@@ -1,25 +1,22 @@
 class Api::V1::FormationPositionsController < ApplicationController
-    before_action :authenticate_request
-    before_action :set_user
-    before_action :set_formation, only: %i[show update destroy]
-    load_and_authorize_resource
+  before_action :authenticate_request
+  before_action :set_user
+  before_action :set_formation
+  before_action :set_formation_position, only: %i[show update destroy]
+  load_and_authorize_resource
 
-    # GET /api/v1/formations/:formation_id/formation_positions
-  api :GET, '/api/v1/formations/:formation_id/formation_positions', 'Get all positions for a specific formation'
+  # GET /api/v1/users/:user_id/formations/:formation_id/formation_positions
   def index
     @formation_positions = @formation.formation_positions
     render json: @formation_positions
   end
 
-  # GET /api/v1/formations/:formation_id/formation_positions/:id
-  api :GET, '/api/v1/formations/:formation_id/formation_positions/:id', 'Get a specific position by ID for a formation'
-  param :id, :number, desc: 'ID of the requested position', required: true
+  # GET /api/v1/users/:user_id/formations/:formation_id/formation_positions/:id
   def show
     render json: @formation_position
   end
 
-  # POST /api/v1/formations/:formation_id/formation_positions
-  api :POST, '/api/v1/formations/:formation_id/formation_positions', 'Create a new position for a formation'
+  # POST /api/v1/users/:user_id/formations/:formation_id/formation_positions
   def create
     @formation_position = @formation.formation_positions.new(formation_position_params)
     if @formation_position.save
@@ -29,8 +26,7 @@ class Api::V1::FormationPositionsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /api/v1/formations/:formation_id/formation_positions/:id
-  api :PATCH, '/api/v1/formations/:formation_id/formation_positions/:id', 'Update an existing position by ID'
+  # PATCH/PUT /api/v1/users/:user_id/formations/:formation_id/formation_positions/:id
   def update
     if @formation_position.update(formation_position_params)
       render json: @formation_position
@@ -39,8 +35,7 @@ class Api::V1::FormationPositionsController < ApplicationController
     end
   end
 
-  # DELETE /api/v1/formations/:formation_id/formation_positions/:id
-  api :DELETE, '/api/v1/formations/:formation_id/formation_positions/:id', 'Delete a position by ID'
+  # DELETE /api/v1/users/:user_id/formations/:formation_id/formation_positions/:id
   def destroy
     @formation_position.destroy
     head :no_content
@@ -48,8 +43,12 @@ class Api::V1::FormationPositionsController < ApplicationController
 
   private
 
+  def set_user
+    @user = User.find(params[:user_id])
+  end
+
   def set_formation
-    @formation = Formation.find(params[:formation_id])
+    @formation = @user.formations.find(params[:formation_id])
   end
 
   def set_formation_position
@@ -60,3 +59,4 @@ class Api::V1::FormationPositionsController < ApplicationController
     params.require(:formation_position).permit(:position_name, :position_order, :position_number)
   end
 end
+
