@@ -18,14 +18,21 @@ class Api::V1::SessionsController < Devise::SessionsController
                User.find_for_database_authentication(username: login)
 
     return invalid_login_attempt unless resource
+    Rails.logger.info("JWT_SECRET: #{ENV['JWT_SECRET']}")
+    Rails.logger.info("JWT_SECRET: #{ENV['JWT_SECRET']}")
+
+
 
     if resource.valid_password?(params[:user][:password])
       sign_in(resource_name, resource)
-      unless resource.authentication_token.present?
-        token = current_token
-        resource.update(authentication_token: token)
-      end
-      render json: { user: resource }, status: :created and return
+
+      # Generate or fetch the JWT token
+      token = request.env['warden-jwt_auth.token'] || generate_jwt_token(resource)
+
+      # Update the user's token in the database
+
+      resource.update(authentication_token: token)
+      render json: { user: resource, token: token }, status: :created and return
     end
 
     invalid_login_attempt
@@ -40,9 +47,10 @@ class Api::V1::SessionsController < Devise::SessionsController
 
     if user.present?
       user.clear_jwt_token
-      user.authentication_token = nil
+      user.update(authentication_token: nil)
       render json: { message: 'Logged out successfully' }, status: :ok
     else
+      logger.debug "Invalid token provided during logout: #{token} "
       render json: { error: 'Invalid token' }, status: :unprocessable_entity
     end
   end
@@ -50,7 +58,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   protected
 
   def jwt_revoked?(_payload, token)
-    RevokedToken.exists?(token:)
+    RevokedToken.exists?(token: token)
   end
 
   def invalid_login_attempt
@@ -60,5 +68,12 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def current_token
     request.env['warden-jwt_auth.token']
-  end   
+  end
+
+  private
+
+  def generate_jwt_token(resource)
+    payload = { sub: resource.id, exp: 36.hours.from_now.to_i }
+    JWT.encode(payload, ENV['JWT_SECRET'], 'HS256')
+  end
 end

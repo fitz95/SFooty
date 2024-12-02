@@ -6,13 +6,16 @@ class ApplicationController < ActionController::API
 
   def authenticate_request
     @current_user = authorize_token
-    return if @current_user
 
-    render json: { error: 'Unauthorized' }, status: :unauthorized
+    if @current_user
+    else
+      render json: { error: 'Unauthorized' }, status: :unauthorized
+    end
   end
 
   def authorize_token
     token = extract_token
+
     return unless token
 
     if revoked_token?(token)
@@ -21,8 +24,10 @@ class ApplicationController < ActionController::API
     end
 
     decoded_token = decode_token(token)
+
     User.find_by(id: decoded_token['sub']) if decoded_token
-  rescue JWT::DecodeError
+  rescue JWT::DecodeError => e
+    logger.debug "JWT Decode Error: #{e.message}"
     nil
   end
 
@@ -32,11 +37,16 @@ class ApplicationController < ActionController::API
   end
 
   def decode_token(token)
-    @decode_token = JWT.decode(token, ENV.fetch('JWT_SECRET', nil), true, algorithm: 'HS256').first
+    begin
+      @decode_token = JWT.decode(token, ENV.fetch('JWT_SECRET', nil), true, algorithm: 'HS256').first
+    rescue JWT::DecodeError => e
+      logger.debug "JWT Decode Error: #{e.message}"
+      nil
+    end
   end
 
   def revoked_token?(token)
-    RevokedToken.exists?(token:)
+    RevokedToken.exists?(token: token)
   end
 
   protected
