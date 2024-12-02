@@ -65,7 +65,8 @@ class Api::V1::MatchInterceptionsController < ApplicationController
   
     # Strong parameters
     def match_interception_params
-      params.require(:match_interception).permit(:player_id, :team_id, :interception_type, :x_coordinate, :y_coordinate, :minute, :successful :outcome :match_pass_id)
+      params.require(:match_interception).permit(:player_id, :team_id, :interception_type, :x_coordinate, :y_coordinate, :minute, :successful, :outcome, :match_pass_id, is_cross,
+                                                 :is_high_claim, :is_low_claim, :body_part, :is_dropped_down, :is_corner, :is_free_kick)
     end
   end
   

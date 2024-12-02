@@ -6607,7 +6607,209 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ErrorLeadingToGoal'                
+                  $ref: '#/components/schemas/ErrorLeadingToGoal'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_keeper_saves:
+    get:
+      summary: Retrieve all keeper saves for a specific match
+      tags:
+        - MatchKeeperSaves
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of keeper saves for a specific match
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchKeeperSave'
+    post:
+      summary: Create a new keeper save
+      tags:
+        - MatchKeeperSaves
+      parameters:
+        - name: user_id
+          in: path  
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path  
+          required: true
+          schema:
+            type: integer 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchKeeperSave'
+      responses:
+        '200':
+          description: Keeper save created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchKeeperSave'
+        '422':
+          description: Validation errors  
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_keeper_saves/{id}:
+    get:
+      summary: Retrieve a specific keeper save
+      tags:
+        - MatchKeeperSaves
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A specific keeper save
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchKeeperSave'  
+    patch:
+      summary: Update a keeper save
+      tags:
+        - MatchKeeperSaves
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchKeeperSave'
+      responses:
+        '200':
+          description: Keeper save updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchKeeperSave'
+        '422':
+          description: Validation errors  
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+    delete:
+      summary: Delete a specific keeper save
+      tags:
+        - MatchKeeperSaves
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Keeper save deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Keeper save deleted successfully!"  
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_keeper_saves/players/{player_id}:
+    get:
+      summary: Retrieve all keeper saves for a specific player in a match
+      tags:
+        - MatchKeeperSaves
+      parameters:
+        - name: user_id
+          in: path  
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path  
+          required: true
+          schema:
+            type: integer
+        - name: player_id
+          in: path  
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of keeper saves for a specific player in a match
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchKeeperSave'  
+
+
 components:
   schemas:
     UserRegistration:
@@ -8187,7 +8389,21 @@ components:
         minute:
           type: integer
         expected_assist_value:
-          type: number
+          type: decimal
+        is_goalkick:
+          type: boolean
+        is_throwout: 
+          type: boolean
+        is_throwin:
+          type: boolean
+        is_punt:
+          type: boolean
+        is_open_play:
+          type: boolean
+        is_freekick:
+          type: boolean
+        
+        
 
     NewMatchPass:
       type: object
@@ -8523,14 +8739,30 @@ components:
         user_id:
           type: integer
           description: ID of the user who created or updated the record.
-        created_at:
+        successful:
+          type: boolean
+          description: Indicates if the interception was successful.
+        is_cross:
+          type: boolean
+          description: Indicates if the interception was a cross.
+        is_high_claim:
+          type: boolean
+          description: Indicates if the interception was a high claim.
+        is_low_claim:
+          type: boolean
+          description: Indicates if the interception was a low claim.
+        body_part:
           type: string
-          format: datetime
-          description: Time when the record was created.
-        updated_at:
-          type: string
-          format: datetime
-          description: Time when the record was last updated.
+          description: The body part used for the interception (e.g., head, foot).
+        dropped_down:
+          type: boolean
+          description: Indicates if the goalkeeper dropped the ball.
+        is_corner:
+          type: boolean
+          description: Indicates if the interception was during a corner.
+        is_free_kick:
+          type: boolean
+          description: Indicates if the interception was during a free kick.
 
     NewMatchInterception:
       type: object
@@ -8564,6 +8796,26 @@ components:
         match_pass_id:
           type: integer
           description: ID of the corresponding pass that was intercepted.
+        is_cross:
+          type: boolean
+          description: Indicates if the interception was a cross.
+        is_high_claim:
+          type: boolean
+          description: Indicates if the interception was a high claim.
+        is_low_claim:
+          type: boolean
+          description: Indicates if the interception was a low claim.
+        body_part:
+          type: string
+          description: The body part used for the interception (e.g., head, foot).
+        dropped_down:
+          type: boolean
+          description: Indicates if the goalkeeper dropped the ball.
+        is_corner:
+          type: boolean
+          description: Indicates if the interception was during a corner.
+        is_free_kick:
+          type: boolean
 
     MatchTackles:
       type: object
@@ -8652,6 +8904,8 @@ components:
           type: boolean
         resulted_in_goal:
           type: boolean
+        sweeper_clearance:
+          type: boolean
 
     NewMatchClearance:
       type: object 
@@ -8679,6 +8933,8 @@ components:
         resulted_in_throw_in:
           type: boolean
         resulted_in_goal:
+          type: boolean
+        sweeper_clearance:
           type: boolean
     
     MatchOffside:
@@ -8932,5 +9188,90 @@ components:
         description:
           type: string
 
+    MatchKeeperSave:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        save_type:
+          type: string
+        aerial:
+          type: boolean
+        ground:
+          type: boolean
+        is_penalty_save:
+          type: boolean
+        body_part:
+          type: string
+        is_close_range_save:
+          type: boolean 
+        is_one_on_one_save:
+          type: boolean
+        is_reaction_save:
+          type: boolean
+        minute:
+          type: integer
+        xgp:
+          type: float
+        additional_time:
+          type: integer
+        distance_from_goal:
+          type: float
+        location_on_pitch:
+          type: string
+        save_outcome:
+          type: string
+        description:
+          type: string
+        shot_taker_id:
+          type: integer
+    
+    NewMatchKeeperSave:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        save_type:
+          type: string 
+        aerial:
+          type: boolean
+        ground:
+          type: boolean
+        is_penalty_save:
+          type: boolean
+        body_part:
+          type: string
+        is_close_range_save:
+          type: boolean 
+        is_one_on_one_save:
+          type: boolean
+        is_reaction_save:
+          type: boolean
+        minute:
+          type: integer
+        xgp:
+          type: float
+        additional_time:
+          type: integer
+        distance_from_goal:
+          type: float
+        location_on_pitch:
+          type: string
+        save_outcome:
+          type: string
+
+    
 security:
   - BearerAuth: []

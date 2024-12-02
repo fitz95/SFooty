@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_26_101022) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_27_075335) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -206,6 +206,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_101022) do
     t.boolean "resulted_in_goal", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "sweeper_clearance", default: false
     t.index ["match_id"], name: "index_match_clearances_on_match_id"
     t.index ["player_id"], name: "index_match_clearances_on_player_id"
     t.index ["team_id"], name: "index_match_clearances_on_team_id"
@@ -352,14 +353,51 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_101022) do
     t.integer "y_coordinate"
     t.string "interception_outcome"
     t.integer "minute"
-    t.boolean "successful"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "successful", default: false
+    t.boolean "is_cross", default: false
+    t.boolean "is_high_claim", default: false
+    t.boolean "is_low_claim", default: false
+    t.string "body_part"
+    t.boolean "dropped_down", default: false
+    t.boolean "is_corner", default: false
+    t.boolean "is_free_kick", default: false
     t.index ["match_id"], name: "index_match_interceptions_on_match_id"
     t.index ["match_pass_id"], name: "index_match_interceptions_on_match_pass_id"
     t.index ["player_id"], name: "index_match_interceptions_on_player_id"
     t.index ["team_id"], name: "index_match_interceptions_on_team_id"
     t.index ["user_id"], name: "index_match_interceptions_on_user_id"
+  end
+
+  create_table "match_keeper_saves", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "user_id", null: false
+    t.string "save_type"
+    t.boolean "is_penalty_save"
+    t.boolean "is_ground"
+    t.boolean "is_aerial"
+    t.string "body_part"
+    t.boolean "is_close_range_save", default: false
+    t.boolean "is_one_on_one_save", default: false
+    t.boolean "is_reaction_save", default: false
+    t.float "xgp"
+    t.integer "minute"
+    t.integer "additional_time", default: 0
+    t.string "location_on_pitch"
+    t.float "distance_from_goal"
+    t.string "save_outcome"
+    t.text "description"
+    t.integer "shot_taker_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_keeper_saves_on_match_id"
+    t.index ["player_id"], name: "index_match_keeper_saves_on_player_id"
+    t.index ["shot_taker_id"], name: "index_match_keeper_saves_on_shot_taker_id"
+    t.index ["team_id"], name: "index_match_keeper_saves_on_team_id"
+    t.index ["user_id"], name: "index_match_keeper_saves_on_user_id"
   end
 
   create_table "match_lineups", force: :cascade do |t|
@@ -445,6 +483,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_101022) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_goalkick", default: false
+    t.boolean "is_throw_out", default: false
+    t.boolean "is_punt", default: false
+    t.boolean "is_open_play", default: true
+    t.boolean "is_freekick", default: false
+    t.boolean "is_throw_in", default: false, null: false
     t.index ["assister"], name: "index_match_passes_on_assister"
     t.index ["match_id"], name: "index_match_passes_on_match_id"
     t.index ["player_id"], name: "index_match_passes_on_player_id"
@@ -944,6 +988,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_26_101022) do
   add_foreign_key "match_interceptions", "players"
   add_foreign_key "match_interceptions", "teams"
   add_foreign_key "match_interceptions", "users"
+  add_foreign_key "match_keeper_saves", "matches"
+  add_foreign_key "match_keeper_saves", "players"
+  add_foreign_key "match_keeper_saves", "teams"
+  add_foreign_key "match_keeper_saves", "users"
   add_foreign_key "match_lineups", "formations"
   add_foreign_key "match_lineups", "matches"
   add_foreign_key "match_lineups", "users"

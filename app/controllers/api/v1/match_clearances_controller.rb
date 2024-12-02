@@ -61,7 +61,7 @@ class Api::V1::MatchClearancesController < ApplicationController
     end
   
     def match_clearance_params
-      params.require(:match_clearance).permit(:player_id, :team_id, :clearance_type, :clearance_outcome, :x_coordinate, :y_coordinate, :minute, :successful, :under_pressure, :resulted_in_corner, :resulted_in_throw_in, :resulted_in_goal)
+      params.require(:match_clearance).permit(:player_id, :team_id, :clearance_type, :clearance_outcome, :x_coordinate, :y_coordinate, :minute, :successful, :under_pressure, :resulted_in_corner, :resulted_in_throw_in, :resulted_in_goa, :sweeper_clearance)
     end
   end
   
