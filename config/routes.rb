@@ -28,7 +28,16 @@ Rails.application.routes.draw do
         resources :seasons, only: [:index, :show, :create, :destroy, :update]
         resources :season_managers, only: [:index, :show, :create, :destroy, :update]
         resources :game_weeks, only: [:index, :show, :create, :destroy, :update]
-        resources :matches, only: [:index, :show, :create, :destroy, :update]
+        resources :matches, only: [:index, :show, :create, :destroy, :update] do
+          resources :substitutions, only: [:index, :show, :create, :destroy, :update]
+          resources :match_shots, only: [:index, :show, :create, :destroy, :update] do
+            collection do
+              get :on_target
+              get :missed_shots
+              get :total_xg
+            end
+          end
+        end
         resources :competitions, only: [:index, :show, :create, :destroy, :update]
         resources :match_goals, only: [:index, :show, :create, :destroy, :update]
         resources :formations, only: [:index, :show, :create, :destroy, :update] do

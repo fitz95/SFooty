@@ -11,6 +11,10 @@ class Match < ApplicationRecord
   has_many :player_stats, dependent: :destroy
   has_many :match_events, dependent: :destroy
   has_many :match_goals, dependent: :destroy
+  has_many :match_lineups, dependent: :destroy
+  has_many :lineup_players, through: :match_lineups
+  has_many :lineup_positions, through: :match_lineups
+  has_many :substitudes
 
 
   validates :stadium_id, :referee_id, :home_team_id, :away_team_id, presence: true
