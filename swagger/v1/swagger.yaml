@@ -6453,7 +6453,161 @@ paths:
                 items:
                   $ref: '#/components/schemas/MatchCorner'
 
-                  
+  /api/v1/users/{user_id}/error_leading_to_goals:
+    get:
+      summary: Retrieve all error leading to goals 
+      tags: 
+        - ErrorLeadingToGoals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of error leading to goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorLeadingToGoal'
+    post:
+      summary: Create a new error leading to goal
+      tags:
+        - ErrorLeadingToGoals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewErrorLeadingToGoal'
+      responses:
+        '200':
+          description: Error leading to goal created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorLeadingToGoal'
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/error_leading_to_goals/{id}:
+    get:
+      summary: Retrieve a specific error leading to goal
+      tags:
+        - ErrorLeadingToGoals
+      parameters:
+        - name: user_id
+          in: path
+          required: true  
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true  
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A specific error leading to goal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorLeadingToGoal'
+    delete:
+      summary: Delete a specific error leading to goal
+      tags:
+        - ErrorLeadingToGoals      
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true  
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Error leading to goal deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/v1/users/{user_id}/error_leading_to_goals/players/{player_id}:
+    get:
+      summary: Retrieve all error leading to goals for a specific player
+      tags:
+        - ErrorLeadingToGoals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of error leading to goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorLeadingToGoal'
+
+  /api/v1/users/{user_id}/error_leading_to_goals/teams/{team_id}:
+    get:
+      summary: Retrieve all error leading to goals for a specific team
+      tags:
+        - ErrorLeadingToGoals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer 
+      responses:
+        '200':
+          description: A list of error leading to goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorLeadingToGoal'                
 components:
   schemas:
     UserRegistration:
@@ -8739,5 +8893,44 @@ components:
           type: string
         side:
           type: string
+
+    ErrorLeadingToGoal:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        error_type:
+          type: string
+        minute:
+          type: integer
+        additional_time:
+          type: integer
+        description:
+          type: string
+
+    NewErrorLeadingToGoal:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        error_type:
+          type: string
+        additional_time:
+          type: integer
+        description:
+          type: string
+
 security:
   - BearerAuth: []

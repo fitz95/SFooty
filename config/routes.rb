@@ -28,6 +28,12 @@ Rails.application.routes.draw do
         resources :seasons, only: [:index, :show, :create, :destroy, :update]
         resources :season_managers, only: [:index, :show, :create, :destroy, :update]
         resources :game_weeks, only: [:index, :show, :create, :destroy, :update]
+        resources :error_leading_to_goals, only: [:index, :show, :create, :destroy, :update] do
+          collection do
+            get :error_leading_to_goals_by_team
+            get :error_leading_to_goals_by_player
+          end
+        end
         resources :matches, only: [:index, :show, :create, :destroy, :update] do
           resources :substitutions, only: [:index, :show, :create, :destroy, :update]
           resources :match_shots, only: [:index, :show, :create, :destroy, :update] do
