@@ -370,10 +370,11 @@ paths:
                 properties:
                   error:
                     type: string
-  /api/v1/users/{user_id}/leagues/{league_id}/teams:
+
+  /api/v1/users/{user_id}/teams:
     get:
-      summary: Get all teams in a specific league
-      description: Retrieve all teams within the specified league.
+      summary: Get all teams for the user
+      description: Retrieve all teams associated with the specified user.
       tags:
         - Teams
       parameters:
@@ -383,12 +384,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
       responses:
         '200':
           description: List of teams
@@ -399,7 +394,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Team'
         '404':
-          description: League not found
+          description: User not found
           content:
             application/json:
               schema:
@@ -409,8 +404,8 @@ paths:
                     type: string
 
     post:
-      summary: Create a new team in a league
-      description: Add a new team to the specified league.
+      summary: Create a new team for the user
+      description: Add a new team to the specified user.
       tags:
         - Teams
       parameters:
@@ -420,12 +415,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
       requestBody:
         required: true
         content:
@@ -451,10 +440,10 @@ paths:
     security:
       - BearerAuth: []
 
-  /api/v1/users/{user_id}/leagues/{league_id}/teams/{id}:
+  /api/v1/users/{user_id}/teams/{id}:
     get:
       summary: Get team by ID
-      description: Retrieve a specific team by its ID within a league.
+      description: Retrieve a specific team by its ID.
       tags:
         - Teams
       parameters:
@@ -464,12 +453,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
         - in: path
           name: id
           required: true
@@ -492,9 +475,10 @@ paths:
                 properties:
                   error:
                     type: string
+
     patch:
       summary: Update team by ID
-      description: Modify details of a specific team by its ID within a league.
+      description: Modify details of a specific team by its ID.
       tags:
         - Teams
       parameters:
@@ -504,12 +488,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
         - in: path
           name: id
           required: true
@@ -541,7 +519,7 @@ paths:
 
     delete:
       summary: Delete team by ID
-      description: Remove a team by its ID within a league.
+      description: Remove a team by its ID.
       tags:
         - Teams
       parameters:
@@ -551,12 +529,6 @@ paths:
           schema:
             type: integer
           description: ID of the user.
-        - in: path
-          name: league_id
-          required: true
-          schema:
-            type: integer
-          description: ID of the league.
         - in: path
           name: id
           required: true
@@ -582,7 +554,8 @@ paths:
                 type: object
                 properties:
                   error:
-                    type: string
+                    type: string 
+
   /api/v1/users/{user_id}/leagues/{league_id}/players:
     get:
       summary: Get all players in a specific league
