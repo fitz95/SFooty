@@ -6250,6 +6250,210 @@ paths:
                 items:
                   $ref: '#/components/schemas/MatchFoul'               
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_corners:
+    get:
+      summary: Retrieve all corners for a specific match
+      tags:
+        - MatchCorners
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of corners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchCorner'
+    post:
+      summary: Create a new corner
+      tags:
+        - MatchCorners
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchCorner'
+      responses:
+        '200':  
+          description: Corner created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchCorner'
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_corners/{id}:
+    patch:
+      summary: Update a match corner
+      tags:
+        - MatchCorners
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer  
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path  
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchCorner'      
+      responses:
+        '200':
+          description: Match corner updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchCorner'
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+    delete:
+      summary: Delete a match corner
+      tags:
+        - MatchCorners
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match corner deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    
+  /api/v1/users/{user_id}/matches/{match_id}/match_corners/players/{player_id}:
+    get:
+      summary: Retrieve all corners for a specific player in a match
+      tags:
+        - MatchCorners
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: player_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of corners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchCorner'
+    
+  /api/v1/users/{user_id}/matches/{match_id}/match_corners/team/{team_id}:
+    get:
+      summary: Retrieve all corners for a specific team in a match
+      tags:
+        - MatchCorners
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: team_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of corners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchCorner'
+
+                  
 components:
   schemas:
     UserRegistration:
@@ -8504,5 +8708,36 @@ components:
           in: header
           description: Enter your Bearer token in the format 'Bearer {token}'
 
+    MatchCorner:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        outcome:
+          type: string
+        side:
+          type: string
+    
+    NewMatchCorner:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        outcome:
+          type: string
+        side:
+          type: string
 security:
   - BearerAuth: []
