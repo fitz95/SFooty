@@ -2709,6 +2709,504 @@ paths:
                     items:
                       type: string
 
+  /api/v1/users/{user_id}/competitions:
+    get:
+      summary: Get all competitions for a user
+      description: Retrieve a list of all competitions created by a specific user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+
+    post:
+      summary: Create a new competition for a user
+      description: Create a new competition record for a specific user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCompetition'
+      responses:
+        '201':
+          description: Competition created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/competitions/{id}:
+
+    get:
+      summary: Get a specific competition by ID
+      description: Retrieve details of a specific competition by its ID for a user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the competition.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        '404':
+          description: Competition not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Competition not found!"
+
+    patch:
+      summary: Update a specific competition by ID
+      description: Modify details of a specific competition by its ID for a user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the competition.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCompetition'
+      responses:
+        '200':
+          description: Competition updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific competition by ID
+      description: Remove a competition by its ID for a user.
+      tags:
+        - Competitions
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the competition.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Competition deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Competition deleted successfully!"
+        '404':
+          description: Competition not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Competition not found!"
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_goals:
+    get:
+      summary: Get all match goals for a specific match of a user
+      description: Retrieve a list of all goals scored in a specific match created by a specific user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchGoal'
+
+    post:
+      summary: Create a new match goal for a specific match of a user
+      description: Record a new goal in a specific match created by a specific user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchGoal'
+      responses:
+        '201':
+          description: Match goal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchGoal'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_goals/{id}:
+    get:
+      summary: Get a specific match goal by ID
+      description: Retrieve details of a specific goal scored in a match created by a specific user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match goal.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchGoal'
+        '404':
+          description: Match goal not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    patch:
+      summary: Update a specific match goal by ID
+      description: Update details of a specific goal in a match created by a specific user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match goal.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchGoal'
+      responses:
+        '200':
+          description: Match goal updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchGoal'
+        '404':
+          description: Match goal not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    delete:
+      summary: Delete a specific match goal by ID
+      description: Delete a specific goal record from a match created by a specific user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match goal.
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Match goal deleted successfully
+        '404':
+          description: Match goal not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    patch:
+      summary: Update a specific match goal by ID
+      description: Modify details of a specific match goal by its ID for a user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match goal.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchGoal'
+      responses:
+        '200':
+          description: Match goal updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchGoal'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  
+    delete:
+      summary: Delete a specific match goal by ID
+      description: Remove a match goal by its ID for a user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match goal.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match goal deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Match goal deleted successfully!"
+        '404':  
+          description: Match goal not found 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Match goal not found!"
+
+    get :
+      summary: Get a specific match goal by ID
+      description: Retrieve details of a specific match goal by its ID for a user.
+      tags:
+        - Match Goals
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user.
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match goal.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchGoal'
+        '404':
+          description: Match goal not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Match goal not found!"
+                  
+
 components:
   schemas:
     UserRegistration:
@@ -3835,6 +4333,160 @@ components:
         - time
         - home_team_id
         - away_team_id
+
+
+    Competition:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date
+          description: The start date of the competition.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the competition.
+        status:
+          type: string
+          description: Status of the competition.
+        location:
+          type: string
+          description: Location of the competition.
+        description:
+          type: string
+          description: Detailed description of the competition.
+        user_id:
+          type: integer
+          description: ID of the user who created the competition.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewCompetition:
+      type: object
+      properties:
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        status:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date
+          description: The start date of the competition.
+        end_date:
+          type: string
+          format: date
+          description: The end date of the competition.
+        status:
+          type: string
+          description: Status of the competition.
+        location:
+          type: string
+          description: Location of the competition.
+        description:
+          type: string
+          description: Detailed description of the competition.
+        user_id:
+          type: integer
+          description: ID of the user who created the competition.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    
+    MatchGoal:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+          description: ID of the match where the goal was scored.
+        scorer_player_id:
+          type: integer
+          description: ID of the player who scored the goal.
+        assister_player_id:
+          type: integer
+          description: ID of the player who assisted the goal (if any).
+        team_for_id:
+          type: integer
+          description: ID of the team that scored the goal.
+        team_against_id:
+          type: integer
+          description: ID of the opposing team.
+        penalty_goal:
+          type: boolean
+          description: Indicates if the goal was a penalty.
+        own_goal:
+          type: boolean
+          description: Indicates if the goal was an own goal.
+        goal_type:
+          type: string
+          description: The type of goal (e.g., "header", "free kick").
+        goal_desc:
+          type: string
+          description: Additional description of the goal.
+        minute_scored:
+          type: integer
+          description: The minute during which the goal was scored.
+        user_id:
+          type: integer
+          description: ID of the user who created the match goal.
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewMatchGoal:
+      type: object
+      properties:
+        scorer_player_id:
+          type: integer
+        assister_player_id:
+          type: integer
+        team_for_id:
+          type: integer
+        team_against_id:
+          type: integer
+        penalty_goal:
+          type: boolean
+        own_goal:
+          type: boolean
+        goal_type:
+          type: string
+        goal_desc:
+          type: string
+        minute_scored:
+          type: integer
+
 
   securitySchemes:
     BearerAuth:

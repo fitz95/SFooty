@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_06_090138) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_07_065053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_06_090138) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "status"
+    t.string "location"
+    t.text "description"
+    t.index ["user_id"], name: "index_competitions_on_user_id"
   end
 
   create_table "follows", force: :cascade do |t|
@@ -552,6 +559,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_06_090138) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "competitions", "users"
   add_foreign_key "follows", "users"
   add_foreign_key "follows", "users", column: "followed_user_id"
   add_foreign_key "follows", "users", column: "following_user_id"
