@@ -5529,96 +5529,96 @@ paths:
           description: Validation errors
 
   /api/v1/users/{user_id}/matches/{match_id}/match_tackles/{id}:
-  get:
-    summary: Retrieve a specific match tackle
-    tags:
-      - MatchTackles
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      '200':
-        description: Match tackle details
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MatchTackle'
-  patch:
-    summary: Update a match tackle
-    tags:
-      - MatchTackles
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    requestBody:
-      required: true
-      content:
-        application/json:
+    get:
+      summary: Retrieve a specific match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
           schema:
-            $ref: '#/components/schemas/UpdateMatchTackle'
-    responses:
-      '200':
-        description: Match tackle updated
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match tackle details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTackle'
+    patch:
+      summary: Update a match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MatchTackle'
-  delete:
-    summary: Delete a match tackle
-    tags:
-      - MatchTackles
-    parameters:
-      - name: user_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: match_id
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-    responses:
-      '200':
-        description: Match tackle deleted
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
+              $ref: '#/components/schemas/UpdateMatchTackle'
+      responses:
+        '200':
+          description: Match tackle updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTackle'
+    delete:
+      summary: Delete a match tackle
+      tags:
+        - MatchTackles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match tackle deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
   /api/v1/users/{user_id}/matches/{match_id}/match_clearances:
     get:
@@ -5915,6 +5915,340 @@ paths:
                 properties:
                   message:
                     type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_duels:
+    get:
+      summary: Retrieve all duels for a specific match
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match duels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchDuel'
+    post:
+      summary: Create a new match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchDuel'
+      responses:
+        '201':
+          description: Match duel created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDuel'
+        '422':
+          description: Validation errors
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_duels/{id}:
+    get:
+      summary: Retrieve a specific match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match duel details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDuel'
+    patch:
+      summary: Update a match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchDuel'
+      responses:
+        '200':
+          description: Match duel updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDuel'
+    delete:
+      summary: Delete a match duel
+      tags:
+        - MatchDuels
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match duel deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls:
+    get:
+      summary: Retrieve all fouls for a specific match
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match fouls
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchFoul'
+    post:
+      summary: Create a new match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchFoul'
+    '422':
+      description: Validation errors
+  
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls/{id}:
+    get:
+      summary: Retrieve a specific match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match foul details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchFoul'
+    patch:
+      summary: Update a match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchFoul'
+    delete:
+      summary: Delete a match foul
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match foul deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls/yellow_cards:
+    get:
+      summary: Retrieve all yellow cards for a specific match
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of yellow cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchFoul'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_fouls/red_cards:
+    get:
+      summary: Retrieve all red cards for a specific match
+      tags:
+        - MatchFouls
+      parameters:
+        - name: user_id
+          in: path  
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of red cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchFoul'               
 
 components:
   schemas:
@@ -8029,14 +8363,146 @@ components:
         resulted_in_goal:
           type: boolean
   
+    MatchDuel:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        opponent_player_id:
+          type: integer
+        team_id:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        duel_type:
+          type: string
+        outcome:
+          type: string
+        successful:
+          type: boolean
+        aerial:
+          type: boolean
+        ground:
+          type: boolean
+        
+    NewMatchDuel:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        opponent_player_id:
+          type: integer
+        team_id:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        duel_type:
+          type: string
+        outcome:
+          type: string
+        successful:
+          type: boolean
+        aerial:
+          type: boolean
+        last_man:
+          type: boolean
+        ground:
+          type: boolean
 
+    MatchFoul:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opposing_team:
+          type: integer
+        minute:
+          type: integer
+        fouled_player_id:
+          type: integer
+        fouled_official_id:
+          type: integer
+        foul_type:
+          type: string
+        severity:
+          type: string
+        card_issued:
+          type: boolean
+        card_type:
+          type: string
+        tackle_id:
+          type: integer
+        penalty_awarded:
+          type: boolean
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        created_at:
+          type: string
+        updated_at:
+          type: string
 
-  securitySchemes:
-    BearerAuth:
-      type: apiKey
-      name: Authorization
-      in: header
-      description: Enter your Bearer token in the format 'Bearer {token}'
+    NewMatchFoul:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        opposing_team_id:
+          type: integer
+        minute:
+          type: integer
+        foul_type:
+          type: string
+        severity:
+          type: string
+        card_issued:
+          type: boolean
+        card_type:
+          type: string
+        penalty_awarded:
+          type: boolean
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        tackle_id:
+          type: integer
+        fouled_player_id:
+          type: integer
+        fouled_official_id:
+          type: integer
+        severity:
+          type: string
+
+      
+
+      securitySchemes:
+        BearerAuth:
+          type: apiKey
+          name: Authorization
+          in: header
+          description: Enter your Bearer token in the format 'Bearer {token}'
 
 security:
   - BearerAuth: []
