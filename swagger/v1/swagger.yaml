@@ -5768,6 +5768,154 @@ paths:
                   message:
                     type: string
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_offsides:
+    get:
+      summary: Retrieve all offsides for a specific match
+      tags:
+        - MatchOffsides
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match offsides
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchOffside'
+    post:
+      summary: Create a new match offside
+      tags:
+        - MatchOffsides
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchOffside'
+      responses:
+        '201':
+          description: Match offside created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchOffside'
+        '422':
+          description: Validation errors
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_offsides/{id}:
+    get:
+      summary: Retrieve a specific match offside
+      tags:
+        - MatchOffsides
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match offside details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchOffside'
+    patch:
+      summary: Update a match offside
+      tags:
+        - MatchOffsides
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchOffside'
+      responses:
+        '200':
+          description: Match offside updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchOffside'
+    delete:
+      summary: Delete a match offside
+      tags:
+        - MatchOffsides
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match offside deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
 components:
   schemas:
     UserRegistration:
@@ -7840,7 +7988,49 @@ components:
           type: boolean
         resulted_in_goal:
           type: boolean
-        
+    
+    MatchOffside:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        last_man:
+          type: integer
+        resulted_in_goal:
+          type: boolean
+
+    NewMatchOffside:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        minute:
+          type: integer
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        last_man:
+          type: integer
+        resulted_in_goal:
+          type: boolean
+  
+
+
   securitySchemes:
     BearerAuth:
       type: apiKey
