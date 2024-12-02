@@ -28,7 +28,7 @@ class Api::V1::PlayerInjuriesController < ApplicationController
         @player_injury = @user.player_injuries.new(player_injury_params)
 
         if @player_injury.save
-            render json: @player_injury, notice: 'Player Injury was successfully created.'
+            render json: @player_injury, message: 'Player Injury was successfully created.'
         else
             render json: @player_injury.errors, status: :unprocessable_entity
         end
