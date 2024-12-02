@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_20_035046) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_20_055109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -168,6 +168,29 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_035046) do
     t.index ["player_id"], name: "index_match_blocks_on_player_id"
     t.index ["team_id"], name: "index_match_blocks_on_team_id"
     t.index ["user_id"], name: "index_match_blocks_on_user_id"
+  end
+
+  create_table "match_clearances", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "player_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.string "clearance_type"
+    t.string "clearance_outcome"
+    t.integer "x_coordinate"
+    t.integer "y_coordinate"
+    t.integer "minute"
+    t.boolean "successful"
+    t.boolean "under_pressure", default: true
+    t.boolean "resulted_in_corner", default: false
+    t.boolean "resulted_in_throw_in", default: false
+    t.boolean "resulted_in_goal", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_clearances_on_match_id"
+    t.index ["player_id"], name: "index_match_clearances_on_player_id"
+    t.index ["team_id"], name: "index_match_clearances_on_team_id"
+    t.index ["user_id"], name: "index_match_clearances_on_user_id"
   end
 
   create_table "match_dribbles", force: :cascade do |t|
@@ -774,6 +797,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_20_035046) do
   add_foreign_key "match_blocks", "players", column: "opponent_id"
   add_foreign_key "match_blocks", "teams"
   add_foreign_key "match_blocks", "users"
+  add_foreign_key "match_clearances", "matches"
+  add_foreign_key "match_clearances", "players"
+  add_foreign_key "match_clearances", "teams"
+  add_foreign_key "match_clearances", "users"
   add_foreign_key "match_dribbles", "matches"
   add_foreign_key "match_dribbles", "players"
   add_foreign_key "match_dribbles", "players", column: "opponent_id"
