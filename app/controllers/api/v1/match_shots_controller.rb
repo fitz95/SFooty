@@ -3,6 +3,7 @@ class Api::V1::MatchShotsController < ApplicationController
   before_action :set_user
   before_action :set_match
   before_action :set_match_shot, only: [:show, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /api/v1/users/:user_id/matches/:match_id/match_shots
   def index

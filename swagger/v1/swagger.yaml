@@ -4342,6 +4342,650 @@ paths:
                     format: float
                     example: 2.34
 
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes:
+    get:
+      summary: Retrieve all match passes for a specific  match
+      description: Fetches all match passes created for a given match.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of match passes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchPass'
+              examples:
+                example-1:
+                  summary: Successful response
+                  value:
+                    - id: 1
+                      match_id: 5
+                      player_id: 12
+                      team_id: 3
+                      pass_type: "through_ball"
+                      pass_outcome: "completed"
+                      is_successful: true
+                      is_key_pass: true
+                      minute: 34
+                      pass_start_x: 40
+                      pass_start_y: 50
+                      pass_end_x: 60
+                      pass_end_y: 30
+                      expected_assist_value: 0.2
+                    - id: 2
+                      match_id: 5
+                      player_id: 20
+                      team_id: 3
+                      pass_type: "cross"
+                      pass_outcome: "intercepted"
+                      is_successful: false
+                      minute: 78
+                      pass_start_x: 30
+                      pass_start_y: 20
+                      pass_end_x: 70
+                      pass_end_y: 40
+        '404':
+          description: User or match not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "User or match not found"
+
+    post:
+      summary: Create a new match pass
+      description: Create a new match pass for a specific user and match with details like player, pass type, outcome, and coordinates.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMatchPass'
+            examples:
+              example-1:
+                summary: Example request body
+                value:
+                  player_id: 12
+                  team_id: 3
+                  pass_type: "through_ball"
+                  pass_outcome: "completed"
+                  is_successful: true
+                  is_key_pass: false
+                  minute: 45
+                  pass_start_x: 40
+                  pass_start_y: 50
+                  pass_end_x: 60
+                  pass_end_y: 30
+                  expected_assist_value: 0.1
+      responses:
+        '201':
+          description: Match pass created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchPass'
+              example:
+                id: 7
+                match_id: 5
+                player_id: 12
+                team_id: 3
+                pass_type: "through_ball"
+                pass_outcome: "completed"
+                is_successful: true
+                minute: 45
+                expected_assist_value: 0.1
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  errors: ["Player ID is required", "Minute cannot be negative"]
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes/{id}:
+    get:
+      summary: Retrieve a specific match pass
+      description: Fetches details of a specific match pass for a given user and match.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match pass details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchPass'
+              example:
+                id: 7
+                match_id: 5
+                player_id: 12
+                team_id: 3
+                pass_type: "through_ball"
+                pass_outcome: "completed"
+                is_successful: true
+                minute: 45
+        '404':
+          description: Match pass not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Match pass not found"
+    patch:
+      summary: Update a match pass
+      description: Update the details of a specific match pass.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match pass
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMatchPass'
+      responses:
+        '200':
+          description: Match pass updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchPass'
+        '404':
+          description: Match pass not found
+        '422':
+          description: Validation error
+
+    delete:
+      summary: Delete a match pass
+      description: Delete a specific match pass by its ID.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: integer
+        - name: match_id
+          in: path
+          required: true
+          description: The ID of the match
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          description: The ID of the match pass
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match pass deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "Match pass deleted successfully"
+        '404':
+          description: Match pass not found
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes/key_passes:
+    get:
+      summary: Retrieve all key passes for a match
+      description: Fetches all key passes made by players in a specific match.
+      tags:
+        - MatchPasses
+      responses:
+        '200':
+          description: A list of key passes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchPass'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_passes/completed:
+    get:
+      summary: Retrieve the count of completed passes
+      description: Fetches the number of completed passes for a specific team in a match.
+      tags:
+        - MatchPasses
+      parameters:
+        - name: team_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Count of completed passes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completed_passes:
+                    type: integer
+                example:
+                  completed_passes: 42
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches:
+    get:
+      summary: Retrieve all match touches for a specific match
+      description: Fetches all touch events for players in a specific match.
+      tags:
+        - Match Touches
+      responses:
+        '200':
+          description: A list of match touches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchTouch'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches/{id}:
+    get:
+      summary: Retrieve a specific match touch by its ID
+      description: Fetches a single touch event from a specific match by its ID.
+      tags:
+        - Match Touches
+      responses:
+        '200':
+          description: A match touch object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTouch'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches/in_box:
+    get:
+      summary: Retrieve all match touches in the penalty box
+      description: Fetches all touches made in the penalty box during a specific match.
+      tags:
+        - MatchTouches
+      responses:
+        '200':
+          description: A list of match touches in the penalty box
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchTouch'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches:
+    post:
+      summary: Create a new match touch
+      description: Registers a new touch event for a player in a specific match.
+      tags:
+        - MatchTouches
+      responses:
+        '201':
+          description: Match touch created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTouch'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_touches/{id}:
+    patch:
+      summary: Update a match touch
+      description: Updates the details of a specific match touch event.
+      tags:
+        - MatchTouches
+      responses:
+        '200':
+          description: Match touch updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchTouch'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a match touch
+      description: Deletes a specific match touch from a match.
+      tags:
+        - MatchTouches
+      responses:
+        '200':
+          description: Match touch deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Match touch deleted successfully"
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_dribbles:
+    get:
+      summary: Retrieve all match dribbles for a specific match
+      description: Fetches all dribble events for players in a specific match.
+      tags:
+        - Match Dribbles
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+      responses:
+        '200':
+          description: A list of match dribbles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchDribble'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_dribbles/{id}:
+    get:
+      summary: Retrieve a specific match dribble by its ID
+      description: Fetches a single dribble event from a specific match by its ID.
+      tags:
+        - Match Dribbles
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match dribble
+      responses:
+        '200':
+          description: A match dribble object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDribble'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_dribbles/successful:
+    get:
+      summary: Retrieve all successful dribbles for a specific match
+      description: Fetches all successful dribbles during a specific match.
+      tags:
+        - Match Dribbles
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+      responses:
+        '200':
+          description: A list of successful match dribbles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchDribble'
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_dribbles:
+    post:
+      summary: Create a new match dribble
+      description: Registers a new dribble event for a player in a specific match.
+      tags:
+        - Match Dribbles
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchDribble'
+      responses:
+        '201':
+          description: Match dribble created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDribble'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+  /api/v1/users/{user_id}/matches/{match_id}/match_dribbles/{id}:
+    patch:
+      summary: Update an existing match dribble
+      description: Updates a dribble event by its ID for a specific match.
+      tags:
+        - Match Dribbles
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match dribble
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchDribble'
+      responses:
+        '200':
+          description: Match dribble updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchDribble'
+        '422':
+          description: Unprocessable entity (validation errors)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+    delete:
+      summary: Delete a specific match dribble by its ID
+      description: Deletes a dribble event from a specific match by its ID.
+      tags:
+        - Match Dribbles
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the user
+        - in: path
+          name: match_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID of the match dribble
+      responses:
+        '200':
+          description: Match dribble deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 components:
   schemas:
     UserRegistration:
@@ -5898,8 +6542,210 @@ components:
         expected_goal_value:
           type: number
           format: float
- 
- 
+
+    MatchPass:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        pass_type:
+          type: string
+        pass_outcome:
+          type: string
+        is_successful:
+          type: boolean
+        is_key_pass:
+          type: boolean
+        minute:
+          type: integer
+        expected_assist_value:
+          type: number
+
+    NewMatchPass:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        pass_type:
+          type: string
+        pass_outcome:
+          type: string
+        is_successful:
+          type: boolean
+        is_key_pass:
+          type: boolean
+        minute:
+          type: integer
+        expected_assist_value:
+          type: number
+  
+    MatchTouch:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the match touch event
+        match_id:
+          type: integer
+          description: The ID of the match associated with this touch
+        player_id:
+          type: integer
+          description: The ID of the player who made the touch
+        team_id:
+          type: integer
+          description: The ID of the team the player belongs to
+        touch_type:
+          type: string
+          description: Type of touch (e.g., "pass", "clearance", "dribble")
+        touch_direction:
+          type: string
+          description: Direction of the touch (e.g., "forward", "backward")
+        successful:
+          type: boolean
+          description: Indicates whether the touch was successful (true/false)
+        x_coordinate:
+          type: integer
+          description: The x-coordinate on the field where the touch occurred
+        y_coordinate:
+          type: integer
+          description: The y-coordinate on the field where the touch occurred
+        minute:
+          type: integer
+          description: The minute of the match when the touch occurred
+        in_box:
+          type: boolean
+          description: Indicates whether the touch was inside the penalty box (true/false)
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the match touch was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the match touch was last updated
+
+    NewMatchTouch:
+      type: object
+      properties:
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        touch_type:
+          type: string
+        touch_direction:
+          type: string
+        successful:
+          type: boolean
+        x_coordinate:
+          type: integer
+        y_coordinate:
+          type: integer
+        minute:
+          type: integer
+        in_box:
+          type: boolean
+
+    MatchDribble:
+      type: object
+      properties:
+        id:
+          type: integer
+        match_id:
+          type: integer
+        player_id:
+          type: integer
+        team_id:
+          type: integer
+        user_id:
+          type: integer
+        opponent_id:
+          type: integer
+          nullable: true
+        minute:
+          type: integer
+        is_successful:
+          type: boolean
+        dribble_type:
+          type: string
+        outcome:
+          type: string
+        x:
+          type: number
+          format: float
+        y:
+          type: number
+          format: float
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    NewMatchDribble:
+      type: object
+      required:
+        - match_id
+        - player_id
+        - team_id
+        - user_id
+        - minute
+        - is_successful
+        - dribble_type
+      properties:
+        match_id:
+          type: integer
+          description: ID of the match associated with the dribble
+        player_id:
+          type: integer
+          description: ID of the player who performed the dribble
+        team_id:
+          type: integer
+          description: ID of the team to which the player belongs
+        user_id:
+          type: integer
+          description: ID of the user recording the dribble event
+        opponent_id:
+          type: integer
+          nullable: true
+          description: ID of the opposing player involved in the dribble (if any)
+        minute:
+          type: integer
+          description: Minute of the match when the dribble occurred
+        is_successful:
+          type: boolean
+          description: Indicates if the dribble was successful
+        dribble_type:
+          type: string
+          description: Type of dribble (e.g., "nutmeg", "through", "around", "stepover")
+          example: "nutmeg"
+        outcome:
+          type: string
+          nullable: true
+          description: Outcome of the dribble (e.g., "assist", "goal", "blocked", "intercepted", "out of bounds")
+          example: "assist"
+        x:
+          type: number
+          format: float
+          nullable: true
+          description: X-coordinate of the dribble location on the pitch
+        y:
+          type: number
+          format: float
+          nullable: true
+          description: Y-coordinate of the dribble location on the pitch
+    
+    
+
   securitySchemes:
     BearerAuth:
       type: apiKey
