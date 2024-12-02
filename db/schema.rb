@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_26_050644) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_24_092612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,12 +44,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_26_050644) do
     t.index ["user_id"], name: "index_game_weeks_on_user_id"
   end
 
+  create_table "league_groups", force: :cascade do |t|
+    t.bigint "league_id", null: false
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_id"], name: "index_league_groups_on_league_id"
+    t.index ["user_id"], name: "index_league_groups_on_user_id"
+  end
+
   create_table "leagues", force: :cascade do |t|
     t.string "league_name"
     t.string "country"
     t.integer "tier_level"
     t.string "description"
-    t.string "division_photo"
+    t.string "league_photo"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -443,8 +453,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_26_050644) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "first_name"
-    t.string "email", null: false
+    t.string "first_name", default: "", null: false
+    t.string "last_name", default: "", null: false
+    t.string "email", default: "", null: false
     t.string "role", default: "client"
     t.string "user_photo"
     t.datetime "created_at", null: false
@@ -460,7 +471,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_26_050644) do
     t.string "last_sign_in_ip"
     t.string "authentication_token"
     t.string "jti", null: false
-    t.string "last_name"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
@@ -472,6 +482,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_26_050644) do
   add_foreign_key "follows", "users", column: "following_user_id"
   add_foreign_key "game_weeks", "leagues"
   add_foreign_key "game_weeks", "users"
+  add_foreign_key "league_groups", "leagues"
+  add_foreign_key "league_groups", "users"
   add_foreign_key "leagues", "users"
   add_foreign_key "lineup_players", "lineup_positions"
   add_foreign_key "lineup_players", "match_lineups"
