@@ -1,7 +1,7 @@
 class PlayerInjury < ApplicationRecord
-    belongs_to :player
-    belongs_to :user
+  belongs_to :player
+  belongs_to :user
 
-    validates :player_id, presence: true
-    validates :injury_type, presence: true
+  validates :player_id, presence: true
+  validates :injury_type, presence: true
 end

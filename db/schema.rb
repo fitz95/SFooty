@@ -10,9 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_24_104238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "competitions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "follows", force: :cascade do |t|
     t.integer "following_user_id"
@@ -44,12 +50,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["user_id"], name: "index_game_weeks_on_user_id"
   end
 
+  create_table "league_groups", force: :cascade do |t|
+    t.bigint "league_id", null: false
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_id"], name: "index_league_groups_on_league_id"
+    t.index ["user_id"], name: "index_league_groups_on_user_id"
+  end
+
   create_table "leagues", force: :cascade do |t|
     t.string "league_name"
     t.string "country"
     t.integer "tier_level"
     t.string "description"
-    t.string "division_photo"
+    t.string "league_photo"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -88,6 +104,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["substitute_player_id"], name: "index_lineup_substitute_options_on_substitute_player_id"
     t.index ["team_id"], name: "index_lineup_substitute_options_on_team_id"
     t.index ["user_id"], name: "index_lineup_substitute_options_on_user_id"
+  end
+
+  create_table "match_events", force: :cascade do |t|
+    t.integer "match_id"
+    t.string "event_type"
+    t.text "event_description"
+    t.integer "event_minute"
+    t.integer "player_id"
+    t.integer "team_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_events_on_match_id"
+    t.index ["player_id"], name: "index_match_events_on_player_id"
+    t.index ["team_id"], name: "index_match_events_on_team_id"
+    t.index ["user_id"], name: "index_match_events_on_user_id"
   end
 
   create_table "match_goals", force: :cascade do |t|
@@ -321,6 +353,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["user_id"], name: "index_referees_on_user_id"
   end
 
+  create_table "revoked_tokens", force: :cascade do |t|
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_revoked_tokens_on_token"
+  end
+
   create_table "stadiums", force: :cascade do |t|
     t.string "stadium_name"
     t.string "city"
@@ -347,6 +386,36 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["match_id"], name: "index_team_shots_on_match_id"
     t.index ["team_id"], name: "index_team_shots_on_team_id"
     t.index ["user_id"], name: "index_team_shots_on_user_id"
+  end
+
+  create_table "team_stats", force: :cascade do |t|
+    t.integer "team_id"
+    t.integer "league_id"
+    t.integer "matches_played"
+    t.integer "matches_won"
+    t.integer "matches_drawn"
+    t.integer "matches_lost"
+    t.integer "goals_scored"
+    t.integer "goals_conceded"
+    t.integer "clean_sheets"
+    t.integer "yellow_cards"
+    t.integer "red_cards"
+    t.integer "shots_on_target"
+    t.integer "shots_off_target"
+    t.integer "corners"
+    t.integer "fouls_committed"
+    t.integer "fouls_conceded"
+    t.integer "possessions"
+    t.integer "passes_completed"
+    t.integer "pass_accuracy"
+    t.integer "aerial_duels_won"
+    t.integer "aerial_duels_lost"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_id"], name: "index_team_stats_on_league_id"
+    t.index ["team_id"], name: "index_team_stats_on_team_id"
+    t.index ["user_id"], name: "index_team_stats_on_user_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -379,14 +448,39 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
     t.index ["user_id"], name: "index_trophies_on_user_id"
   end
 
+  create_table "trophy_players", force: :cascade do |t|
+    t.bigint "trophy_id", null: false
+    t.bigint "player_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_trophy_players_on_player_id"
+    t.index ["trophy_id"], name: "index_trophy_players_on_trophy_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "name"
-    t.string "email", null: false
+    t.string "first_name", default: "", null: false
+    t.string "last_name", default: "", null: false
+    t.string "email", default: "", null: false
     t.string "role", default: "client"
     t.string "user_photo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "authentication_token"
+    t.string "jti", null: false
+    t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "follows", "users"
@@ -394,6 +488,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
   add_foreign_key "follows", "users", column: "following_user_id"
   add_foreign_key "game_weeks", "leagues"
   add_foreign_key "game_weeks", "users"
+  add_foreign_key "league_groups", "leagues"
+  add_foreign_key "league_groups", "users"
   add_foreign_key "leagues", "users"
   add_foreign_key "lineup_players", "lineup_positions"
   add_foreign_key "lineup_players", "match_lineups"
@@ -405,6 +501,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
   add_foreign_key "lineup_substitute_options", "players", column: "substitute_player_id"
   add_foreign_key "lineup_substitute_options", "teams"
   add_foreign_key "lineup_substitute_options", "users"
+  add_foreign_key "match_events", "matches"
+  add_foreign_key "match_events", "players"
+  add_foreign_key "match_events", "teams"
+  add_foreign_key "match_events", "users"
   add_foreign_key "match_goals", "matches"
   add_foreign_key "match_goals", "players", column: "assister_player_id"
   add_foreign_key "match_goals", "players", column: "scorer_player_id"
@@ -445,9 +545,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_071951) do
   add_foreign_key "team_shots", "matches"
   add_foreign_key "team_shots", "teams"
   add_foreign_key "team_shots", "users"
+  add_foreign_key "team_stats", "leagues"
+  add_foreign_key "team_stats", "teams"
+  add_foreign_key "team_stats", "users"
   add_foreign_key "teams", "leagues"
   add_foreign_key "teams", "users"
   add_foreign_key "trophies", "leagues"
   add_foreign_key "trophies", "teams"
   add_foreign_key "trophies", "users"
+  add_foreign_key "trophy_players", "players"
+  add_foreign_key "trophy_players", "trophies"
 end

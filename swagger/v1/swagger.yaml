@@ -1,0 +1,306 @@
+openapi: 3.0.0
+
+info:
+  title: Ruby App API
+  description: API documentation for the Ruby App
+  version: 1.0.0
+
+
+paths:
+  /v1/users:
+    post:
+      summary: Create a new user
+      description: Creates a new user account.
+      tags:
+        - Registrations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  
+    get:
+      summary: Get all users
+      description: Returns a list of all users.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: Users not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    
+
+  /v1/users/sign_in:
+    post:
+      summary: Sign in user
+      description: Authenticates a user and returns an access token.
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  $ref: '#/components/schemas/UserSignIn'
+      responses:
+        '201':
+          description: User signed in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /v1/users/sign_out:
+    delete:
+      summary: Sign out user
+      description: Logs out a user.
+      tags:
+        - Sessions
+      responses:
+        '200':
+          description: Logout successful
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /v1/users/password:
+    put:
+      summary: Update user password
+      description: Updates a user's password.
+      tags:
+        - Passwords
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  $ref: '#/components/schemas/UserPasswordUpdate'
+      security: 
+        -BearerAuth: []
+      responses:
+        '200':
+          description: Password updated successfully
+        '404':
+          description: Password not updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /v1/users/{id}:
+    get:
+      summary: Get user by ID
+      description: Returns a user by ID.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user.
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      summary: Delete user by ID
+      description: Deletes a user by ID.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the user.
+      responses:
+        '200':
+          description: User deleted successfully
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email address of the user.
+        password:
+          type: string
+          description: The password of the user.
+        password_confirmation:
+          type: string
+          description: The password confirmation of the user.
+        role:
+          type: string
+          description: The role of the user.
+        first_name:
+          type: string
+          description: The first name of the user.
+        last_name:
+          type: string
+          description: The last name of the user.
+        username:
+          type: string
+          description: The username of the user.
+        user_photo:
+          type: string
+          description: The photo of the user.
+      required:
+        - email
+        - password
+        - password_confirmation
+        - username
+        - user_photo
+
+    UserSignIn:
+      type: object
+      properties:
+        login:
+          type: string
+          description: The email or username of the user.
+        password:
+          type: string
+          description: The password of the user.
+      required:
+        - login
+        - password
+
+    UserPasswordUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The email address of the user.
+        password:
+          type: string
+          description: The new password of the user.
+        password_confirmation:
+          type: string
+          description: The new password confirmation of the user.
+      required:
+        - email
+        - password
+        - password_confirmation
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the user.
+        email:
+          type: string
+          description: The email address of the user.
+        role:
+          type: string
+          description: The role of the user.
+        first_name:
+          type: string
+          description: The first name of the user.
+        last_name:
+          type: string
+          description: The last name of the user.
+        username:
+          type: string
+          description: The username of the user.
+        user_photo:
+          type: string
+          description: The photo of the user.
+      required:
+        - id
+        - email
+        - role
+        - first_name
+        - last_name
+        - username
+        - user_photo
+
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+      description: Enter your Bearer token in the format 'Bearer {token}'
+
+security: 
+  - BearerAuth: []
