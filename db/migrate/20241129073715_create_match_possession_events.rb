@@ -13,7 +13,7 @@ class CreateMatchPossessionEvents < ActiveRecord::Migration[7.0]
       t.decimal :attacking_threat
       t.decimal :conceding_threat
       t.boolean :is_goal, default: false
-      t.boolean chance_created, default: false
+      t.boolean :chance_created, default: false
       t.integer :additional_time, default: false
       t.text :description
 
