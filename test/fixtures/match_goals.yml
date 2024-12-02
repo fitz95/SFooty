@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  match_id: 1
+  player_id: 1
+  assist_player_id: 1
+  team_id: 1
+  goal_type: MyString
+  goal_desc: MyString
+  minute_scored: 1
+  user_id: 1
+
+two:
+  match_id: 1
+  player_id: 1
+  assist_player_id: 1
+  team_id: 1
+  goal_type: MyString
+  goal_desc: MyString
+  minute_scored: 1
+  user_id: 1
