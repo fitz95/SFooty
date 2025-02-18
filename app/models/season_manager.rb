@@ -5,6 +5,6 @@ class SeasonManager < ApplicationRecord
     belongs_to :team
 
     validates :role, presence: true
-    validates :season_start_date presence: true
+    validates :season_start_date, presence: true
     validates :status, presence: true
 end

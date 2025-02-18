@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_27_075335) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_18_071013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -497,6 +497,29 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_075335) do
     t.index ["user_id"], name: "index_match_passes_on_user_id"
   end
 
+  create_table "match_possession_events", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "possession_start_zone"
+    t.string "possession_end_zone"
+    t.string "possession_direction"
+    t.string "possession_type"
+    t.decimal "attacking_threat"
+    t.decimal "conceding_threat"
+    t.boolean "is_goal", default: false
+    t.boolean "chance_created", default: false
+    t.integer "additional_time", default: 0
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_possession_events_on_match_id"
+    t.index ["team_id"], name: "index_match_possession_events_on_team_id"
+    t.index ["user_id"], name: "index_match_possession_events_on_user_id"
+  end
+
   create_table "match_shots", force: :cascade do |t|
     t.integer "match_id"
     t.integer "player_id"
@@ -775,6 +798,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_075335) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "teams", default: [], array: true
     t.index ["user_id"], name: "index_seasons_on_user_id"
   end
 
@@ -1009,6 +1033,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_27_075335) do
   add_foreign_key "match_passes", "players", column: "receiver"
   add_foreign_key "match_passes", "teams"
   add_foreign_key "match_passes", "users"
+  add_foreign_key "match_possession_events", "matches"
+  add_foreign_key "match_possession_events", "teams"
+  add_foreign_key "match_possession_events", "users"
   add_foreign_key "match_shots", "players", column: "assist_player_id"
   add_foreign_key "match_shots", "users"
   add_foreign_key "match_substitutions", "matches"

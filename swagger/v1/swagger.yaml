@@ -7565,6 +7565,12 @@ components:
         total_matches:
           type: integer
           description: The total number of matches in the season.
+        teams:
+          type: array
+          items: 
+            type: integer
+            description: An array of teams in the season.
+          
         user_id:
           type: integer
           description: The ID of the user who created the season.
@@ -7577,7 +7583,7 @@ components:
         - number_of_teams
         - season_type
         - description
-        - total_matches
+        - teams
         - user_id
 
     NewSeason:

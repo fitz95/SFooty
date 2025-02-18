@@ -89,8 +89,8 @@ class Api::V1::MatchPassesController < ApplicationController
         :player_id, :team_id, :minute, :is_successful, :is_key_pass, :is_cross,
         :is_assist, :pass_type, :pass_outcome, :pass_start_x, :pass_start_y, 
         :pass_end_x, :pass_end_y, :pass_distance, :pass_direction, 
-        :expected_assist_value, :assist_player_id, :received_by_player_id
-        :is_goalkick, :is_throwout, :is_punt, :is_punt, :is_oepn_play, is_freekick
+        :expected_assist_value, :assist_player_id, :received_by_player_id,
+        :is_goalkick, :is_throwout, :is_punt, :is_open_play, is_freekick
       )
     end
   end
